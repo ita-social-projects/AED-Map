@@ -1,10 +1,10 @@
 import {
-	START_LOAD_DEF, 
-	SUCCESS_LOAD_DEF, 
-	FAIL_LOAD_DEF, 
-	CREATE_DEF_POINT, 
-	DELETE_DEF_POINT, 
-	EDIT_DEF_POINT 
+	START_LOAD_DEF,
+	SUCCESS_LOAD_DEF,
+	FAIL_LOAD_DEF,
+	CREATE_DEF_POINT,
+	DELETE_DEF_POINT,
+	EDIT_DEF_POINT
 } from '../consts/def';
 
 const initialState = {
@@ -27,14 +27,14 @@ export default function(defs = initialState, action) {
 				...defs,
 				loading: false,
 				data: action.defs
-			};	
+			};
 		case FAIL_LOAD_DEF:
 			return {
 				...defs,
 				loading: false,
 				error: action.error
-			};	
-		// CRUD	
+			};
+		// CRUD
 		case CREATE_DEF_POINT:
 			const newDef = action.newDef;
 			return {
@@ -57,8 +57,12 @@ export default function(defs = initialState, action) {
 			return {
 				...defs,
 				data: newData
-			};				
+			};
 		default:
 			return defs;
 	}
+}
+
+export function defsFilterSelector(state) {
+	return state.defs.data.filter(def => def.address.toLowerCase().includes(state.filter.toLowerCase()));
 }

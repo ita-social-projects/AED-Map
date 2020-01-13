@@ -23,18 +23,18 @@ describe('fetchDefs action', () => {
       { type: types.START_LOAD_DEF },
       { type: types.SUCCESS_LOAD_DEF, defs: {data: mockData} }
     ];
-    return store.dispatch(actions.fetchDefs('/def.json')).then(() => {
+    return store.dispatch(actions.fetchDefs('/defibrillators.json')).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
 
   it(`should fetch data from DB and have length`, async () => {
-    fetchMock.getOnce('/def.json', {
+    fetchMock.getOnce('/defibrillators.json', {
       body: { data: mockData },
       headers: { 'content-type': 'application/json' }
     });
     const store = mockStore({ data: [] });
-    const res = await store.dispatch(actions.fetchDefs('/def.json'));
+    const res = await store.dispatch(actions.fetchDefs('/defibrillators.json'));
     expect(res.defs.data.length).toBe(mockData.length);
   });
 });

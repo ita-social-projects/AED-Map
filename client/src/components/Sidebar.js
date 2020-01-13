@@ -5,15 +5,19 @@ import ItemList from "./ItemList";
 import AddForm from "./AddForm";
 import Filter from "./Filter";
 
-const Sidebar = () => {
+import { defsFilterSelector } from '../reducers/defReducer';
+import { connect } from 'react-redux';
+const Sidebar = ({ isFilterGetResult }) => {
   return (
     <div className={myClasses.sidebarStyle}>
       <Header />
-      <ItemList />
-      <AddForm />
       <Filter />
+      {isFilterGetResult ? <ItemList /> : 'Вибачте, ми не знайшли даних по заданій адресі'}
+      <AddForm />
     </div>
   );
 };
-
-export default Sidebar;
+const mapStateToProps = (state) => ({
+  isFilterGetResult: defsFilterSelector(state).length
+});
+export default connect(mapStateToProps)(Sidebar);

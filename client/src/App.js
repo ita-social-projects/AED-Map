@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 
 const App = ({ fetchDefs, defsState, filteredDefs }) => {
   useEffect(useCallback(() => {
-    fetchDefs('/def.json');
+    fetchDefs('/defibrillators.json');
   }, [fetchDefs]), []);
 
   if(defsState.loading) return <p>Loading...</p>;

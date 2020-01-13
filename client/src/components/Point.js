@@ -1,9 +1,11 @@
 import React from "react";
 import myClasses from "../styles";
 
+import { defsFilterSelector } from '../reducers/defReducer';
 import { setMap } from '../actions/map';
 import { connect } from 'react-redux';
 import { flyToPin } from '../utils/flyToPin';
+
 const Point = ({ point, filteredDefs, setMap }) => {
   return (
     <div
@@ -20,10 +22,8 @@ const Point = ({ point, filteredDefs, setMap }) => {
   );
 };
 
-const mapStateToProps = ({defs, filter}) => ({
-  filteredDefs: defs.data
-                  .filter(item => item.address.toLowerCase()
-						               .includes(filter.toLowerCase())),
+const mapStateToProps = (state) => ({
+  filteredDefs: defsFilterSelector(state),
 });
 const mapDispatchToProps = {
   setMap

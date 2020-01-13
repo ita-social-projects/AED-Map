@@ -2,6 +2,7 @@ import React from "react";
 import mapPin from "../icons/icons-location-world.png";
 import myClasses from "../styles";
 
+import { defsFilterSelector } from '../reducers/defReducer';
 import { connect } from 'react-redux';
 import ReactMapboxGl, {
 	GeoJSONLayer,
@@ -87,13 +88,11 @@ const MapHolder = ({ filteredDefs, mapState }) => {
 	);
 };
 
-const mapStateToProps = ({defs, filter, map}) => ({
-	defsState: defs,
-	filter,
-	filteredDefs: defs.data
-                  .filter(item => item.address.toLowerCase()
-						               .includes(filter.toLowerCase())),
-	mapState: map
+const mapStateToProps = (state) => ({
+	defsState: state.defs,
+	filter: state.filter,
+	filteredDefs: defsFilterSelector(state),
+	mapState: state.map
 });
 
 export default connect(mapStateToProps, null)(MapHolder);
