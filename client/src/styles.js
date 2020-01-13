@@ -9,10 +9,37 @@ const styles = {
     marginBottom: "10px",
     padding: "10px",
     borderRadius: "10px",
+    display: "flex",
     "&:hover": {
       background: "#ccc",
       cursor: "pointer"
     }
+  },
+  pointCardInfo:{
+    flex: "5"
+  },
+  eventButtons:{
+    flex: "1",
+  },
+  editItem:{
+    border: "2px solid #000",
+    borderRadius: "50%",
+    backgroundColor: "#fff",
+    padding: "2px",
+    opacity: ".7",
+    margin: "2px 10px",
+    transform: "scale(0.8)",
+    cursor: "pointer"
+  },
+  deleteItem:{
+    border: "2px solid #000",
+    borderRadius: "50%",
+    backgroundColor: "#fff",
+    padding: "2px",
+    opacity: ".7",
+    margin: "2px 10px",
+    transform: "scale(0.8)",
+    cursor: "pointer"
   },
   titleStyle: {
     fontSize: "22px",
@@ -57,6 +84,9 @@ const styles = {
   mainStyle: {
     display: "flex",
     width: "100%"
+  },
+  addForm:{
+    color: "#fff"
   }
 };
 
