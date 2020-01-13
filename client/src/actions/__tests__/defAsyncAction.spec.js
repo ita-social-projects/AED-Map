@@ -10,31 +10,38 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
 describe('fetchDefs action', () => {
-	afterEach(() => {
-		fetchMock.restore();
-	});
-	it(`creates ${types.SUCCESS_LOAD_DEF} when fetching defs has been done`, async () => {
-    fetchMock.getOnce('/def.json', {
+  afterEach(() => {
+    fetchMock.restore();
+  });
+  it(`creates ${types.SUCCESS_LOAD_DEF} when fetching defs has been done`, async () => {
+    fetchMock.getOnce('/defibrillators.json', {
       body: { data: mockData },
-      headers: { 'content-type': 'application/json' }
+      headers: { 'content-type': 'application/json' },
     });
     const store = mockStore({ data: [] });
     const expectedActions = [
       { type: types.START_LOAD_DEF },
-      { type: types.SUCCESS_LOAD_DEF, defs: {data: mockData} }
+      {
+        type: types.SUCCESS_LOAD_DEF,
+        defs: { data: mockData },
+      },
     ];
-    return store.dispatch(actions.fetchDefs('/defibrillators.json')).then(() => {
-      expect(store.getActions()).toEqual(expectedActions);
-    });
+    return store
+      .dispatch(actions.fetchDefs('/defibrillators.json'))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
   });
 
   it(`should fetch data from DB and have length`, async () => {
     fetchMock.getOnce('/defibrillators.json', {
       body: { data: mockData },
-      headers: { 'content-type': 'application/json' }
+      headers: { 'content-type': 'application/json' },
     });
     const store = mockStore({ data: [] });
-    const res = await store.dispatch(actions.fetchDefs('/defibrillators.json'));
+    const res = await store.dispatch(
+      actions.fetchDefs('/defibrillators.json'),
+    );
     expect(res.defs.data.length).toBe(mockData.length);
   });
 });

@@ -1,5 +1,5 @@
-import React from "react";
-import myClasses from "../styles";
+import React from 'react';
+import myClasses from '../styles';
 
 import { defsFilterSelector } from '../reducers/defReducer';
 import { setMap } from '../actions/map';
@@ -10,8 +10,9 @@ const Point = ({ point, filteredDefs, setMap }) => {
   return (
     <div
       className={myClasses.pointCard}
-      onClick={() => flyToPin(point.id, filteredDefs, setMap)}
-    >
+      onClick={() =>
+        flyToPin(point.id, filteredDefs, setMap)
+      }>
       <h3 className={myClasses.titleStyle}>
         Title: {point.title}
       </h3>
@@ -26,6 +27,9 @@ const mapStateToProps = (state) => ({
   filteredDefs: defsFilterSelector(state),
 });
 const mapDispatchToProps = {
-  setMap
+  setMap,
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Point);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Point);
