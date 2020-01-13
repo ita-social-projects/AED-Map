@@ -23,7 +23,9 @@ const styles = {
   },
   sidebarStyle: {
     flex: "2",
-    padding: "20px"
+    padding: "20px",
+    maxHeight: "100vh",
+    overflowY: "scroll"
   },
   coordsStyle: {
     display: "block",

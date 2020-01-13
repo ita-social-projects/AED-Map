@@ -1,9 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 
-class Filter extends Component {
-  render() {
-    return <div></div>;
-  }
+const Filter = () => {
+  return <div></div>;
 }
 
 export default Filter;

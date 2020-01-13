@@ -1,9 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 
-class AddForm extends Component {
-  render() {
-    return <div></div>;
-  }
+const AddForm = () => {
+  return <div></div>;
 }
 
 export default AddForm;
