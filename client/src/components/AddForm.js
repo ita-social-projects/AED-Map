@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-const AddForm = props => {
+const AddForm = () => {
   return <div></div>;
 };
 
