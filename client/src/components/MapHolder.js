@@ -2,6 +2,8 @@ import React from 'react';
 import mapPin from '../icons/icons-location-world.png';
 import myClasses from '../styles';
 
+import SYMBOL_LAYOUT from '../symbolLayout';
+import geoJsonData from '../geoJsonData';
 import { defsFilterSelector } from '../reducers/defReducer';
 import { connect } from 'react-redux';
 import ReactMapboxGl, {
@@ -15,34 +17,7 @@ const Map = ReactMapboxGl({
 });
 
 const MapHolder = ({ filteredDefs, mapState }) => {
-  const features = filteredDefs.map((point) => ({
-    type: 'Feature',
-    geometry: {
-      type: point.location.type,
-      coordinates: point.location.coordinates,
-    },
-    properties: {
-      title: point.title,
-    },
-  }));
-
-  const GEO_JSON_DATA = {
-    type: 'FeatureCollection',
-    features,
-  };
-
-  const SYMBOL_LAYOUT = {
-    'icon-image': 'pointer',
-    'icon-size': 1,
-    'icon-offset': [0, -20],
-    'text-field': ['get', 'title'],
-    'text-font': [
-      'Open Sans Semibold',
-      'Arial Unicode MS Bold',
-    ],
-    'text-offset': [0, 0.2],
-    'text-anchor': 'top',
-  };
+  const GEO_JSON_DATA = geoJsonData(filteredDefs);
   const { lng, lat, zoom } = mapState;
   const symbolClick = (event) => {
     event.target.flyTo({
