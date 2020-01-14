@@ -1,40 +1,42 @@
-import React, { useState } from "react";
-import "./App.css";
-import Sidebar from "./components/Sidebar";
-import MapHolder from "./components/MapHolder";
-import myClasses from "./styles";
-import points from "./points";
+import React, { useEffect, useCallback } from 'react';
+import './App.css';
+// import Header from "./components/Header";
+import Sidebar from './components/Sidebar';
+import MapHolder from './components/MapHolder';
+import myClasses from './styles';
 
-const App = props => {
-  const [state, setState] = useState({
-    lng: 24.0311,
-    lat: 49.842,
-    zoom: 12.5
-  });
+import { fetchDefs } from './actions/def';
+import { connect } from 'react-redux';
+import { defsFilterSelector } from './reducers/defReducer';
+const App = ({ fetchDefs, defsState, filteredDefs }) => {
+  useEffect(
+    useCallback(() => {
+      fetchDefs('/defibrillators.json');
+    }, [fetchDefs]),
+    [],
+  );
 
-  const flyToPin = pinId => {
-    const point = points.find(
-      element => element.id === pinId
-    );
-    setState({
-      lng: point.lng,
-      lat: point.lat,
-      zoom: 18
-    });
-  };
-
+  if (defsState.loading) return <p>Loading...</p>;
+  if (defsState.error) return <p>Something wrong there</p>;
   return (
     <div className="App">
       <div className={myClasses.mainStyle}>
-        <Sidebar flyToPin={flyToPin} />
-        <MapHolder
-          lng={state.lng}
-          lat={state.lat}
-          zoom={state.zoom}
-        />
+        <Sidebar />
+        <MapHolder />
       </div>
     </div>
   );
 };
 
-export default App;
+const mapStateToProps = (state) => ({
+  defsState: state.defs,
+  filter: state.filter,
+  filteredDefs: defsFilterSelector(state),
+});
+const mapDispatchToProps = {
+  fetchDefs,
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(App);
