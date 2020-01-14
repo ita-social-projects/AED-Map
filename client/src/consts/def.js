@@ -1,0 +1,6 @@
+export const START_LOAD_DEF = 'START_LOAD_DEF';
+export const SUCCESS_LOAD_DEF = 'SUCCESS_LOAD_DEF';
+export const FAIL_LOAD_DEF = 'FAIL_LOAD_DEF';
+export const CREATE_DEF_POINT = 'CREATE_DEF_POINT';
+export const DELETE_DEF_POINT = 'DELETE_DEF_POINT';
+export const EDIT_DEF_POINT = 'EDIT_DEF_POINT';
