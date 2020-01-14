@@ -12,6 +12,11 @@ import ReactMapboxGl, {
   Image,
 } from 'react-mapbox-gl';
 
+const Map = ReactMapboxGl({
+  accessToken:
+    'pk.eyJ1Ijoib3Nrb3ZiYXNpdWsiLCJhIjoiY2s1NWVwcnhhMDhrazNmcGNvZjJ1MnA4OSJ9.56GsGp2cl6zpYh-Ns8ThxA',
+});
+
 const MapHolder = ({ filteredDefs, mapState }) => {
   const GEO_JSON_DATA = geoJsonData(filteredDefs);
   const { lng, lat, zoom } = mapState;
