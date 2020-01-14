@@ -1,16 +1,16 @@
-import points from "./points";
-
-const geoJsonData = {
-  type: "FeatureCollection",
-  features: points.map(point => ({
-    type: "Feature",
+const features = (points) =>
+  points.map((point) => ({
+    type: 'Feature',
     geometry: {
-      type: "Point",
-      coordinates: [point.lng, point.lat]
+      type: point.location.type,
+      coordinates: point.location.coordinates,
     },
     properties: {
-      title: point.title
-    }
-  }))
-};
+      title: point.title,
+    },
+  }));
+const geoJsonData = (points) => ({
+  type: 'FeatureCollection',
+  features: features(points),
+});
 export default geoJsonData;

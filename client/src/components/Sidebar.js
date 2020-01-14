@@ -1,18 +1,27 @@
-import React from "react";
-import myClasses from "../styles";
-import Header from "./Header";
-import ItemList from "./ItemList";
-import AddForm from "./AddForm";
-import Filter from "./Filter";
+import React from 'react';
+import myClasses from '../styles';
+import Header from './Header';
+import ItemList from './ItemList';
+import AddForm from './AddForm';
+import Filter from './Filter';
 
-const Sidebar = props => {
+import { defsFilterSelector } from '../reducers/defReducer';
+import { connect } from 'react-redux';
+const Sidebar = ({ isFilterGetResult }) => {
   return (
     <div className={myClasses.sidebarStyle}>
       <Header />
-      <ItemList flyToPin={props.flyToPin} />
-      <AddForm />
       <Filter />
+      {isFilterGetResult ? (
+        <ItemList />
+      ) : (
+        'Вибачте, ми не знайшли даних по заданій адресі'
+      )}
+      <AddForm />
     </div>
   );
 };
-export default Sidebar;
+const mapStateToProps = (state) => ({
+  isFilterGetResult: defsFilterSelector(state).length,
+});
+export default connect(mapStateToProps)(Sidebar);
