@@ -10,7 +10,11 @@
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "start": "node index.js"
   },
-  "keywords": ["nodejs", "express", "mongodb"],
+  "keywords": [
+    "nodejs",
+    "express",
+    "mongodb"
+  ],
   "author": "LV-469",
   "license": "ISC",
   "dependencies": {

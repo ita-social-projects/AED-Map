@@ -1,20 +1,25 @@
 {
-  "name": "client",
+  "name": "map-project",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.0",
     "@testing-library/user-event": "^7.2.1",
+    "jss": "^10.0.3",
+    "mapbox-gl": "^1.6.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-jss": "^10.0.3",
+    "react-mapbox-gl": "^4.8.2",
     "react-scripts": "3.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint src/**/*.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -31,5 +36,8 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:3012"
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-plugin-react": "^7.17.0"
+  }
 }

@@ -1,26 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import Sidebar from "./components/Sidebar";
+import MapHolder from "./components/MapHolder";
+import myClasses from "./styles";
+import points from "./points";
 
-function App() {
+const App = props => {
+  const [state, setState] = useState({
+    lng: 24.0311,
+    lat: 49.842,
+    zoom: 12.5
+  });
+
+  const flyToPin = pinId => {
+    const point = points.find(
+      element => element.id === pinId
+    );
+    setState({
+      lng: point.lng,
+      lat: point.lat,
+      zoom: 18
+    });
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className={myClasses.mainStyle}>
+        <Sidebar flyToPin={flyToPin} />
+        <MapHolder
+          lng={state.lng}
+          lat={state.lat}
+          zoom={state.zoom}
+        />
+      </div>
     </div>
   );
-}
+};
 
 export default App;
