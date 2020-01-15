@@ -1,6 +1,9 @@
-import React from "react";
+import React from 'react';
+const headerStyle = {
+  width: '100%',
+};
 
-const Header = props => {
+const Header = () => {
   return <div></div>;
 };
 
