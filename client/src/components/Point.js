@@ -6,18 +6,24 @@ import { setMap } from '../actions/map';
 import { connect } from 'react-redux';
 import { flyToPin } from '../utils/flyToPin';
 
-const Point = ({ point, filteredDefs, setMap }) => {
+const Point = ({
+  point,
+  filteredDefs,
+  setMap,
+  styleParam,
+}) => {
   return (
     <div
       className={myClasses.pointCard}
+      style={styleParam}
       onClick={() =>
         flyToPin(point.id, filteredDefs, setMap)
       }>
       <h3 className={myClasses.titleStyle}>
-        Title: {point.title}
+        {point.title}
       </h3>
       <p className={myClasses.descStyle}>
-        Description: {point.additional_information}
+        {point.additional_information}
       </p>
     </div>
   );
