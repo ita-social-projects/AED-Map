@@ -35,12 +35,12 @@ export default function(defs = initialState, action) {
         error: action.error,
       };
     // CRUD
-    case CREATE_DEF_POINT:
+    case CREATE_DEF_POINT: {
       const newDef = action.newDef;
       return {
         ...defs,
         data: [newDef, ...defs.data],
-      };
+    }}
     case DELETE_DEF_POINT:
       return {
         ...defs,
@@ -48,7 +48,7 @@ export default function(defs = initialState, action) {
           (def) => def.id !== action.id,
         ),
       };
-    case EDIT_DEF_POINT:
+    case EDIT_DEF_POINT: {
       const newDefInfo = action.newDefInfo;
       const newData = defs.data.map((def) => {
         if (def.id === action.id) {
@@ -59,7 +59,7 @@ export default function(defs = initialState, action) {
       return {
         ...defs,
         data: newData,
-      };
+    }}
     default:
       return defs;
   }

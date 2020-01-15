@@ -19,6 +19,7 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
+    "prestart": "npm run test && npm run lint",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
