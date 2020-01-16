@@ -1,20 +1,28 @@
 import React from 'react';
 import mapPin from '../icons/icons-location-world.png';
-import myClasses from '../styles';
 import Map from './Map';
 
 import SYMBOL_LAYOUT from '../symbolLayout';
 import geoJsonData from '../geoJsonData';
 import { defsFilterSelector } from '../reducers/defReducer';
 import { connect } from 'react-redux';
-import ReactMapboxGl, {
-  GeoJSONLayer,
-  Image,
-} from 'react-mapbox-gl';
+import { GeoJSONLayer, Image } from 'react-mapbox-gl';
+import { createUseStyles } from 'react-jss';
+
+const useStyle = createUseStyles({
+  mapOuterStyle: {
+    position: 'relative',
+    height: '100vh',
+    overflow: 'hidden',
+    width: 'calc(100vw - 400px)',
+  },
+});
 
 const MapHolder = ({ filteredDefs, mapState }) => {
+  const classes = useStyle();
   const GEO_JSON_DATA = geoJsonData(filteredDefs);
   const { lng, lat, zoom } = mapState;
+
   const symbolClick = (event) => {
     event.target.flyTo({
       center: [event.lngLat.lng, event.lngLat.lat],
@@ -33,13 +41,9 @@ const MapHolder = ({ filteredDefs, mapState }) => {
     <Map
       // eslint-disable-next-line react/style-prop-object
       style="mapbox://styles/mapbox/streets-v11"
-      className={myClasses.mapOuterStyle}
+      className={classes.mapOuterStyle}
       center={[lng, lat]}
-      zoom={[zoom]}
-      containerStyle={{
-        height: '100vh',
-        width: '100vw',
-      }}>
+      zoom={[zoom]}>
       <Image
         id={'pointer'}
         url={mapPin}
@@ -65,7 +69,4 @@ const mapStateToProps = (state) => ({
   mapState: state.map,
 });
 
-export default connect(
-  mapStateToProps,
-  null,
-)(MapHolder);
+export default connect(mapStateToProps, null)(MapHolder);

@@ -1,14 +1,26 @@
 import React, { useEffect, useCallback } from 'react';
 import './App.css';
-// import Header from "./components/Header";
 import Sidebar from './components/Sidebar';
 import MapHolder from './components/MapHolder';
-import myClasses from './styles';
-
 import { fetchDefs } from './actions/def';
 import { connect } from 'react-redux';
 import { defsFilterSelector } from './reducers/defReducer';
+import { createUseStyles } from 'react-jss';
+const useStyle = createUseStyles({
+  mainStyle: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    width: '100%',
+  },
+  loading: {
+    color: '#fff',
+    fontSize: '35px',
+  },
+});
+
 const App = ({ fetchDefs, defsState, filteredDefs }) => {
+  const classes = useStyle();
+
   useEffect(
     useCallback(() => {
       fetchDefs('/defibrillators.json');
@@ -16,11 +28,12 @@ const App = ({ fetchDefs, defsState, filteredDefs }) => {
     [],
   );
 
-  if (defsState.loading) return <p>Loading...</p>;
+  if (defsState.loading)
+    return <p className={classes.loading}>Loading...</p>;
   if (defsState.error) return <p>Something wrong there</p>;
   return (
     <div className="App">
-      <div className={myClasses.mainStyle}>
+      <div className={classes.mainStyle}>
         <Sidebar />
         <MapHolder />
       </div>
