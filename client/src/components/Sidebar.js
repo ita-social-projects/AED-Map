@@ -15,7 +15,9 @@ const Sidebar = ({ isFilterGetResult }) => {
       {isFilterGetResult ? (
         <ItemList />
       ) : (
-        'Вибачте, ми не знайшли даних по заданій адресі'
+        <div>
+          {'Вибачте, ми не знайшли даних по заданій адресі'}
+        </div>
       )}
       <AddForm />
     </div>

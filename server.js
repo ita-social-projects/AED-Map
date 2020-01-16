@@ -1,30 +1,28 @@
-const express = require("express");
-const bodyParser = require("body-parser");
+const express = require('express');
+const mongoose = require('mongoose');
+const path = require('path');
 
-const MongoClient = require("mongodb").MongoClient;
-
-const path = require("path");
 const app = express();
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static("client/build"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('client/build'));
 
-MongoClient.connect(
-  "mongodb://localhost:27017",
-  { useUnifiedTopology: true },
-  function(err, database) {
-    if (err) {
-      console.log(err);
-    }
-    app.listen(3012, function() {
-      console.log("API app started");
-    });
-  }
-);
+mongoose.connect('mongodb://localhost:27017/defibrillatorDB', {
+  useNewUrlParser: true, 
+  useUnifiedTopology: true,
+  useFindAndModify: true
+}).then(() => {
+  console.log('connection to database established');
+}).catch(err => {
+  console.log(`db error ${err.message}`);
+});
 
-app.get("/", function(req, res) {
-  res.sendFile(
-    path.resolve(__dirname, "client", "build", "index.html")
-  );
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+});
+
+const PORT = 3012;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

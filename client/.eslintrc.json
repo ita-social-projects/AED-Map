@@ -19,9 +19,16 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "plugins": ["react"],
+  "plugins": ["react", "react-hooks"], 
   "rules": {
-    "no-unused-vars": "warn",
-    "react/prop-types": "warn"
+    "react/prop-types": "warn",
+    "no-multiple-empty-lines": [ "error", { "max": 1 } ],
+    "indent": [ "warn", 2, {"SwitchCase": 1} ], 
+    "linebreak-style": [ "error", "unix" ], 
+    "quotes": [ "error", "single" ], 
+    "semi": [ "error", "always" ], 
+    "react/jsx-uses-vars": "error", 
+    "react/jsx-uses-react": "error", 
+    "react-hooks/rules-of-hooks": "warn"
   }
 }
