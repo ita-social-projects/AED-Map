@@ -6,6 +6,7 @@ import { fetchDefs } from './actions/def';
 import { connect } from 'react-redux';
 import { defsFilterSelector } from './reducers/defReducer';
 import { createUseStyles } from 'react-jss';
+
 const useStyle = createUseStyles({
   mainStyle: {
     display: 'flex',

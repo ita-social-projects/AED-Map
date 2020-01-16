@@ -9,7 +9,10 @@ import {
   CellMeasurerCache,
 } from 'react-virtualized';
 import { createUseStyles } from 'react-jss';
-
+import {
+  SIDEBAR_ITEMSLIST_WIDTH,
+  SIDEBAR_HEADER_HEIGHT,
+} from '../consts/defSizesOfComponents';
 const useStyle = createUseStyles({
   listOuter: {
     borderTop: '1px solid #fff3',
@@ -29,8 +32,8 @@ const useStyle = createUseStyles({
     },
   },
   listContainer: {
-    width: '100%',
-    height: 'calc(100vh - 100px)',
+    width: `${SIDEBAR_ITEMSLIST_WIDTH}`,
+    height: `calc(100vh - ${SIDEBAR_HEADER_HEIGHT})`,
   },
 });
 
