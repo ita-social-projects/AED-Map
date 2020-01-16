@@ -5,27 +5,57 @@ jss.setup(preset());
 
 const styles = {
   pointCard: {
-    background: '#fff',
-    marginBottom: '10px',
-    padding: '10px',
-    borderRadius: '10px',
+    padding: '20px 10px',
+    minHeight: '100px',
+    '&:not(:last-of-type)': {
+      borderBottom: '1px solid #fff',
+    },
+    overflow: 'hidden',
     '&:hover': {
-      background: '#ccc',
+      background: '#686c7458',
       cursor: 'pointer',
     },
   },
+  listOuterStyle: {
+    width: '100%',
+    height: 'calc(100vh - 100px)',
+  },
+  listStyle: {
+    borderTop: '1px solid #fff3',
+    borderBottom: '1px solid #fff3',
+    paddingRight: '5px',
+    '&:focus': {
+      outline: 'none',
+    },
+    '&::-webkit-scrollbar': {
+      width: '5px',
+    },
+    '&::-webkit-scrollbar-track': {
+      backgroundColor: 'rgba(0,0,0,0.1)',
+    },
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: 'rgba(255,255,255,0.3)',
+    },
+  },
   titleStyle: {
-    fontSize: '22px',
-    lineHeight: '26px',
+    color: '#fff',
+    fontSize: '19px',
+    lineHeight: '23px',
+    marginBottom: '10px',
   },
   descStyle: {
-    fontSize: '14px',
+    color: '#bbb',
+    fontSize: '13px',
+    lineHeight: '16px',
   },
   sidebarStyle: {
-    flex: '2',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    width: '360px',
     padding: '20px',
     maxHeight: '100vh',
-    overflowY: 'scroll',
+    flexShrink: '0',
   },
   coordsStyle: {
     display: 'block',
@@ -54,10 +84,11 @@ const styles = {
     position: 'relative',
     height: '100vh',
     overflow: 'hidden',
-    flex: '10',
+    width: 'calc(100vw - 400px)',
   },
   mainStyle: {
     display: 'flex',
+    justifyContent: 'flex-start',
     width: '100%',
   },
 };
