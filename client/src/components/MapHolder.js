@@ -6,9 +6,7 @@ import geoJsonData from '../geoJsonData';
 import { defsFilterSelector } from '../reducers/defReducer';
 import { connect } from 'react-redux';
 import { GeoJSONLayer, Image } from 'react-mapbox-gl';
-
 import { createUseStyles } from 'react-jss';
-
 import { SIDEBAR_WIDTH } from '../consts/defSizesOfComponents';
 
 const useStyle = createUseStyles({

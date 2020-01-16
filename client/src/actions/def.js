@@ -27,18 +27,19 @@ export function failLoadDef(error) {
   };
 }
 
-// const delay = (ms) => new Promise(resolve =>
-//   setTimeout(resolve, ms)
-// );
+const delay = (ms) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
 
 export function fetchDefs(url) {
   return (dispatch) => {
     dispatch(startLoadDef());
-
-    return fetch(url)
-      .then((res) => res.json())
-      .then((data) => dispatch(successLoadDef(data)))
-      .catch((error) => dispatch(failLoadDef(error)));
+    //SYNTHETIC DELAY
+    return delay(1000).then(() =>
+      fetch(url)
+        .then((res) => res.json())
+        .then((data) => dispatch(successLoadDef(data)))
+        .catch((error) => dispatch(failLoadDef(error))),
+    );
   };
 }
 
