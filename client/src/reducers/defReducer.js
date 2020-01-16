@@ -40,7 +40,7 @@ export default function(defs = initialState, action) {
       return {
         ...defs,
         data: [newDef, ...defs.data],
-    }}
+    };}
     case DELETE_DEF_POINT:
       return {
         ...defs,
@@ -59,7 +59,7 @@ export default function(defs = initialState, action) {
       return {
         ...defs,
         data: newData,
-    }}
+    };}
     default:
       return defs;
   }
