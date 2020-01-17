@@ -11,23 +11,31 @@ const { Schema } = mongoose;
 
 /*
     Model 'Defibrillator'
-    
     10 properties
 
     title - String
     address - String
-    location - Object (with properties: type - String and coordinates - Array[Number])
+    location - Object 
+      + type - String 
+      + coordinates - Array[Number]
     actual_date - Date
     storage_place - String
     accessibility - String
     language - String
-    informational_plates - String (with enum values: "Присутні", "Відсутні", "Присутні в будівлі", "Присутні тільки біля приладу")
+    informational_plates - String 
+      + available values: 
+          "present", 
+          "missing", 
+          "present in building", 
+          "present near appliance"
     phone - Array[String]
     additional_information - String
 
     Note
-    In property 'location.coordinates' is Array coordinates of the current address.
-    In this Array first element is 'longitude'(!) and second 'latitude'(!).
+    In property 'location.coordinates' is 
+    Array coordinates of the current address.
+    In this Array first element is 
+    'longitude'(!) and second 'latitude'(!).
     It is a feature of GeoJSON type in MongoDB.
 */
 
