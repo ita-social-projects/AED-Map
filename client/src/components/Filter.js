@@ -1,16 +1,15 @@
 import React from 'react';
-
-import { setFilter } from '../actions/filter';
 import { connect } from 'react-redux';
+import { setFilter } from '../actions/filter';
 
 const Filter = ({ filter, setFilter }) => {
   return (
     <div>
       <input
         style={{
-          width: 100 + '%',
-          marginBottom: 1 + 'rem',
-          padding: 0.5 + 'rem',
+          width: '100%',
+          marginBottom: '1rem',
+          padding: '0.5rem',
         }}
         type="text"
         placeholder="Впишіть сюди назву вулиці"
