@@ -1,12 +1,10 @@
 import React, { useEffect, useCallback } from 'react';
 import './App.css';
-// import Header from "./components/Header";
+import { connect } from 'react-redux';
 import Sidebar from './components/Sidebar';
 import MapHolder from './components/MapHolder';
 import myClasses from './styles';
-
 import { fetchDefs } from './actions/def';
-import { connect } from 'react-redux';
 import { defsFilterSelector } from './reducers/defReducer';
 const App = ({ fetchDefs, defsState, filteredDefs }) => {
   useEffect(
