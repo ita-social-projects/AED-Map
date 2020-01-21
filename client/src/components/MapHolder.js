@@ -20,6 +20,7 @@ const useStyle = createUseStyles({
 
 const MapHolder = ({ filteredDefs, mapState }) => {
   const classes = useStyle();
+
   const GEO_JSON_DATA = geoJsonData(filteredDefs);
   const { lng, lat, zoom } = mapState;
 
@@ -39,7 +40,6 @@ const MapHolder = ({ filteredDefs, mapState }) => {
 
   return (
     <Map
-      // eslint-disable-next-line react/style-prop-object
       style="mapbox://styles/mapbox/streets-v11"
       className={classes.mapOuterStyle}
       center={[lng, lat]}

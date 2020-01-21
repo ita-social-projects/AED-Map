@@ -13,6 +13,7 @@ import {
   SIDEBAR_ITEMSLIST_WIDTH,
   SIDEBAR_HEADER_HEIGHT,
 } from '../consts/defSizesOfComponents';
+
 const useStyle = createUseStyles({
   listOuter: {
     borderTop: '1px solid #fff3',

@@ -9,8 +9,10 @@ const features = (points) =>
       title: point.title,
     },
   }));
+
 const geoJsonData = (points) => ({
   type: 'FeatureCollection',
   features: features(points),
 });
+
 export default geoJsonData;
