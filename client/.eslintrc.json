@@ -1,10 +1,12 @@
 {
   "env": {
     "browser": true,
-    "es6": true
+    "es6": true,
+    "jest": true
   },
   "extends": [
-    "eslint:recommended",
+    "airbnb",
+    "prettier",
     "plugin:react/recommended"
   ],
   "globals": {
@@ -18,9 +20,20 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "plugins": ["react"],
+  "plugins": ["react", "prettier"],
   "rules": {
-    "no-unused-vars": "warn",
-    "react/prop-types": "warn"
+    "react/jsx-filename-extension": [
+      1,
+      { "extensions": [".js", ".jsx"] }
+    ],
+    "react/prop-types": "error",
+    "no-multiple-empty-lines": ["error", { "max": 1 }],
+    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "linebreak-style": [0, "unix"],
+    "quotes": ["error", "single"],
+    "semi": ["error", "always"],
+    "react/jsx-uses-vars": "error",
+    "react/jsx-uses-react": "error",
+    "react-hooks/rules-of-hooks": 0
   }
 }

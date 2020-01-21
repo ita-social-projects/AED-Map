@@ -1,9 +1,9 @@
 import React, { useEffect, useCallback } from 'react';
 import './App.css';
+import { connect } from 'react-redux';
 import Sidebar from './components/Sidebar';
 import MapHolder from './components/MapHolder';
 import { fetchDefs } from './actions/def';
-import { connect } from 'react-redux';
 import { defsFilterSelector } from './reducers/defReducer';
 import { createUseStyles } from 'react-jss';
 
