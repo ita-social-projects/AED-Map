@@ -18,7 +18,6 @@ const Sidebar = () => {
     </div>
   );
 };
-
 const mapStateToProps = (state) => ({
   isFilterGetResult: defsFilterSelector(state).length,
 });
