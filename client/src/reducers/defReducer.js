@@ -66,9 +66,17 @@ export default function(defs = initialState, action) {
 }
 
 export function defsFilterSelector(state) {
-  return state.defs.data.filter((def) =>
-    def.address
-      .toLowerCase()
-      .includes(state.filter.toLowerCase()),
-  );
+  return state.defs.data.filter((def) => {
+    return (
+      def.title
+        .toLowerCase()
+        .includes(state.filter.title.toLowerCase()) &&
+      def.address
+        .toLowerCase()
+        .includes(state.filter.address.toLowerCase()) &&
+      def.language
+        .toLowerCase()
+        .includes(state.filter.language)
+    );
+  });
 }

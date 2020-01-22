@@ -1,6 +1,10 @@
 import { SET_FILTER } from '../consts/filter';
 
-const initialState = '';
+const initialState = {
+  title: '',
+  address: '',
+  language: '',
+};
 
 export default function(filter = initialState, action) {
   switch (action.type) {
