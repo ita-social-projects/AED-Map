@@ -9,7 +9,7 @@ import { defsFilterSelector } from './reducers/defReducer';
 const App = ({ fetchDefs, defsState, filteredDefs }) => {
   useEffect(
     useCallback(() => {
-      fetchDefs('/defibrillators.json');
+      fetchDefs('/api/defibrillator');
     }, [fetchDefs]),
     [],
   );
