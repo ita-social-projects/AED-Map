@@ -2,15 +2,11 @@ import React from 'react';
 import mapPin from '../icons/icons-location-world.png';
 import myClasses from '../styles';
 import Map from './Map';
-
 import SYMBOL_LAYOUT from '../symbolLayout';
 import geoJsonData from '../geoJsonData';
 import { defsFilterSelector } from '../reducers/defReducer';
 import { connect } from 'react-redux';
-import ReactMapboxGl, {
-  GeoJSONLayer,
-  Image,
-} from 'react-mapbox-gl';
+import { GeoJSONLayer, Image } from 'react-mapbox-gl';
 
 const MapHolder = ({ filteredDefs, mapState }) => {
   const GEO_JSON_DATA = geoJsonData(filteredDefs);
@@ -65,7 +61,4 @@ const mapStateToProps = (state) => ({
   mapState: state.map,
 });
 
-export default connect(
-  mapStateToProps,
-  null,
-)(MapHolder);
+export default connect(mapStateToProps, null)(MapHolder);

@@ -49,9 +49,6 @@ const styles = {
     lineHeight: '16px',
   },
   sidebarStyle: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
     width: '360px',
     padding: '20px',
     maxHeight: '100vh',

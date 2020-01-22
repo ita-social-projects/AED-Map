@@ -1,22 +1,41 @@
 import React from 'react';
+import { createUseStyles } from 'react-jss';
 import myClasses from '../styles';
 import Header from './Header';
 import ItemList from './ItemList';
 import AddForm from './AddForm';
-import Filter from './Filter';
-
+import Search from './Search';
+import Filter from './Filter/Filter';
 import { defsFilterSelector } from '../reducers/defReducer';
 import { connect } from 'react-redux';
+
+const useStyle = createUseStyles({
+  searchFilterContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginBottom: 10,
+  },
+});
+
 const Sidebar = ({ isFilterGetResult }) => {
+  const classes = useStyle();
+
   return (
     <div className={myClasses.sidebarStyle}>
       <Header />
-      <Filter />
+      {/* temporary */}
+      <div className={classes.searchFilterContainer}>
+        {/* Search is a plug */}
+        <Search />
+        <Filter />
+      </div>
       {isFilterGetResult ? (
         <ItemList />
       ) : (
         <div>
-          {'Вибачте, ми не знайшли даних по заданій адресі'}
+          {
+            'Вибачте, ми не знайшли даних по заданому фільру'
+          }
         </div>
       )}
       <AddForm />

@@ -1,6 +1,5 @@
 import React from 'react';
 import Point from './Point';
-
 import { connect } from 'react-redux';
 import { defsFilterSelector } from '../reducers/defReducer';
 import {
@@ -10,6 +9,7 @@ import {
   CellMeasurerCache,
 } from 'react-virtualized';
 import classes from '../styles';
+
 const ItemList = ({ defsState, filteredDefs }) => {
   const cache = new CellMeasurerCache({
     fixedWidth: true,
