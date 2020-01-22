@@ -3,23 +3,33 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { defsFilterSelector } from '../reducers/defReducer';
 import { setMap } from '../actions/map';
-import { flyToPin } from '../utils/flyToPin';
 import myClasses from '../styles';
 
 const Point = ({
   point,
-  filteredDefs,
   setMapParams,
   // eslint-disable-next-line react/prop-types
   styleParam,
 }) => {
   const handleClick = () => {
-    flyToPin(point.id, filteredDefs, setMapParams);
+    const [lng, lat] = point.location.coordinates;
+    const mapParams = {
+      lng,
+      lat,
+      zoom: 18,
+    };
+    setMapParams(mapParams);
   };
 
-  const handleKeyDown = (ev) => {
-    if (ev.keyCode === 13) {
-      flyToPin(point.id, filteredDefs, setMapParams);
+  const handleKeyDown = (event) => {
+    if (event.keyCode === 13) {
+      const [lng, lat] = point.location.coordinates;
+      const mapParams = {
+        lng,
+        lat,
+        zoom: 18,
+      };
+      setMapParams(mapParams);
     }
   };
 
@@ -43,8 +53,7 @@ const Point = ({
 };
 Point.defaultProps = {
   point: {},
-  filteredDefs: [],
-  setMapParams: null,
+  setMapParams: () => null,
 };
 Point.propTypes = {
   point: PropTypes.shape({
@@ -64,25 +73,6 @@ Point.propTypes = {
     phone: PropTypes.arrayOf(PropTypes.string),
     additional_information: PropTypes.string,
   }),
-  filteredDefs: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      title: PropTypes.string,
-      address: PropTypes.string,
-      location: PropTypes.shape({
-        type: PropTypes.string,
-        coordinates: PropTypes.arrayOf(PropTypes.number),
-      }),
-      actual_date: PropTypes.string,
-      floor: PropTypes.number,
-      storage_place: PropTypes.string,
-      accessibility: PropTypes.string,
-      language: PropTypes.string,
-      informational_plates: PropTypes.bool,
-      phone: PropTypes.arrayOf(PropTypes.string),
-      additional_information: PropTypes.string,
-    }),
-  ),
   setMapParams: PropTypes.func,
 };
 const mapStateToProps = (state) => ({

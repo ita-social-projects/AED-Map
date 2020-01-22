@@ -15,7 +15,8 @@ import classes from '../styles';
 const ItemList = ({ filteredDefs, fetchDefebs }) => {
   useEffect(
     useCallback(() => {
-      fetchDefebs('/defibrillators.json');
+      fetchDefebs('/api/defibrillator');
+      //  fetchDefebs('/defibrillators.js');
     }, [fetchDefebs]),
     [],
   );

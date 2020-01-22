@@ -3,12 +3,12 @@ const router = express.Router();
 
 const Defibrillator = require('../models/Defibrillator');
 
-router.get(`/`, async (req, res) => {
+router.get('/', async (req, res) => {
   const defibrillators = await Defibrillator.find();
   return res.send(defibrillators);
 });
 
-router.post(`/`, async (req, res) => {
+router.post('/', async (req, res) => {
   const defibrillator = await Defibrillator.create(
     req.body,
   );
@@ -18,7 +18,7 @@ router.post(`/`, async (req, res) => {
   });
 });
 
-router.put(`/:id`, async (req, res) => {
+router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const defibrillator = await Defibrillator.findByIdAndUpdate(
     id,
@@ -30,7 +30,7 @@ router.put(`/:id`, async (req, res) => {
   });
 });
 
-router.delete(`/:id`, async (req, res) => {
+router.delete('/:id', async (req, res) => {
   const { id } = req.params;
   const defibrillator = await Defibrillator.findByIdAndDelete(
     id,
