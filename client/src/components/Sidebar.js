@@ -26,10 +26,10 @@ const Sidebar = ({ isFilterGetResult }) => {
   );
 };
 Sidebar.defaultProps = {
-  isFilterGetResult: true,
+  isFilterGetResult: 0,
 };
 Sidebar.propTypes = {
-  isFilterGetResult: PropTypes.bool,
+  isFilterGetResult: PropTypes.number,
 };
 const mapStateToProps = (state) => ({
   isFilterGetResult: defsFilterSelector(state).length,

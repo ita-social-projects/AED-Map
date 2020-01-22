@@ -7,12 +7,18 @@ import Map from './Map';
 import SYMBOL_LAYOUT from '../symbolLayout';
 import geoJsonData from '../geoJsonData';
 import { defsFilterSelector } from '../reducers/defReducer';
+import { setMap } from '../actions/map';
 
-const MapHolder = ({ filteredDefs, mapState }) => {
-  const [map, setMap] = useState(null);
-  const onMapLoad = (mapRaw) => {
+const MapHolder = ({
+  filteredDefs,
+  mapState,
+  setMapCenterParams,
+}) => {
+  const [map, setLocalMap] = useState(null);
+  const loadMap = (mapRaw) => {
     if (mapRaw) {
-      setMap(mapRaw);
+      setLocalMap(mapRaw);
+      console.log('map set in local store');
     }
   };
 
@@ -20,8 +26,11 @@ const MapHolder = ({ filteredDefs, mapState }) => {
   const { lng, lat, zoom } = mapState;
 
   const symbolClick = (event) => {
-    event.target.flyTo({
-      center: [event.lngLat.lng, event.lngLat.lat],
+    const { lngLat } = event;
+    setMapCenterParams({
+      lng: lngLat.lng,
+      lat: lngLat.lat,
+      zoom,
     });
   };
 
@@ -45,7 +54,9 @@ const MapHolder = ({ filteredDefs, mapState }) => {
         width: '100vw',
       }}
       onStyleLoad={(rawMap) => {
-        onMapLoad(rawMap);
+        if (rawMap) {
+          loadMap(rawMap);
+        }
       }}
     >
       <GeoJSONLayer
@@ -61,6 +72,7 @@ const MapHolder = ({ filteredDefs, mapState }) => {
 MapHolder.defaultProps = {
   mapState: {},
   filteredDefs: [],
+  setMapCenterParams: () => null,
 };
 
 MapHolder.propTypes = {
@@ -88,6 +100,7 @@ MapHolder.propTypes = {
       additional_information: PropTypes.string,
     }),
   ),
+  setMapCenterParams: PropTypes.func,
 };
 const mapStateToProps = (state) => ({
   defsState: state.defs,
@@ -95,5 +108,10 @@ const mapStateToProps = (state) => ({
   filteredDefs: defsFilterSelector(state),
   mapState: state.map,
 });
-
-export default connect(mapStateToProps, null)(MapHolder);
+const mapDispatchToProps = {
+  setMapCenterParams: setMap,
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(MapHolder);
