@@ -22,7 +22,7 @@ router.post('/create', (req, res) => {
     additional_information,
   } = req.body;
 
-  const newDeff = new Deff({
+  const newDeff = new Defibrillator({
     title,
     address,
     location,
