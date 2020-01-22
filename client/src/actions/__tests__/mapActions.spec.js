@@ -1,5 +1,5 @@
 import * as types from '../../consts/map';
-import * as actions from '../../actions/map';
+import * as actions from '../map';
 
 import { mockMap } from '../../mocks';
 

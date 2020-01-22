@@ -1,5 +1,5 @@
 import * as types from '../../consts/def';
-import * as actions from '../../actions/def';
+import * as actions from '../def';
 
 import { mockNewDefInfo } from '../../mocks';
 

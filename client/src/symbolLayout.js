@@ -1,7 +1,7 @@
 const SYMBOL_LAYOUT = {
-  'icon-image': 'pointer',
-  'icon-size': 1,
-  'icon-offset': [0, -20],
+  'icon-image': 'map-marker-point',
+  'icon-size': 0.08,
+  'icon-offset': [0, -180],
   'text-field': ['get', 'title'],
   'text-font': [
     'Open Sans Semibold',
