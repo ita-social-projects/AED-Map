@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import myClasses from '../styles';
 import Header from './Header';
 import ItemList from './ItemList';
@@ -9,29 +8,19 @@ import Filter from './Filter';
 
 import { defsFilterSelector } from '../reducers/defReducer';
 
-const Sidebar = ({ isFilterGetResult }) => {
+const Sidebar = () => {
   return (
     <div className={myClasses.sidebarStyle}>
       <Header />
       <Filter />
-      {isFilterGetResult ? (
-        <ItemList />
-      ) : (
-        <div>
-          Вибачте, ми не знайшли даних по заданій адресі
-        </div>
-      )}
+      <ItemList />
       <AddForm />
     </div>
   );
 };
-Sidebar.defaultProps = {
-  isFilterGetResult: 0,
-};
-Sidebar.propTypes = {
-  isFilterGetResult: PropTypes.number,
-};
+
 const mapStateToProps = (state) => ({
   isFilterGetResult: defsFilterSelector(state).length,
 });
+
 export default connect(mapStateToProps)(Sidebar);

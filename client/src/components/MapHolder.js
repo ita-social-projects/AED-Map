@@ -18,7 +18,6 @@ const MapHolder = ({
   const loadMap = (mapRaw) => {
     if (mapRaw) {
       setLocalMap(mapRaw);
-      console.log('map set in local store');
     }
   };
 
@@ -27,10 +26,11 @@ const MapHolder = ({
 
   const symbolClick = (event) => {
     const { lngLat } = event;
+    const curZoom = map.getZoom();
     setMapCenterParams({
       lng: lngLat.lng,
       lat: lngLat.lat,
-      zoom,
+      zoom: curZoom,
     });
   };
 
