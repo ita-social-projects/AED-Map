@@ -17,15 +17,14 @@ router.post(`/`, async (req, res) => {
     defibrillator,
   });
 });
-  
-  newDeff.save((err) => {
-    if (err) {
-      return next(err);
-    }
-    res.status(201).send({
-      error: false,
-      newDeff
-    });
+
+newDeff.save((err) => {
+  if (err) {
+    return next(err);
+  }
+  res.status(201).send({
+    error: false,
+    newDeff,
   });
 });
 
