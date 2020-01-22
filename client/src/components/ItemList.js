@@ -100,27 +100,6 @@ const mapDispatchToProps = {
   fetchDefebs: fetchDefs,
 };
 
-ItemList.propTypes = {
-  filteredDefs: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      title: PropTypes.string,
-      address: PropTypes.string,
-      location: PropTypes.shape({
-        type: PropTypes.string,
-        coordinates: PropTypes.arrayOf(PropTypes.number),
-      }),
-      actual_date: PropTypes.string,
-      floor: PropTypes.number,
-      storage_place: PropTypes.string,
-      accessibility: PropTypes.string,
-      language: PropTypes.string,
-      informational_plates: PropTypes.bool,
-      phone: PropTypes.arrayOf(PropTypes.string),
-      additional_information: PropTypes.string,
-    }),
-  ),
-};
 const mapStateToProps = (state) => ({
   defsState: state.defs,
   filter: state.filter,
