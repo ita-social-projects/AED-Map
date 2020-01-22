@@ -2,11 +2,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 
+const defRoute = require('./routes/defRoute');
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('client/build'));
+
+app.use('/api/defibrillator', defRoute);
 
 mongoose
   .connect('mongodb://localhost:27017/defibrillatorDB', {

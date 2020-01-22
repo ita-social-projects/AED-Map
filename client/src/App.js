@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import { connect } from 'react-redux';
-
 import Sidebar from './components/Sidebar';
 import MapHolder from './components/MapHolder';
 import myClasses from './styles';
