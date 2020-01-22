@@ -16,40 +16,45 @@ const initialState = {
 export default function(defs = initialState, action) {
   switch (action.type) {
     // LOAD
-    case START_LOAD_DEF:
+    case START_LOAD_DEF: {
       return {
         ...defs,
         loading: true,
         error: null,
       };
-    case SUCCESS_LOAD_DEF:
+    }
+    case SUCCESS_LOAD_DEF: {
       return {
         ...defs,
         loading: false,
         data: action.defs,
       };
-    case FAIL_LOAD_DEF:
+    }
+    case FAIL_LOAD_DEF: {
       return {
         ...defs,
         loading: false,
         error: action.error,
       };
+    }
     // CRUD
-    case CREATE_DEF_POINT:
-      const newDef = action.newDef;
+    case CREATE_DEF_POINT: {
+      const { newDef } = action;
       return {
         ...defs,
         data: [newDef, ...defs.data],
       };
-    case DELETE_DEF_POINT:
+    }
+    case DELETE_DEF_POINT: {
       return {
         ...defs,
         data: defs.data.filter(
           (def) => def.id !== action.id,
         ),
       };
-    case EDIT_DEF_POINT:
-      const newDefInfo = action.newDefInfo;
+    }
+    case EDIT_DEF_POINT: {
+      const { newDefInfo } = action;
       const newData = defs.data.map((def) => {
         if (def.id === action.id) {
           return { ...def, ...newDefInfo };
@@ -60,6 +65,7 @@ export default function(defs = initialState, action) {
         ...defs,
         data: newData,
       };
+    }
     default:
       return defs;
   }

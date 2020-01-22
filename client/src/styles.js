@@ -1,4 +1,5 @@
 import jss from 'jss';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import preset from 'jss-preset-default';
 
 jss.setup(preset());

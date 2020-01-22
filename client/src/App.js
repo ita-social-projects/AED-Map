@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React from 'react';
 import './App.css';
 import { connect } from 'react-redux';
 import Sidebar from './components/Sidebar';
@@ -6,16 +6,10 @@ import MapHolder from './components/MapHolder';
 import myClasses from './styles';
 import { fetchDefs } from './actions/def';
 import { defsFilterSelector } from './reducers/defReducer';
-const App = ({ fetchDefs, defsState, filteredDefs }) => {
-  useEffect(
-    useCallback(() => {
-      fetchDefs('/defibrillators.json');
-    }, [fetchDefs]),
-    [],
-  );
 
-  if (defsState.loading) return <p>Loading...</p>;
-  if (defsState.error) return <p>Something wrong there</p>;
+const App = () => {
+  // if (defsState.loading) return <p>Loading...</p>;
+  // if (defsState.error) return <p>Something wrong there</p>;
   return (
     <div className="App">
       <div className={myClasses.mainStyle}>
@@ -32,7 +26,7 @@ const mapStateToProps = (state) => ({
   filteredDefs: defsFilterSelector(state),
 });
 const mapDispatchToProps = {
-  fetchDefs,
+  fetchDefebs: fetchDefs,
 };
 export default connect(
   mapStateToProps,

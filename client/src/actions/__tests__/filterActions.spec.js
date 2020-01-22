@@ -1,5 +1,5 @@
 import * as types from '../../consts/filter';
-import * as actions from '../../actions/filter';
+import * as actions from '../filter';
 
 import { mockFilter } from '../../mocks';
 
