@@ -1,7 +1,8 @@
 import React from 'react';
+import Form from './Form';
 
 const AddForm = () => {
-  return <div />;
+  return <Form />;
 };
 
 export default AddForm;

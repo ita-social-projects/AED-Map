@@ -8,13 +8,41 @@ router.get(`/`, async (req, res) => {
   return res.send(defibrillators);
 });
 
-router.post(`/`, async (req, res) => {
-  const defibrillator = await Defibrillator.create(
-    req.body,
-  );
-  return res.status(201).send({
-    error: false,
-    defibrillator,
+router.post('/create', (req, res) => {
+  const {
+    title,
+    address,
+    location,
+    actual_date,
+    storage_place,
+    accessibility,
+    language,
+    informational_plates,
+    phone,
+    additional_information,
+  } = req.body;
+
+  const newDeff = new Deff({
+    title,
+    address,
+    location,
+    actual_date,
+    storage_place,
+    accessibility,
+    language,
+    informational_plates,
+    phone,
+    additional_information,
+  });
+  
+  newDeff.save((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.status(201).send({
+      error: false,
+      newDeff
+    });
   });
 });
 
