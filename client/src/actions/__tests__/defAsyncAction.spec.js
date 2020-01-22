@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock';
 
 import * as types from '../../consts/def';
-import * as actions from '../../actions/def';
+import * as actions from '../def';
 import { mockData } from '../../mocks';
 
 const middlewares = [thunk];
@@ -33,7 +33,7 @@ describe('fetchDefs action', () => {
       });
   });
 
-  it(`should fetch data from DB and have length`, async () => {
+  it('should fetch data from DB and have length', async () => {
     fetchMock.getOnce('/defibrillators.json', {
       body: { data: mockData },
       headers: { 'content-type': 'application/json' },

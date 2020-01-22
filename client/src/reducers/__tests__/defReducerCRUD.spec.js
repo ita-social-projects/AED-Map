@@ -1,6 +1,5 @@
 import defReducer from '../defReducer';
 import * as types from '../../consts/def';
-import * as actions from '../../actions/def';
 
 import { mockData, mockNewDefInfo } from '../../mocks';
 

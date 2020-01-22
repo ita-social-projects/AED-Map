@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { setFilter } from '../actions/filter';
 
-const Filter = ({ filter, setFilter }) => {
+const Filter = ({ filter, setFilterValue }) => {
   return (
     <div>
       <input
@@ -14,21 +15,25 @@ const Filter = ({ filter, setFilter }) => {
         type="text"
         placeholder="Впишіть сюди назву вулиці"
         value={filter}
-        onChange={(event) => setFilter(event.target.value)}
+        onChange={(event) => setFilterValue(event.target.value)}
       />
     </div>
   );
 };
-
+Filter.defaultProps = {
+  filter: '',
+  setFilterValue: null,
+};
+Filter.propTypes = {
+  filter: PropTypes.string,
+  setFilterValue: PropTypes.func,
+};
 const mapStateToProps = (state) => ({
   filter: state.filter,
 });
 
 const mapDispatchToProps = {
-  setFilter,
+  setFilterValue: setFilter,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Filter);
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);

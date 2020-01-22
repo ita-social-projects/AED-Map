@@ -1,12 +1,7 @@
 import defReducer from '../defReducer';
 import * as types from '../../consts/def';
-import * as actions from '../../actions/def';
+import { mockData, mockError } from '../../mocks';
 
-import {
-  mockData,
-  mockNewDefInfo,
-  mockError,
-} from '../../mocks';
 const initialState = {
   loading: false,
   data: [],
