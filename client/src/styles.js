@@ -9,45 +9,45 @@ const styles = {
     padding: '20px 10px',
     minHeight: '100px',
     '&:not(:last-of-type)': {
-      borderBottom: '1px solid #fff',
+      borderBottom: '1px solid #fff'
     },
     overflow: 'hidden',
     '&:hover': {
       background: '#686c7458',
-      cursor: 'pointer',
-    },
+      cursor: 'pointer'
+    }
   },
   listOuterStyle: {
     width: '100%',
-    height: 'calc(100vh - 100px)',
+    height: 'calc(100vh - 100px)'
   },
   listStyle: {
     borderTop: '1px solid #fff3',
     borderBottom: '1px solid #fff3',
     paddingRight: '5px',
     '&:focus': {
-      outline: 'none',
+      outline: 'none'
     },
     '&::-webkit-scrollbar': {
-      width: '5px',
+      width: '5px'
     },
     '&::-webkit-scrollbar-track': {
-      backgroundColor: 'rgba(0,0,0,0.1)',
+      backgroundColor: 'rgba(0,0,0,0.1)'
     },
     '&::-webkit-scrollbar-thumb': {
-      backgroundColor: 'rgba(255,255,255,0.3)',
-    },
+      backgroundColor: 'rgba(255,255,255,0.3)'
+    }
   },
   titleStyle: {
     color: '#fff',
     fontSize: '19px',
     lineHeight: '23px',
-    marginBottom: '10px',
+    marginBottom: '10px'
   },
   descStyle: {
     color: '#bbb',
     fontSize: '13px',
-    lineHeight: '16px',
+    lineHeight: '16px'
   },
   sidebarStyle: {
     display: 'flex',
@@ -56,7 +56,7 @@ const styles = {
     width: '360px',
     padding: '20px',
     maxHeight: '100vh',
-    flexShrink: '0',
+    flexShrink: '0'
   },
   coordsStyle: {
     display: 'block',
@@ -68,7 +68,7 @@ const styles = {
     color: '#ffffff',
     zIndex: '1',
     padding: '7px',
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
 
   mapStyle: {
@@ -78,20 +78,20 @@ const styles = {
     left: '0',
     bottom: '0',
     width: '100%',
-    height: '100%',
+    height: '100%'
   },
 
   mapOuterStyle: {
     position: 'relative',
     height: '100vh',
     overflow: 'hidden',
-    width: 'calc(100vw - 400px)',
+    width: 'calc(100vw - 400px)'
   },
   mainStyle: {
     display: 'flex',
     justifyContent: 'flex-start',
-    width: '100%',
-  },
+    width: '100%'
+  }
 };
 
 const { classes } = jss.createStyleSheet(styles).attach();

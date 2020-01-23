@@ -4,13 +4,13 @@ import {
   FAIL_LOAD_DEF,
   CREATE_DEF_POINT,
   DELETE_DEF_POINT,
-  EDIT_DEF_POINT,
+  EDIT_DEF_POINT
 } from '../consts/def';
 
 const initialState = {
   loading: false,
   error: null,
-  data: [],
+  data: []
 };
 
 export default function(defs = initialState, action) {
@@ -20,21 +20,21 @@ export default function(defs = initialState, action) {
       return {
         ...defs,
         loading: true,
-        error: null,
+        error: null
       };
     }
     case SUCCESS_LOAD_DEF: {
       return {
         ...defs,
         loading: false,
-        data: action.defs,
+        data: action.defs
       };
     }
     case FAIL_LOAD_DEF: {
       return {
         ...defs,
         loading: false,
-        error: action.error,
+        error: action.error
       };
     }
     // CRUD
@@ -42,15 +42,15 @@ export default function(defs = initialState, action) {
       const { newDef } = action;
       return {
         ...defs,
-        data: [newDef, ...defs.data],
+        data: [newDef, ...defs.data]
       };
     }
     case DELETE_DEF_POINT: {
       return {
         ...defs,
         data: defs.data.filter(
-          (def) => def.id !== action.id,
-        ),
+          (def) => def.id !== action.id
+        )
       };
     }
     case EDIT_DEF_POINT: {
@@ -63,7 +63,7 @@ export default function(defs = initialState, action) {
       });
       return {
         ...defs,
-        data: newData,
+        data: newData
       };
     }
     default:
@@ -75,6 +75,6 @@ export function defsFilterSelector(state) {
   return state.defs.data.filter((def) =>
     def.address
       .toLowerCase()
-      .includes(state.filter.toLowerCase()),
+      .includes(state.filter.toLowerCase())
   );
 }

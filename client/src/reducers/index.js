@@ -7,5 +7,5 @@ import mapReducer from './mapReducer';
 export default combineReducers({
   defs: defReducer,
   filter: filterReducer,
-  map: mapReducer,
+  map: mapReducer
 });

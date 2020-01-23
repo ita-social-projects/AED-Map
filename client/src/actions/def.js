@@ -4,26 +4,26 @@ import {
   FAIL_LOAD_DEF,
   CREATE_DEF_POINT,
   DELETE_DEF_POINT,
-  EDIT_DEF_POINT,
+  EDIT_DEF_POINT
 } from '../consts/def';
 
 export function startLoadDef() {
   return {
-    type: START_LOAD_DEF,
+    type: START_LOAD_DEF
   };
 }
 
 export function successLoadDef(defs) {
   return {
     type: SUCCESS_LOAD_DEF,
-    defs,
+    defs
   };
 }
 
 export function failLoadDef(error) {
   return {
     type: FAIL_LOAD_DEF,
-    error,
+    error
   };
 }
 
@@ -46,14 +46,14 @@ export function fetchDefs(url) {
 export function createDefPoint(newDef) {
   return {
     type: CREATE_DEF_POINT,
-    newDef,
+    newDef
   };
 }
 
 export function deleteDefPoint(id) {
   return {
     type: DELETE_DEF_POINT,
-    id,
+    id
   };
 }
 
@@ -61,6 +61,6 @@ export function editDefPoint(id, newDefInfo) {
   return {
     type: EDIT_DEF_POINT,
     id,
-    newDefInfo,
+    newDefInfo
   };
 }

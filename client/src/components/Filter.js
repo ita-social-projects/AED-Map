@@ -10,7 +10,7 @@ const Filter = ({ filter, setFilterValue }) => {
         style={{
           width: '100%',
           marginBottom: '1rem',
-          padding: '0.5rem',
+          padding: '0.5rem'
         }}
         type="text"
         placeholder="Впишіть сюди назву вулиці"
@@ -22,18 +22,18 @@ const Filter = ({ filter, setFilterValue }) => {
 };
 Filter.defaultProps = {
   filter: '',
-  setFilterValue: null,
+  setFilterValue: null
 };
 Filter.propTypes = {
   filter: PropTypes.string,
-  setFilterValue: PropTypes.func,
+  setFilterValue: PropTypes.func
 };
 const mapStateToProps = (state) => ({
-  filter: state.filter,
+  filter: state.filter
 });
 
 const mapDispatchToProps = {
-  setFilterValue: setFilter,
+  setFilterValue: setFilter
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Filter);

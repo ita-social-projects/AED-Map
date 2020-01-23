@@ -9,14 +9,14 @@ const Point = ({
   point,
   setMapParams,
   // eslint-disable-next-line react/prop-types
-  styleParam,
+  styleParam
 }) => {
   const handleClick = () => {
     const [lng, lat] = point.location.coordinates;
     const mapParams = {
       lng,
       lat,
-      zoom: 18,
+      zoom: 18
     };
     setMapParams(mapParams);
   };
@@ -27,7 +27,7 @@ const Point = ({
       const mapParams = {
         lng,
         lat,
-        zoom: 18,
+        zoom: 18
       };
       setMapParams(mapParams);
     }
@@ -42,9 +42,7 @@ const Point = ({
       role="button"
       tabIndex={0}
     >
-      <h3 className={myClasses.titleStyle}>
-        {point.title}
-      </h3>
+      <h3 className={myClasses.titleStyle}>{point.title}</h3>
       <p className={myClasses.descStyle}>
         {point.additional_information}
       </p>
@@ -53,7 +51,7 @@ const Point = ({
 };
 Point.defaultProps = {
   point: {},
-  setMapParams: () => null,
+  setMapParams: () => null
 };
 Point.propTypes = {
   point: PropTypes.shape({
@@ -62,7 +60,7 @@ Point.propTypes = {
     address: PropTypes.string,
     location: PropTypes.shape({
       type: PropTypes.string,
-      coordinates: PropTypes.arrayOf(PropTypes.number),
+      coordinates: PropTypes.arrayOf(PropTypes.number)
     }),
     actual_date: PropTypes.string,
     floor: PropTypes.number,
@@ -71,17 +69,14 @@ Point.propTypes = {
     language: PropTypes.string,
     informational_plates: PropTypes.bool,
     phone: PropTypes.arrayOf(PropTypes.string),
-    additional_information: PropTypes.string,
+    additional_information: PropTypes.string
   }),
-  setMapParams: PropTypes.func,
+  setMapParams: PropTypes.func
 };
 const mapStateToProps = (state) => ({
-  filteredDefs: defsFilterSelector(state),
+  filteredDefs: defsFilterSelector(state)
 });
 const mapDispatchToProps = {
-  setMapParams: setMap,
+  setMapParams: setMap
 };
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Point);
+export default connect(mapStateToProps, mapDispatchToProps)(Point);

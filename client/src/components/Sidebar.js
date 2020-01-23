@@ -20,7 +20,7 @@ const Sidebar = () => {
 };
 
 const mapStateToProps = (state) => ({
-  isFilterGetResult: defsFilterSelector(state).length,
+  isFilterGetResult: defsFilterSelector(state).length
 });
 
 export default connect(mapStateToProps)(Sidebar);

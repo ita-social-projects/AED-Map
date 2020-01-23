@@ -5,10 +5,10 @@ const SYMBOL_LAYOUT = {
   'text-field': ['get', 'title'],
   'text-font': [
     'Open Sans Semibold',
-    'Arial Unicode MS Bold',
+    'Arial Unicode MS Bold'
   ],
   'text-offset': [0, 0.2],
-  'text-anchor': 'top',
+  'text-anchor': 'top'
 };
 
 export default SYMBOL_LAYOUT;

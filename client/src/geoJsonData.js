@@ -3,14 +3,14 @@ const features = (points) =>
     type: 'Feature',
     geometry: {
       type: point.location.type,
-      coordinates: point.location.coordinates,
+      coordinates: point.location.coordinates
     },
     properties: {
-      title: point.title,
-    },
+      title: point.title
+    }
   }));
 const geoJsonData = (points) => ({
   type: 'FeatureCollection',
-  features: features(points),
+  features: features(points)
 });
 export default geoJsonData;

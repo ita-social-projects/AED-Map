@@ -7,7 +7,7 @@ describe('filter actions', () => {
   it(`should create action to ${types.SET_MAP}`, () => {
     const expectedAction = {
       type: types.SET_MAP,
-      map: mockMap,
+      map: mockMap
     };
     expect(actions.setMap(mockMap)).toEqual(expectedAction);
   });

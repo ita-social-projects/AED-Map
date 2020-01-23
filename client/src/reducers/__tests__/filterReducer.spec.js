@@ -7,7 +7,7 @@ const initialState = '';
 describe('filter reducer', () => {
   it('should return initial state', () => {
     expect(filterReducer(undefined, {})).toEqual(
-      initialState,
+      initialState
     );
   });
 
@@ -15,8 +15,8 @@ describe('filter reducer', () => {
     expect(
       filterReducer(initialState, {
         type: types.SET_FILTER,
-        filter: mockFilter,
-      }),
+        filter: mockFilter
+      })
     ).toEqual(mockFilter);
   });
 });

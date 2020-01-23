@@ -12,7 +12,7 @@ import { setMap } from '../actions/map';
 const MapHolder = ({
   filteredDefs,
   mapState,
-  setMapCenterParams,
+  setMapCenterParams
 }) => {
   const [map, setLocalMap] = useState(null);
   const loadMap = (mapRaw) => {
@@ -30,7 +30,7 @@ const MapHolder = ({
     setMapCenterParams({
       lng: lngLat.lng,
       lat: lngLat.lat,
-      zoom: curZoom,
+      zoom: curZoom
     });
   };
 
@@ -51,7 +51,7 @@ const MapHolder = ({
       zoom={[zoom]}
       containerStyle={{
         height: '100vh',
-        width: '100vw',
+        width: '100vw'
       }}
       onStyleLoad={(rawMap) => {
         if (rawMap) {
@@ -72,14 +72,14 @@ const MapHolder = ({
 MapHolder.defaultProps = {
   mapState: {},
   filteredDefs: [],
-  setMapCenterParams: () => null,
+  setMapCenterParams: () => null
 };
 
 MapHolder.propTypes = {
   mapState: PropTypes.shape({
     lng: PropTypes.number,
     lat: PropTypes.number,
-    zoom: PropTypes.number,
+    zoom: PropTypes.number
   }),
   filteredDefs: PropTypes.arrayOf(
     PropTypes.shape({
@@ -88,7 +88,7 @@ MapHolder.propTypes = {
       address: PropTypes.string,
       location: PropTypes.shape({
         type: PropTypes.string,
-        coordinates: PropTypes.arrayOf(PropTypes.number),
+        coordinates: PropTypes.arrayOf(PropTypes.number)
       }),
       actual_date: PropTypes.string,
       floor: PropTypes.number,
@@ -97,21 +97,21 @@ MapHolder.propTypes = {
       language: PropTypes.string,
       informational_plates: PropTypes.bool,
       phone: PropTypes.arrayOf(PropTypes.string),
-      additional_information: PropTypes.string,
-    }),
+      additional_information: PropTypes.string
+    })
   ),
-  setMapCenterParams: PropTypes.func,
+  setMapCenterParams: PropTypes.func
 };
 const mapStateToProps = (state) => ({
   defsState: state.defs,
   filter: state.filter,
   filteredDefs: defsFilterSelector(state),
-  mapState: state.map,
+  mapState: state.map
 });
 const mapDispatchToProps = {
-  setMapCenterParams: setMap,
+  setMapCenterParams: setMap
 };
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(MapHolder);

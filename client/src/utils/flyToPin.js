@@ -5,6 +5,6 @@ export const flyToPin = (id, items, setMap) => {
   setMap({
     lng,
     lat,
-    zoom: 18,
+    zoom: 18
   });
 };

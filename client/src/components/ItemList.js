@@ -4,7 +4,7 @@ import {
   List,
   AutoSizer,
   CellMeasurer,
-  CellMeasurerCache,
+  CellMeasurerCache
 } from 'react-virtualized';
 import PropTypes from 'prop-types';
 import { fetchDefs } from '../actions/def';
@@ -18,11 +18,11 @@ const ItemList = ({ filteredDefs, fetchDefebs }) => {
       fetchDefebs('/api/defibrillator');
       //  fetchDefebs('/defibrillators.js');
     }, [fetchDefebs]),
-    [],
+    []
   );
   const cache = new CellMeasurerCache({
     fixedWidth: true,
-    defaultHeight: 100,
+    defaultHeight: 100
   });
 
   // eslint-disable-next-line react/prop-types
@@ -35,10 +35,7 @@ const ItemList = ({ filteredDefs, fetchDefebs }) => {
         columnIndex={0}
         rowIndex={index}
       >
-        <Point
-          styleParam={style}
-          point={filteredDefs[index]}
-        />
+        <Point styleParam={style} point={filteredDefs[index]} />
       </CellMeasurer>
     );
   };
@@ -71,7 +68,7 @@ const ItemList = ({ filteredDefs, fetchDefebs }) => {
 };
 ItemList.defaultProps = {
   filteredDefs: [],
-  fetchDefebs: () => null,
+  fetchDefebs: () => null
 };
 
 ItemList.propTypes = {
@@ -82,7 +79,7 @@ ItemList.propTypes = {
       address: PropTypes.string,
       location: PropTypes.shape({
         type: PropTypes.string,
-        coordinates: PropTypes.arrayOf(PropTypes.number),
+        coordinates: PropTypes.arrayOf(PropTypes.number)
       }),
       actual_date: PropTypes.string,
       floor: PropTypes.number,
@@ -91,23 +88,20 @@ ItemList.propTypes = {
       language: PropTypes.string,
       informational_plates: PropTypes.bool,
       phone: PropTypes.arrayOf(PropTypes.string),
-      additional_information: PropTypes.string,
-    }),
+      additional_information: PropTypes.string
+    })
   ),
-  fetchDefebs: PropTypes.func,
+  fetchDefebs: PropTypes.func
 };
 
 const mapDispatchToProps = {
-  fetchDefebs: fetchDefs,
+  fetchDefebs: fetchDefs
 };
 
 const mapStateToProps = (state) => ({
   defsState: state.defs,
   filter: state.filter,
-  filteredDefs: defsFilterSelector(state),
+  filteredDefs: defsFilterSelector(state)
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ItemList);
+export default connect(mapStateToProps, mapDispatchToProps)(ItemList);
