@@ -10,11 +10,11 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const defibrillator = await Defibrillator.create(
-    req.body,
+    req.body
   );
   return res.status(201).send({
     error: false,
-    defibrillator,
+    defibrillator
   });
 });
 
@@ -22,22 +22,22 @@ router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const defibrillator = await Defibrillator.findByIdAndUpdate(
     id,
-    req.body,
+    req.body
   );
   return res.status(202).send({
     error: false,
-    defibrillator,
+    defibrillator
   });
 });
 
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
   const defibrillator = await Defibrillator.findByIdAndDelete(
-    id,
+    id
   );
   return res.status(202).send({
     error: false,
-    defibrillator,
+    defibrillator
   });
 });
 
