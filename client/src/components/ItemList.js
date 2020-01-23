@@ -35,7 +35,10 @@ const ItemList = ({ filteredDefs, fetchDefebs }) => {
         columnIndex={0}
         rowIndex={index}
       >
-        <Point styleParam={style} point={filteredDefs[index]} />
+        <Point
+          styleParam={style}
+          point={filteredDefs[index]}
+        />
       </CellMeasurer>
     );
   };
@@ -86,7 +89,7 @@ ItemList.propTypes = {
       storage_place: PropTypes.string,
       accessibility: PropTypes.string,
       language: PropTypes.string,
-      informational_plates: PropTypes.bool,
+      informational_plates: PropTypes.string,
       phone: PropTypes.arrayOf(PropTypes.string),
       additional_information: PropTypes.string
     })
@@ -104,4 +107,7 @@ const mapStateToProps = (state) => ({
   filteredDefs: defsFilterSelector(state)
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ItemList);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ItemList);

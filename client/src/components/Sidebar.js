@@ -4,15 +4,12 @@ import myClasses from '../styles';
 import Header from './Header';
 import ItemList from './ItemList';
 import AddForm from './AddForm';
-import Filter from './Filter';
-
 import { defsFilterSelector } from '../reducers/defReducer';
 
 const Sidebar = () => {
   return (
     <div className={myClasses.sidebarStyle}>
       <Header />
-      <Filter />
       <ItemList />
       <AddForm />
     </div>

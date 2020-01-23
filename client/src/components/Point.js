@@ -42,7 +42,9 @@ const Point = ({
       role="button"
       tabIndex={0}
     >
-      <h3 className={myClasses.titleStyle}>{point.title}</h3>
+      <h3 className={myClasses.titleStyle}>
+        {point.title}
+      </h3>
       <p className={myClasses.descStyle}>
         {point.additional_information}
       </p>
@@ -67,7 +69,7 @@ Point.propTypes = {
     storage_place: PropTypes.string,
     accessibility: PropTypes.string,
     language: PropTypes.string,
-    informational_plates: PropTypes.bool,
+    informational_plates: PropTypes.string,
     phone: PropTypes.arrayOf(PropTypes.string),
     additional_information: PropTypes.string
   }),
@@ -79,4 +81,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   setMapParams: setMap
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Point);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Point);
