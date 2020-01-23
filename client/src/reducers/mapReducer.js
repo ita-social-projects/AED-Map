@@ -1,4 +1,5 @@
 import { SET_MAP } from '../consts/map';
+
 const initialState = {
   lng: 24.0311,
   lat: 49.842,

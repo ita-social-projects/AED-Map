@@ -15,7 +15,7 @@ mongoose
   .connect('mongodb://localhost:27017/defibrillatorDB', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: true,
+    useFindAndModify: true
   })
   .then(() => {
     console.log('connection to database established');
@@ -26,12 +26,7 @@ mongoose
 
 app.get('*', (req, res) => {
   res.sendFile(
-    path.resolve(
-      __dirname,
-      'client',
-      'build',
-      'index.html',
-    ),
+    path.resolve(__dirname, 'client', 'build', 'index.html')
   );
 });
 

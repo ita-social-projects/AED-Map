@@ -4,7 +4,7 @@ const {
   PRESENT,
   MISSING,
   PRESENT_IN_BUILDING,
-  PRESENT_NEAR_APPLIANCE,
+  PRESENT_NEAR_APPLIANCE
 } = require('../consts/informational_plate_state.js');
 
 const { Schema } = mongoose;
@@ -34,45 +34,45 @@ const { Schema } = mongoose;
 const defibrillatorSchema = new Schema({
   title: {
     type: String,
-    required: true,
+    required: true
   },
 
   address: {
     type: String,
-    required: true,
+    required: true
   },
 
   location: {
     type: {
       type: String,
       enum: ['Point'],
-      required: true,
+      required: true
     },
 
     coordinates: {
       type: [Number],
-      required: true,
-    },
+      required: true
+    }
   },
 
   actual_date: {
     type: Date,
-    required: true,
+    required: true
   },
 
   storage_place: {
     type: String,
-    required: true,
+    required: true
   },
 
   accessibility: {
     type: String,
-    required: true,
+    required: true
   },
 
   language: {
     type: String,
-    required: true,
+    required: true
   },
 
   informational_plates: {
@@ -81,23 +81,23 @@ const defibrillatorSchema = new Schema({
       PRESENT,
       MISSING,
       PRESENT_IN_BUILDING,
-      PRESENT_NEAR_APPLIANCE,
+      PRESENT_NEAR_APPLIANCE
     ],
-    required: true,
+    required: true
   },
 
   phone: {
     type: [String],
-    required: true,
+    required: true
   },
 
   additional_information: {
     type: String,
-    required: false,
-  },
+    required: false
+  }
 });
 
 module.exports = mongoose.model(
   'defibrillators',
-  defibrillatorSchema,
+  defibrillatorSchema
 );

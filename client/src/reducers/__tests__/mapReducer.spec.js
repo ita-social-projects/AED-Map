@@ -12,8 +12,8 @@ describe('map reducer', () => {
     expect(
       mapReducer(mockMap, {
         type: types.SET_FILTER,
-        map: mockMap,
-      }),
+        map: mockMap
+      })
     ).toEqual(mockMap);
   });
 });
