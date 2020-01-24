@@ -1,5 +1,5 @@
-const features = (points) =>
-  points.map((point) => ({
+const features = points =>
+  points.map(point => ({
     type: 'Feature',
     geometry: {
       type: point.location.type,
@@ -9,7 +9,7 @@ const features = (points) =>
       title: point.title
     }
   }));
-const geoJsonData = (points) => ({
+const geoJsonData = points => ({
   type: 'FeatureCollection',
   features: features(points)
 });

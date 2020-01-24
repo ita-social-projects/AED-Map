@@ -7,16 +7,16 @@ import {
   CellMeasurerCache
 } from 'react-virtualized';
 import PropTypes from 'prop-types';
-import { fetchDefs } from '../actions/def';
-import Point from './Point';
-import { defsFilterSelector } from '../reducers/defReducer';
-import classes from '../styles';
+import { fetchDefs } from '../../../../actions/def';
+import DefItem from './components/DefItem';
+import { defsFilterSelector } from '../../../../reducers/defReducer';
+import classes from '../../../../styles';
 
 const ItemList = ({ filteredDefs, fetchDefebs }) => {
   useEffect(
     useCallback(() => {
-      fetchDefebs('/api/defibrillator');
-      //  fetchDefebs('/defibrillators.js');
+      // fetchDefebs('/api/defibrillator');
+      fetchDefebs('/defibrillators.json');
     }, [fetchDefebs]),
     []
   );
@@ -35,7 +35,10 @@ const ItemList = ({ filteredDefs, fetchDefebs }) => {
         columnIndex={0}
         rowIndex={index}
       >
-        <Point styleParam={style} point={filteredDefs[index]} />
+        <DefItem
+          styleParam={style}
+          defItemInfo={filteredDefs[index]}
+        />
       </CellMeasurer>
     );
   };
@@ -94,14 +97,13 @@ ItemList.propTypes = {
   fetchDefebs: PropTypes.func
 };
 
-const mapDispatchToProps = {
-  fetchDefebs: fetchDefs
-};
-
-const mapStateToProps = (state) => ({
-  defsState: state.defs,
-  filter: state.filter,
-  filteredDefs: defsFilterSelector(state)
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ItemList);
+export default connect(
+  state => ({
+    defsState: state.defs,
+    filter: state.filter,
+    filteredDefs: defsFilterSelector(state)
+  }),
+  {
+    fetchDefebs: fetchDefs
+  }
+)(ItemList);
