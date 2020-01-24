@@ -43,30 +43,32 @@ const MapHolder = ({
   };
 
   return (
-    <Map
-      // eslint-disable-next-line react/style-prop-object
-      style="mapbox://styles/oskovbasiuk/ck5nwya36638v1ilpmwxlfv5g"
-      className={myClasses.mapOuterStyle}
-      center={[lng, lat]}
-      zoom={[zoom]}
-      containerStyle={{
-        height: '100vh',
-        width: '100vw'
-      }}
-      onStyleLoad={(rawMap) => {
-        if (rawMap) {
-          loadMap(rawMap);
-        }
-      }}
-    >
-      <GeoJSONLayer
-        data={GEO_JSON_DATA}
-        symbolLayout={SYMBOL_LAYOUT}
-        symbolOnClick={symbolClick}
-        symbolOnMouseEnter={mouseEnter}
-        symbolOnMouseLeave={mouseLeave}
-      />
-    </Map>
+    <div className={myClasses.mapOuterStyle}>
+      <Map
+        // eslint-disable-next-line react/style-prop-object
+        style="mapbox://styles/oskovbasiuk/ck5nwya36638v1ilpmwxlfv5g"
+        className={myClasses.mapStyle}
+        center={[lng, lat]}
+        zoom={[zoom]}
+        containerStyle={{
+          height: '100vh',
+          width: '100vw'
+        }}
+        onStyleLoad={(rawMap) => {
+          if (rawMap) {
+            loadMap(rawMap);
+          }
+        }}
+      >
+        <GeoJSONLayer
+          data={GEO_JSON_DATA}
+          symbolLayout={SYMBOL_LAYOUT}
+          symbolOnClick={symbolClick}
+          symbolOnMouseEnter={mouseEnter}
+          symbolOnMouseLeave={mouseLeave}
+        />
+      </Map>
+    </div>
   );
 };
 MapHolder.defaultProps = {

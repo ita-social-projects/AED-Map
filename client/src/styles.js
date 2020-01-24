@@ -58,6 +58,9 @@ const styles = {
     maxHeight: '100vh',
     flexShrink: '0'
   },
+  sidebarSetVisible: {
+    display: 'none',
+  },
   coordsStyle: {
     display: 'block',
     position: 'absolute',
@@ -85,7 +88,6 @@ const styles = {
     position: 'relative',
     height: '100vh',
     overflow: 'hidden',
-    width: 'calc(100vw - 400px)'
   },
   mainStyle: {
     display: 'flex',

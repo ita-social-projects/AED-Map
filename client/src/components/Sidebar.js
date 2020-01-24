@@ -4,15 +4,17 @@ import myClasses from '../styles';
 import Header from './Header';
 import ItemList from './ItemList';
 import AddForm from './AddForm';
-import Filter from './Filter';
 
 import { defsFilterSelector } from '../reducers/defReducer';
 
 const Sidebar = () => {
+  
+  const [visible, setVisible] = React.useState(true);
+  const changeVisibilityClass = visible ? myClasses.sidebarStyle : myClasses.sidebarSetVisible;
+
   return (
-    <div className={myClasses.sidebarStyle}>
-      <Header />
-      <Filter />
+    <div className={changeVisibilityClass}>
+      <Header setVisible={setVisible}/>
       <ItemList />
       <AddForm />
     </div>
