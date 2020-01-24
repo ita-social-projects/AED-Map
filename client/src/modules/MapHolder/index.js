@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { GeoJSONLayer } from 'react-mapbox-gl';
 import PropTypes from 'prop-types';
-import myClasses from '../styles';
+import myClasses from '../../styles';
 import Map from './Map';
-import SYMBOL_LAYOUT from '../symbolLayout';
-import geoJsonData from '../geoJsonData';
-import { defsFilterSelector } from '../reducers/defReducer';
-import { setMap } from '../actions/map';
+import SYMBOL_LAYOUT from './symbolLayout';
+import geoJsonData from './geoJsonData';
+import { defsFilterSelector } from '../../reducers/defReducer';
+import { setMap } from '../../actions/map';
 
 const MapHolder = ({
   filteredDefs,
@@ -15,7 +15,7 @@ const MapHolder = ({
   setMapCenterParams
 }) => {
   const [map, setLocalMap] = useState(null);
-  const loadMap = (mapRaw) => {
+  const loadMap = mapRaw => {
     if (mapRaw) {
       setLocalMap(mapRaw);
     }
@@ -24,7 +24,7 @@ const MapHolder = ({
   const GEO_JSON_DATA = geoJsonData(filteredDefs);
   const { lng, lat, zoom } = mapState;
 
-  const symbolClick = (event) => {
+  const symbolClick = event => {
     const { lngLat } = event;
     const curZoom = map.getZoom();
     setMapCenterParams({
@@ -53,7 +53,7 @@ const MapHolder = ({
         height: '100vh',
         width: '100vw'
       }}
-      onStyleLoad={(rawMap) => {
+      onStyleLoad={rawMap => {
         if (rawMap) {
           loadMap(rawMap);
         }
@@ -102,16 +102,15 @@ MapHolder.propTypes = {
   ),
   setMapCenterParams: PropTypes.func
 };
-const mapStateToProps = (state) => ({
-  defsState: state.defs,
-  filter: state.filter,
-  filteredDefs: defsFilterSelector(state),
-  mapState: state.map
-});
-const mapDispatchToProps = {
-  setMapCenterParams: setMap
-};
+
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  state => ({
+    defsState: state.defs,
+    filter: state.filter,
+    filteredDefs: defsFilterSelector(state),
+    mapState: state.map
+  }),
+  {
+    setMapCenterParams: setMap
+  }
 )(MapHolder);

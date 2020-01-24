@@ -1,9 +1,8 @@
 import React from 'react';
 import './App.css';
 import { connect } from 'react-redux';
-
-import Sidebar from './components/Sidebar';
-import MapHolder from './components/MapHolder';
+import Sidebar from './modules/Sidebar';
+import MapHolder from './modules/MapHolder';
 import myClasses from './styles';
 
 const App = () => {
