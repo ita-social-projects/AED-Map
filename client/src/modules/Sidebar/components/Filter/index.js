@@ -1,43 +1,25 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { setFilter } from '../../../../actions/filter';
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import FilterButton from './FilterButton';
+import FilterFormContainer from './FilterFormContainer';
 
-const Filter = ({ filter, setFilterValue }) => {
+const useStyles = makeStyles({
+  container: {
+    borderLeft: '1px solid grey',
+    backgroundColor: 'white'
+  }
+});
+
+const Filter = () => {
+  const classes = useStyles();
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <div>
-      <input
-        style={{
-          width: '100%',
-          marginBottom: '1rem',
-          padding: '0.5rem'
-        }}
-        type="text"
-        placeholder="Впишіть сюди назву вулиці"
-        value={filter}
-        onChange={event =>
-          setFilterValue(event.target.value)
-        }
-      />
+    <div className={classes.container}>
+      <FilterButton isOpen={isOpen} setIsOpen={setIsOpen} />
+      {isOpen ? <FilterFormContainer /> : null}
     </div>
   );
 };
 
-Filter.defaultProps = {
-  filter: '',
-  setFilterValue: null
-};
-
-Filter.propTypes = {
-  filter: PropTypes.string,
-  setFilterValue: PropTypes.func
-};
-
-export default connect(
-  state => ({
-    filter: state.filter
-  }),
-  {
-    setFilterValue: setFilter
-  }
-)(Filter);
+export default Filter;
