@@ -1,6 +1,6 @@
 import { SET_FILTER } from '../consts/filter';
 
-const initialState = '';
+const initialState = null;
 
 export default function(filter = initialState, action) {
   switch (action.type) {
