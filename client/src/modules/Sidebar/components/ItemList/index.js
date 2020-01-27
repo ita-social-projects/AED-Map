@@ -114,7 +114,7 @@ ItemList.propTypes = {
       storage_place: PropTypes.string,
       accessibility: PropTypes.string,
       language: PropTypes.string,
-      informational_plates: PropTypes.bool,
+      informational_plates: PropTypes.string,
       phone: PropTypes.arrayOf(PropTypes.string),
       additional_information: PropTypes.string
     })

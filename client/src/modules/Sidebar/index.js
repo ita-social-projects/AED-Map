@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Header from './components/Header';
 import ItemList from './components/ItemList';
 import AddForm from './components/AddForm';
-import Filter from './components/Filter';
 import { defsFilterSelector } from '../../reducers/defReducer';
 import { sidebarWidth } from './styleConstants';
 
@@ -25,7 +24,6 @@ const Sidebar = () => {
   return (
     <div className={classes.sidebarStyle}>
       <Header />
-      <Filter />
       <ItemList />
       <AddForm />
     </div>

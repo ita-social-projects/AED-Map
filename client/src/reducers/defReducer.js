@@ -48,14 +48,12 @@ export default function(defs = initialState, action) {
     case DELETE_DEF_POINT: {
       return {
         ...defs,
-        data: defs.data.filter(
-          (def) => def.id !== action.id
-        )
+        data: defs.data.filter(def => def.id !== action.id)
       };
     }
     case EDIT_DEF_POINT: {
       const { newDefInfo } = action;
-      const newData = defs.data.map((def) => {
+      const newData = defs.data.map(def => {
         if (def.id === action.id) {
           return { ...def, ...newDefInfo };
         }
@@ -72,9 +70,18 @@ export default function(defs = initialState, action) {
 }
 
 export function defsFilterSelector(state) {
-  return state.defs.data.filter((def) =>
-    def.address
-      .toLowerCase()
-      .includes(state.filter.toLowerCase())
-  );
+  const { filter, defs } = state;
+
+  if (filter) {
+    return defs.data.filter(def => {
+      const keys = Object.keys(filter);
+
+      return keys.every(key =>
+        def[key]
+          .toLowerCase()
+          .includes(filter[key].toLowerCase())
+      );
+    });
+  }
+  return defs.data;
 }

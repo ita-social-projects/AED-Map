@@ -3,7 +3,7 @@ import * as types from '../../consts/filter';
 
 import { mockFilter } from '../../mocks';
 
-const initialState = '';
+const initialState = null;
 describe('filter reducer', () => {
   it('should return initial state', () => {
     expect(filterReducer(undefined, {})).toEqual(
