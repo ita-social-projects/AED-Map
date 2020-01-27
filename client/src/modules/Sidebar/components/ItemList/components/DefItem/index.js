@@ -1,9 +1,35 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { defsFilterSelector } from '../../../../../../reducers/defReducer';
 import { setMap } from '../../../../../../actions/map';
-import myClasses from '../../../../../../styles';
+
+const useStyles = makeStyles({
+  pointCard: {
+    padding: '20px 10px',
+    minHeight: '100px',
+    '&:not(:last-of-type)': {
+      borderBottom: '1px solid #fff'
+    },
+    overflow: 'hidden',
+    '&:hover': {
+      background: '#686c7458',
+      cursor: 'pointer'
+    }
+  },
+  titleStyle: {
+    color: '#fff',
+    fontSize: '19px',
+    lineHeight: '23px',
+    marginBottom: '10px'
+  },
+  descStyle: {
+    color: '#bbb',
+    fontSize: '13px',
+    lineHeight: '16px'
+  }
+});
 
 const DefItem = ({
   defItemInfo,
@@ -11,6 +37,8 @@ const DefItem = ({
   // eslint-disable-next-line react/prop-types
   styleParam
 }) => {
+  const classes = useStyles();
+
   const handleClick = () => {
     const [lng, lat] = defItemInfo.location.coordinates;
     const mapParams = {
@@ -35,17 +63,17 @@ const DefItem = ({
 
   return (
     <div
-      className={myClasses.pointCard}
+      className={classes.pointCard}
       style={styleParam}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       role="button"
       tabIndex={0}
     >
-      <h3 className={myClasses.titleStyle}>
+      <h3 className={classes.titleStyle}>
         {defItemInfo.title}
       </h3>
-      <p className={myClasses.descStyle}>
+      <p className={classes.descStyle}>
         {defItemInfo.additional_information}
       </p>
     </div>

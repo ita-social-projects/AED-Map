@@ -1,19 +1,31 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';
 import { GeoJSONLayer } from 'react-mapbox-gl';
 import PropTypes from 'prop-types';
-import myClasses from '../../styles';
 import Map from './Map';
 import SYMBOL_LAYOUT from './symbolLayout';
 import geoJsonData from './geoJsonData';
 import { defsFilterSelector } from '../../reducers/defReducer';
 import { setMap } from '../../actions/map';
+import { sidebarWidth } from '../Sidebar/styleConstants';
+
+const useStyles = makeStyles({
+  mapOuterStyle: {
+    position: 'relative',
+    height: '100vh',
+    overflow: 'hidden',
+    width: `calc(100vw - ${sidebarWidth})`
+  }
+});
 
 const MapHolder = ({
   filteredDefs,
   mapState,
   setMapCenterParams
 }) => {
+  const classes = useStyles();
+
   const [map, setLocalMap] = useState(null);
   const loadMap = mapRaw => {
     if (mapRaw) {
@@ -46,13 +58,9 @@ const MapHolder = ({
     <Map
       // eslint-disable-next-line react/style-prop-object
       style="mapbox://styles/oskovbasiuk/ck5nwya36638v1ilpmwxlfv5g"
-      className={myClasses.mapOuterStyle}
+      className={classes.mapOuterStyle}
       center={[lng, lat]}
       zoom={[zoom]}
-      containerStyle={{
-        height: '100vh',
-        width: '100vw'
-      }}
       onStyleLoad={rawMap => {
         if (rawMap) {
           loadMap(rawMap);
