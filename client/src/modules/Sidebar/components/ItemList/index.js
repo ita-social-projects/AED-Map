@@ -1,5 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   List,
   AutoSizer,
@@ -10,13 +11,37 @@ import PropTypes from 'prop-types';
 import { fetchDefs } from '../../../../actions/def';
 import DefItem from './components/DefItem';
 import { defsFilterSelector } from '../../../../reducers/defReducer';
-import classes from '../../../../styles';
+
+const useStyles = makeStyles({
+  listOuterStyle: {
+    width: '100%',
+    height: 'calc(100vh - 100px)'
+  },
+  listStyle: {
+    borderTop: '1px solid #fff3',
+    borderBottom: '1px solid #fff3',
+    paddingRight: '5px',
+    '&:focus': {
+      outline: 'none'
+    },
+    '&::-webkit-scrollbar': {
+      width: '5px'
+    },
+    '&::-webkit-scrollbar-track': {
+      backgroundColor: 'rgba(0,0,0,0.1)'
+    },
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: 'rgba(255,255,255,0.3)'
+    }
+  }
+});
 
 const ItemList = ({ filteredDefs, fetchDefebs }) => {
+  const classes = useStyles();
   useEffect(
     useCallback(() => {
-      // fetchDefebs('/api/defibrillator');
-      fetchDefebs('/defibrillators.json');
+      fetchDefebs('/api/defibrillator');
+      // fetchDefebs('/defibrillators.json');
     }, [fetchDefebs]),
     []
   );
