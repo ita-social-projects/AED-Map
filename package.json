@@ -4,12 +4,24 @@
   "description": "backend part of defibrillator project",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "client": "npm run start --prefix client",
+    "client": "yarn start --prefix client",
     "server": "nodemon server.js",
-    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "start": "node server.js",
-    "lint": "eslint server.js ./config ./consts ./middleware ./models ./routes ./utils --ext .js"
+    "lint": "eslint server.js ./config ./consts ./middleware ./models ./routes ./utils --ext .js",
+    "test-client": "cd client/ && yarn test",
+    "test-server": ""
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged && yarn test-server && yarn test-client"
+    }
+  },
+  "lint-staged": {
+    "*.(js|jsx)": [
+      "yarn lint --fix",
+      "git add"
+    ]
   },
   "keywords": [
     "nodejs",
@@ -36,6 +48,8 @@
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-prettier": "^3.1.2",
+    "husky": "^4.2.0",
+    "lint-staged": "^10.0.2",
     "nodemon": "^2.0.2",
     "prettier": "^1.19.1"
   },

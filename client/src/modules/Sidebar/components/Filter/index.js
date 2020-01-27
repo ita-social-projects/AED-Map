@@ -16,8 +16,7 @@ const Filter = ({ filter, setFilterValue }) => {
         placeholder="Впишіть сюди назву вулиці"
         value={filter}
         onChange={event =>
-          setFilterValue(event.target.value)
-        }
+          setFilterValue(event.target.value)}
       />
     </div>
   );
