@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.post('/', /*passport.authenticate('jwt', { session: false }),*/ async (req, res) => {
   try {
     const defibrillator = await Defibrillator.create(
       req.body,
@@ -30,7 +30,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), async (req, r
   }
 });
 
-router.put('/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.put('/:id', /*passport.authenticate('jwt', { session: false }),*/ async (req, res) => {
   try {
     const { id } = req.params;
     const defibrillator = await Defibrillator.findByIdAndUpdate(
@@ -46,7 +46,7 @@ router.put('/:id', passport.authenticate('jwt', { session: false }), async (req,
   }
 });
 
-router.delete('/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.delete('/:id', /*passport.authenticate('jwt', { session: false }),*/ async (req, res) => {
   try {
     const { id } = req.params;
     const defibrillator = await Defibrillator.findByIdAndDelete(

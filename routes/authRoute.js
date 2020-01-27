@@ -1,9 +1,13 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
 
 // Handler for error 
 const errorHandler = require('../utils/errorHandler');
+
+// Validation for routers
+const { registerValidationRules, validate } = require('./validation/authRouteValidator');
 
 // Secret key for jwt
 const { SECRET_JWT_KEY } = require('../config/keys');
@@ -14,10 +18,12 @@ const User = require('../models/User');
 // Creating router
 const router = express.Router();
 
-// Route for registering
-router.post('/register', async (req, res) => {
+// Route for registration
+router.post('/register', registerValidationRules(), validate, async (req, res) => {
+  // Get email and password from request
+  const { email, password } = req.body;
   // Search document in collection 'users' with email
-  const candidate = await User.findOne({ email: req.body.email });
+  const candidate = await User.findOne({ email });
 
   if (candidate) {
     // Candidate already exists
@@ -29,10 +35,9 @@ router.post('/register', async (req, res) => {
     // How many rounds bcrypt has to hash password 
     // (2^round - 2 involution to power rounds)
     const salt = bcrypt.genSaltSync(10);
-    const password = req.body.password;
     // Creation user with email and hashed password
     const user = new User({
-      email: req.body.email,
+      email,
       password: bcrypt.hashSync(password, salt)
     });
 
@@ -48,14 +53,16 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// Route for logging
+// Route for authentication
 router.post('/login', async (req, res) => {
+  // Get email and password from request
+  const { email, password } = req.body;
   // Search document in collection 'users' with email
-  const candidate = await User.findOne({ email: req.body.email });
+  const candidate = await User.findOne({ email });
 
   if (candidate) {
     // Comparison password from request and password from database using bcrypt
-    const passwordResult = bcrypt.compareSync(req.body.password, candidate.password);
+    const passwordResult = bcrypt.compareSync(password, candidate.password);
 
     if (passwordResult) {
       // Creation jwt token based on email and id, expiration date - 1 hour
@@ -80,6 +87,23 @@ router.post('/login', async (req, res) => {
     // Candidate with this email isn't found
     res.status(404).json({
       message: 'Користувач з таким email не знайдений.'
+    });
+  }
+});
+
+// Route for authorization
+router.get('/validate', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  try {
+    // Get user from passport authenticate middleware
+    const { user } = req;
+
+    // Send response with current user
+    res.status(200).json(user);
+
+  } catch (e) {
+    // Candidate with this jwt isn't found
+    res.status(401).json({
+      message: 'Користувач з таким jwt не знайдений.'
     });
   }
 });
