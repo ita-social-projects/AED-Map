@@ -5,7 +5,7 @@ import Header from './components/Header';
 import ItemList from './components/ItemList';
 import AddForm from './components/AddForm';
 import Filter from './components/Filter';
-import { defsFilterSelector } from '../../reducers/defReducer';
+import { defsFilterSelector } from './components/ItemList/reducers/listReducer';
 import { sidebarWidth } from './styleConstants';
 
 const useStyles = makeStyles({

@@ -6,8 +6,11 @@ import PropTypes from 'prop-types';
 import Map from './Map';
 import SYMBOL_LAYOUT from './symbolLayout';
 import geoJsonData from './geoJsonData';
-import { defsFilterSelector } from '../../reducers/defReducer';
-import { setMap } from '../../actions/map';
+import { defsFilterSelector } from '../Sidebar/components/ItemList/reducers/listReducer';
+import {
+  setMapCenter,
+  setMapZoom
+} from './actions/mapState';
 import { sidebarWidth } from '../Sidebar/styleConstants';
 
 const useStyles = makeStyles({
@@ -22,7 +25,8 @@ const useStyles = makeStyles({
 const MapHolder = ({
   filteredDefs,
   mapState,
-  setMapCenterParams
+  setMapCenterParams,
+  setMapZoomParam
 }) => {
   const classes = useStyles();
 
@@ -41,9 +45,9 @@ const MapHolder = ({
     const curZoom = map.getZoom();
     setMapCenterParams({
       lng: lngLat.lng,
-      lat: lngLat.lat,
-      zoom: curZoom
+      lat: lngLat.lat
     });
+    setMapZoomParam(curZoom);
   };
 
   const mouseEnter = () => {
@@ -80,7 +84,8 @@ const MapHolder = ({
 MapHolder.defaultProps = {
   mapState: {},
   filteredDefs: [],
-  setMapCenterParams: () => null
+  setMapCenterParams: () => null,
+  setMapZoomParam: () => null
 };
 
 MapHolder.propTypes = {
@@ -103,12 +108,13 @@ MapHolder.propTypes = {
       storage_place: PropTypes.string,
       accessibility: PropTypes.string,
       language: PropTypes.string,
-      informational_plates: PropTypes.bool,
+      informational_plates: PropTypes.string,
       phone: PropTypes.arrayOf(PropTypes.string),
       additional_information: PropTypes.string
     })
   ),
-  setMapCenterParams: PropTypes.func
+  setMapCenterParams: PropTypes.func,
+  setMapZoomParam: PropTypes.func
 };
 
 export default connect(
@@ -116,9 +122,12 @@ export default connect(
     defsState: state.defs,
     filter: state.filter,
     filteredDefs: defsFilterSelector(state),
-    mapState: state.map
+    mapState: state.mapState
   }),
-  {
-    setMapCenterParams: setMap
-  }
+  dispatch => ({
+    setMapCenterParams: mapState =>
+      dispatch(setMapCenter(mapState)),
+    setMapZoomParam: mapZoom =>
+      dispatch(setMapZoom(mapZoom))
+  })
 )(MapHolder);
