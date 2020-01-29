@@ -14,7 +14,6 @@ import permissionService from '../Auth/permissionService';
 import Header from './components/Header';
 import ItemList from './components/ItemList';
 import AddForm from './components/AddForm';
-import { sidebarWidth } from './styleConstants';
 import Alert from '../../shared/Alert';
 import useAlert from '../../shared/Alert/useAlert';
 import { 
@@ -22,25 +21,19 @@ import {
 } from './components/ItemList/consts';
 
 const useStyles = makeStyles({
-  sidebarStyle: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    width: sidebarWidth,
-    padding: 20,
-    maxHeight: '100vh',
-    flexShrink: 0
-  },
   addButtonStyle: {
     marginTop: 10,
     width: '100%'
   },
   LinkStyle: {
-    textDecoration: 'none'
+    textDecoration: 'none',
+    width: '100%',
+    marginTop: 10,
+    flexShrink: '0',
   }
 });
 
-const Sidebar = ({ user }) => {
+const Sidebar = ({ user,setVisible,changeVisibilityClass }) => {
   const classes = useStyles();
   const [alert, ShowAlert] = useAlert();
   const [permissionForAdd, changePermissionForAdd] = useState(false);
@@ -52,8 +45,9 @@ const Sidebar = ({ user }) => {
 
   return (
     <Router>
-      <div className={classes.sidebarStyle}>
-        <Header />
+      <div className={changeVisibilityClass}>
+        <Header setVisible={setVisible} />
+        <Route path="/add-form" component={AddForm} />
         <Route path="/" exact>
           <ItemList />
           <Link
@@ -85,7 +79,9 @@ const Sidebar = ({ user }) => {
 };
 
 Sidebar.defaultProps = {
-  user: null
+  user: null,
+  setVisible: null,
+  changeVisibilityClass: '',
 };
 
 Sidebar.propTypes = {
@@ -93,7 +89,9 @@ Sidebar.propTypes = {
     _id: PropTypes.string,
     email: PropTypes.string,
     role: PropTypes.string
-  })
+  }),
+  setVisible: PropTypes.bool,
+  changeVisibilityClass: PropTypes.string,
 };
 
 export default connect(

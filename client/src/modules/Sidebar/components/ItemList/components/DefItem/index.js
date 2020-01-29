@@ -5,7 +5,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import EditIcon from '@material-ui/icons/Edit';
 import permissionService from '../../../../../Auth/permissionService';
-import { defsSearchSelector } from '../../reducers/listReducer';
 
 import {
   setMapCenter,
@@ -206,7 +205,7 @@ DefItem.propTypes = {
 export default connect(
   state => ({
     user: state.user.user,
-    filteredDefs: defsSearchSelector(state)
+    filteredDefs: state.defs.data
   }),
   dispatch => ({
     setMapCenterCoords: mapState =>

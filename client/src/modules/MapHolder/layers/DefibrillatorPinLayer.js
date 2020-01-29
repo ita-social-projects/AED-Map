@@ -5,7 +5,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { Cluster, Marker } from 'react-mapbox-gl';
 import geoJsonData from '../geoJsonData';
-import { defsSearchSelector } from '../../Sidebar/components/ItemList/reducers/listReducer';
 import { showPopup } from '../actions/popupDisplay';
 import mapPin from '../../../icons/map-marker-point.svg';
 
@@ -153,7 +152,7 @@ DefibrillatorPinLayer.propTypes = {
 
 export default connect(
   state => ({
-    filteredDefs: defsSearchSelector(state),
+    filteredDefs: state.defs.data,
     mapState: state.mapState
   }),
   dispatch => ({
