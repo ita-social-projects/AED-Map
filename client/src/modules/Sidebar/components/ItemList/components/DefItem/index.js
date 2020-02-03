@@ -74,7 +74,7 @@ const DefItem = ({
         {defItemInfo.title}
       </h3>
       <p className={classes.descStyle}>
-        {defItemInfo.additional_information}
+        {defItemInfo.address}
       </p>
     </div>
   );
