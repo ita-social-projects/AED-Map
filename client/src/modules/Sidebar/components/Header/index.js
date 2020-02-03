@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import SignIn from '../../../Auth/SignIn';
 import Search from './components/Search';
 import Filter from './components/Filter';
 
@@ -16,6 +17,7 @@ const Header = () => {
 
   return (
     <div className={classes.searchFilterContainer}>
+      <SignIn />
       {/* Search is a plug */}
       <Search />
       <Filter />
