@@ -43,11 +43,9 @@ describe('fetchDefs action', () => {
       },
       { type: types.SET_LOADING, payload: false }
     ];
-    return store
-      .dispatch(actions.fetchDefs('/api/defibrillator'))
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedActions);
-      });
+    return store.dispatch(actions.fetchDefs()).then(() => {
+      expect(store.getActions()).toEqual(expectedActions);
+    });
   });
 
   it(`creates ${types.FAIL_LOAD_DATA} when fetching defs failed`, () => {
@@ -64,10 +62,8 @@ describe('fetchDefs action', () => {
       },
       { type: types.SET_LOADING, payload: false }
     ];
-    return store
-      .dispatch(actions.fetchDefs('/api/defibrillator'))
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedActions);
-      });
+    return store.dispatch(actions.fetchDefs()).then(() => {
+      expect(store.getActions()).toEqual(expectedActions);
+    });
   });
 });

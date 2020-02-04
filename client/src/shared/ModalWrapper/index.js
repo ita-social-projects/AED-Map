@@ -7,7 +7,7 @@ const useStyles = makeStyles(theme => ({
   modal: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     '&:focus': {
       outline: 0
     }
-  },
+  }
 }));
 
 const ModalWrapper = ({ ButtonOpen, ModalContent }) => {
@@ -42,7 +42,7 @@ const ModalWrapper = ({ ButtonOpen, ModalContent }) => {
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
-          timeout: 500,
+          timeout: 500
         }}
       >
         <Fade in={open}>
@@ -56,7 +56,7 @@ const ModalWrapper = ({ ButtonOpen, ModalContent }) => {
 };
 
 ModalWrapper.propTypes = {
-  ButtonOpen: PropTypes.func.isRequired, 
+  ButtonOpen: PropTypes.func.isRequired,
   ModalContent: PropTypes.func.isRequired
 };
 

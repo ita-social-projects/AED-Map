@@ -1,35 +1,36 @@
 import axios from 'axios';
 
 const http = {
-  get(url, params = {}) {
+  get(url, params, cancel) {
     return axios({
       method: 'get',
       url,
-      params
+      params,
+      cancelToken: cancel ? cancel.token : null
     });
   },
-  post(url, params = {}, data) {
+  post(url, params, cancel) {
     return axios({
       method: 'post',
       url,
-      params,
-      data
+      data: params,
+      cancelToken: cancel ? cancel.token : null
     });
   },
-  delete(url, params = {}, data) {
+  delete(url, params, cancel) {
     return axios({
       method: 'delete',
       url,
-      params,
-      data
+      data: params,
+      cancelToken: cancel ? cancel.token : null
     });
   },
-  put(url, params = {}, data) {
+  put(url, params, cancel) {
     return axios({
       method: 'put',
       url,
-      params,
-      data
+      data: params,
+      cancelToken: cancel ? cancel.token : null
     });
   }
 };

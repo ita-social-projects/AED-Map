@@ -55,7 +55,7 @@ describe('defibrillator async CRUD actions', () => {
       { type: SET_LOADING, payload: false }
     ];
     return store
-      .dispatch(actions.createDefItem('', mockNewDefInfo))
+      .dispatch(actions.createDefItem(mockNewDefInfo))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -76,7 +76,7 @@ describe('defibrillator async CRUD actions', () => {
       { type: SET_LOADING, payload: false }
     ];
     return store
-      .dispatch(actions.createDefItem('/api/defibrillator'))
+      .dispatch(actions.createDefItem())
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
