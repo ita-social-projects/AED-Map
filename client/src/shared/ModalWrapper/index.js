@@ -1,4 +1,5 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Modal, Backdrop, Fade } from '@material-ui/core';
 
@@ -31,7 +32,7 @@ const ModalWrapper = ({ ButtonOpen, ModalContent }) => {
   };
 
   return (
-    <Fragment>
+    <>
       <ButtonOpen handleOpen={handleOpen} />
 
       <Modal
@@ -50,8 +51,13 @@ const ModalWrapper = ({ ButtonOpen, ModalContent }) => {
           </div>
         </Fade>
       </Modal>
-    </Fragment>
+    </>
   );
+};
+
+ModalWrapper.propTypes = {
+  ButtonOpen: PropTypes.node.isRequired, 
+  ModalContent: PropTypes.node.isRequired
 };
 
 export default ModalWrapper;

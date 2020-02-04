@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useField } from 'formik';
 import { TextField, Checkbox, FormControlLabel } from '@material-ui/core';
 
-export const MyTextField = (props) => {
+const MyTextField = (props) => {
   const [field, meta] = useField(props);
 
   return (
@@ -16,7 +17,7 @@ export const MyTextField = (props) => {
   );
 };
 
-export const MyCheckbox = ({ label, ...props }) => {
+const MyCheckbox = ({ label, ...props }) => {
   const [field] = useField({ ...props, type: 'checkbox' });
 
   return (
@@ -31,3 +32,9 @@ export const MyCheckbox = ({ label, ...props }) => {
     />
   );
 };
+
+MyCheckbox.propTypes = {
+  label: PropTypes.string.isRequired
+};
+
+export { MyTextField, MyCheckbox };

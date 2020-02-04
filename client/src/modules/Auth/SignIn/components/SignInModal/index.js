@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container } from '@material-ui/core';
 import { Formik } from 'formik';
@@ -20,6 +21,7 @@ const SignInModal = ({ handleClose }) => {
 
   const handleSubmit = (values, { setSubmitting, resetForm }) => {
     setTimeout(() => {
+      // eslint-disable-next-line no-alert
       alert(JSON.stringify(values, null, 2));
       setSubmitting(false);
       resetForm();
@@ -42,6 +44,10 @@ const SignInModal = ({ handleClose }) => {
       </div>
     </Container>
   );
+};
+
+SignInModal.propTypes = {
+  handleClose: PropTypes.func.isRequired
 };
 
 export default SignInModal;
