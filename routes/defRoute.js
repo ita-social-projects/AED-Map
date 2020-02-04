@@ -14,9 +14,10 @@ router.get('/', async (req, res) => {
   });
 
   try {
-    const defibrillators = await Defibrillator.find(
-      filter
-    ).select('address title location');
+    const defibrillators =
+      (await Defibrillator.find().select(
+        'address title location'
+      )) || [];
     return res.status(200).send(defibrillators);
   } catch (e) {
     errorHandler(res, e);
