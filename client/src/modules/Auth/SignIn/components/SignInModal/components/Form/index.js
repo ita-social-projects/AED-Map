@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import { Form as FormFormik } from 'formik';
@@ -76,6 +77,10 @@ const Form = ({ isSubmitting }) => {
       </Button>
     </FormFormik>
   );
+};
+
+Form.propTypes = {
+  isSubmitting: PropTypes.bool.isRequired
 };
 
 export default Form;
