@@ -9,6 +9,7 @@
     "@testing-library/react": "^9.4.0",
     "@testing-library/user-event": "^7.2.1",
     "formik": "^2.1.2",
+    "axios": "^0.19.2",
     "mapbox-gl": "^1.6.1",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
@@ -65,9 +66,9 @@
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.18.0",
     "eslint-plugin-react-hooks": "^1.7.0",
-    "fetch-mock": "^8.3.1",
     "husky": "^4.2.0",
     "lint-staged": "^10.0.2",
+    "moxios": "^0.4.0",
     "node-fetch": "^2.6.0",
     "prettier": "^1.19.1",
     "redux-mock-store": "^1.5.4"

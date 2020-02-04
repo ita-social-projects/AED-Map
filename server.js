@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('client/build'));
 
 app.use('/api/auth', authRoute);
-app.use('/api/defibrillator', defRoute);
+app.use('/api/defibrillators', defRoute);
 
 // Middlewares for passport
 app.use(passport.initialize());

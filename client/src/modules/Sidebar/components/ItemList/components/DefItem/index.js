@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import { defsFilterSelector } from '../../../../../../reducers/defReducer';
-import { setMap } from '../../../../../../actions/map';
+import { defsFilterSelector } from '../../reducers/listReducer';
+import { setMapCenter } from '../../../../../MapHolder/actions/mapState';
 
 const useStyles = makeStyles({
   pointCard: {
@@ -43,8 +43,7 @@ const DefItem = ({
     const [lng, lat] = defItemInfo.location.coordinates;
     const mapParams = {
       lng,
-      lat,
-      zoom: 18
+      lat
     };
     setMapParams(mapParams);
   };
@@ -54,8 +53,7 @@ const DefItem = ({
       const [lng, lat] = defItemInfo.location.coordinates;
       const mapParams = {
         lng,
-        lat,
-        zoom: 18
+        lat
       };
       setMapParams(mapParams);
     }
@@ -97,7 +95,7 @@ DefItem.propTypes = {
     storage_place: PropTypes.string,
     accessibility: PropTypes.string,
     language: PropTypes.string,
-    informational_plates: PropTypes.bool,
+    informational_plates: PropTypes.string,
     phone: PropTypes.arrayOf(PropTypes.string),
     additional_information: PropTypes.string
   }),
@@ -108,7 +106,8 @@ export default connect(
   state => ({
     filteredDefs: defsFilterSelector(state)
   }),
-  {
-    setMapParams: setMap
-  }
+  dispatch => ({
+    setMapParams: mapState =>
+      dispatch(setMapCenter(mapState))
+  })
 )(DefItem);

@@ -1,56 +1,83 @@
 export const mockData = [
   {
-    id: '127e7fejdfjd',
-    city: 'Львів',
-    address: 'пл. Ринок, 1 (Львівська ратуша)',
-    cabinet: '1 пов.(перший кабінет праворуч)',
-    lang: 'Російськомовний',
-    accesibility: 'Цілодобово. Без вихідних',
-    infoTableAboutAED: 'немає',
-    phone: '+38 (032) 297-59-94'
-  },
-  {
     id: '423432fsd4',
-    city: 'Львів',
-    address:
-      'вул. Любінська, 168, AED #1 ЛЬВІВСЬКИЙ МІЖНАРОДНИЙ АЕРОПОРТ',
-    cabinet:
-      'Вхід в крайні ліві розсувні двері (ліворуч та прямо) 1 пов. Біля каб. Медпункту (на стіні)',
-    lang: 'Україномовний',
-    accesibility: 'Цілодобово. Без вихідних',
-    infoTableAboutAED: 'Лише біля самого AED',
-    phone: '+38 (032) 229-83-03'
+    title: 'Львівська Ратуша',
+    address: 'м. Львів, пл. Ринок, 1',
+    location: {
+      type: 'Point',
+      coordinates: [24.031691, 49.841771]
+    },
+    actual_date: '2019-02-12',
+    storage_place: 'Поверх 1, каб. Муніципальної Варти',
+    accessibility: 'Цілодобово. Без вихідних',
+    language: 'Російськомовний',
+    informational_plates: 'Відсутні',
+    phone: ['380322975994'],
+    additional_information:
+      'Перший кабінет праворуч на 1 поверсі'
   },
   {
-    id: '576uyjty',
-    city: 'Львів',
+    id: 'djsgherjt45658ure7wy',
+    title: 'Львівський міжнародний аеропорт',
+    address: 'м. Львів, вул. Любінська, 168',
+    location: {
+      type: 'Point',
+      coordinates: [23.959755, 49.818201]
+    },
+    actual_date: '2019-02-22',
+    storage_place:
+      'Поверх 1, біля каб. Медпункту (на стіні)',
+    accessibility: 'Цілодобово. Без вихідних',
+    language: 'Україномовний',
+    informational_plates: 'Присутні тільки біля приладу',
+    phone: ['380322298303'],
+    additional_information:
+      'Вхід в крайні ліві розсувні двері (ліворуч та прямо)'
+  },
+  {
+    id: 'gfdsjhdshjt5h65utu8',
+    title: 'Медичний центр \'Профідент-плюс\'',
     address:
-      'вул. Єфремова 85 (вхід з вул. Конотопська) Медичний центр "ПРОФІДЕНТ- ПЛЮС"',
-    cabinet:
-      '1 пов. Рецепція (схований від загального виду/треба запитатись)',
-    lang: 'Російськомовний',
-    accesibility: 'Пн-Пт 09:00 - 18:00',
-    infoTableAboutAED: 'Присутні',
-    phone: '+38 (050) 371-32-00; +38 (032) 240-17-40'
+      'м. Львів, вул. Єфремова, 85 (вхід з вул. Конотопська)',
+    location: {
+      type: 'Point',
+      coordinates: [24.001906, 49.828486]
+    },
+    actual_date: '2019-03-07',
+    storage_place:
+      'Поверх 1, рецепція (схований від загального виду, треба запитатись)',
+    accessibility: 'Пн-Пт: 09:00-18:00',
+    language: 'Російськомовний',
+    informational_plates: 'Присутні',
+    phone: ['380503713200', '380322401740'],
+    additional_information: ''
   }
 ];
 
 export const mockNewDefInfo = {
   id: '576uyjty',
-  city: 'Львів 2',
-  address:
-    'вул. Єфремова 131 (вхід з вул. Конотопська) Медичний центр "ПРОФІДЕНТ- ПЛЮС"',
-  cabinet:
-    '1 пов. Рецепція (схований від загального виду/треба запитатись)',
-  lang: 'Російськомовний',
-  accesibility: 'Пн-Пт 09:00 - 18:00',
-  infoTableAboutAED: 'Немає',
-  phone: '+38 (050) 371-32-00; +38 (032) 240-17-40'
+  _id: '576uyjty',
+  title: 'Львівська Ратуша',
+  address: 'м. Львів, пл. Ринок, 1',
+  location: {
+    type: 'Point',
+    coordinates: [24.031691, 49.841771]
+  },
+  actual_date: '2019-02-12',
+  storage_place: 'Поверх 1, каб. Муніципальної Варти',
+  accessibility: 'Цілодобово. Без вихідних',
+  language: 'Російськомовний',
+  informational_plates: 'Відсутні',
+  phone: ['380322975994'],
+  additional_information:
+    'Перший кабінет праворуч на 1 поверсі'
 };
 
 export const mockFilter = 'some address';
 
-export const mockError = new Error('Some error');
+export const mockError = new Error(
+  'Request failed with status code 500'
+);
 
 export const mockMap = {
   lng: 24.0311,

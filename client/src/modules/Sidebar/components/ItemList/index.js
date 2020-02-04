@@ -8,9 +8,9 @@ import {
   CellMeasurerCache
 } from 'react-virtualized';
 import PropTypes from 'prop-types';
-import { fetchDefs } from '../../../../actions/def';
+import { fetchDefs } from './actions/list';
 import DefItem from './components/DefItem';
-import { defsFilterSelector } from '../../../../reducers/defReducer';
+import { defsFilterSelector } from './reducers/listReducer';
 
 const useStyles = makeStyles({
   listOuterStyle: {
@@ -36,13 +36,12 @@ const useStyles = makeStyles({
   }
 });
 
-const ItemList = ({ filteredDefs, fetchDefebs }) => {
+const ItemList = ({ filteredDefs, fetchDefItems }) => {
   const classes = useStyles();
   useEffect(
     useCallback(() => {
-      fetchDefebs('/api/defibrillator');
-      // fetchDefebs('/defibrillators.json');
-    }, [fetchDefebs]),
+      fetchDefItems();
+    }, [fetchDefItems]),
     []
   );
   const cache = new CellMeasurerCache({
@@ -96,7 +95,7 @@ const ItemList = ({ filteredDefs, fetchDefebs }) => {
 };
 ItemList.defaultProps = {
   filteredDefs: [],
-  fetchDefebs: () => null
+  fetchDefItems: () => null
 };
 
 ItemList.propTypes = {
@@ -114,12 +113,12 @@ ItemList.propTypes = {
       storage_place: PropTypes.string,
       accessibility: PropTypes.string,
       language: PropTypes.string,
-      informational_plates: PropTypes.bool,
+      informational_plates: PropTypes.string,
       phone: PropTypes.arrayOf(PropTypes.string),
       additional_information: PropTypes.string
     })
   ),
-  fetchDefebs: PropTypes.func
+  fetchDefItems: PropTypes.func
 };
 
 export default connect(
@@ -128,7 +127,7 @@ export default connect(
     filter: state.filter,
     filteredDefs: defsFilterSelector(state)
   }),
-  {
-    fetchDefebs: fetchDefs
-  }
+  dispatch => ({
+    fetchDefItems: url => dispatch(fetchDefs(url))
+  })
 )(ItemList);
