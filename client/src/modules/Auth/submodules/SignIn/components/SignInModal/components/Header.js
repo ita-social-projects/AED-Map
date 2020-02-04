@@ -6,8 +6,8 @@ import { LockOutlined } from '@material-ui/icons';
 const useStyles = makeStyles(theme => ({
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
+    backgroundColor: theme.palette.secondary.main
+  }
 }));
 
 const Header = () => {

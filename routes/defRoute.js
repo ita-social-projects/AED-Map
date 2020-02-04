@@ -66,10 +66,25 @@ router.put(
   }
 );
 
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const defibrillator = await Defibrillator.findById(id);
+    return res.status(200).send({
+      error: false,
+      defibrillator
+    });
+  } catch (e) {
+    resServerError(res, e);
+  }
+});
+
 router.delete(
   '/:id',
-  // passport.authenticate('jwt', { session: false }),
-  async (req, res) => {
+  /*passport.authenticate('jwt', { session: false }),*/ async (
+    req,
+    res
+  ) => {
     try {
       const { id } = req.params;
       const defibrillator = await Defibrillator.findByIdAndDelete(

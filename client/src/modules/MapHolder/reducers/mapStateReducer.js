@@ -10,10 +10,18 @@ export default function(
   { type, payload }
 ) {
   switch (type) {
-    case SET_MAP_CENTER:
+    case SET_MAP_CENTER: {
+      if (
+        state.lng === payload.lng &&
+        state.lat === payload.lat
+      ) {
+        return state;
+      }
       return { ...state, ...payload }; // here payload is {lng: number, lat: number}
-    case SET_MAP_ZOOM:
+    }
+    case SET_MAP_ZOOM: {
       return { ...state, zoom: payload }; // here payload is number
+    }
     default:
       return state;
   }

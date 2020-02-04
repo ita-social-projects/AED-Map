@@ -2,7 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import { setMapCenter } from '../../../../../MapHolder/actions/mapState';
+import { defsSearchSelector } from '../../reducers/listReducer';
+import {
+  setMapCenter,
+  setMapZoom
+} from '../../../../../MapHolder/actions/mapState';
+import {
+  ENTER_BUTTON_CODE,
+  BASE_ZOOM_VALUE
+} from '../../consts';
 
 const useStyles = makeStyles({
   pointCard: {
@@ -32,29 +40,28 @@ const useStyles = makeStyles({
 
 const DefItem = ({
   defItemInfo,
-  setMapParams,
+  setMapCenterCoords,
+  setMapZoomParam,
   // eslint-disable-next-line react/prop-types
   styleParam
 }) => {
   const classes = useStyles();
+  const [lng, lat] = defItemInfo.location.coordinates;
 
   const handleClick = () => {
-    const [lng, lat] = defItemInfo.location.coordinates;
-    const mapParams = {
+    setMapCenterCoords({
       lng,
       lat
-    };
-    setMapParams(mapParams);
+    });
+    setMapZoomParam(BASE_ZOOM_VALUE);
   };
 
   const handleKeyDown = event => {
-    if (event.keyCode === 13) {
-      const [lng, lat] = defItemInfo.location.coordinates;
-      const mapParams = {
+    if (event.keyCode === ENTER_BUTTON_CODE) {
+      setMapCenterCoords({
         lng,
         lat
-      };
-      setMapParams(mapParams);
+      });
     }
   };
 
@@ -78,7 +85,8 @@ const DefItem = ({
 };
 DefItem.defaultProps = {
   defItemInfo: {},
-  setMapParams: () => null
+  setMapCenterCoords: () => null,
+  setMapZoomParam: () => null
 };
 DefItem.propTypes = {
   defItemInfo: PropTypes.shape({
@@ -98,9 +106,18 @@ DefItem.propTypes = {
     phone: PropTypes.arrayOf(PropTypes.string),
     additional_information: PropTypes.string
   }),
-  setMapParams: PropTypes.func
+  setMapCenterCoords: PropTypes.func,
+  setMapZoomParam: PropTypes.func
 };
 
-export default connect(null, dispatch => ({
-  setMapParams: mapState => dispatch(setMapCenter(mapState))
-}))(DefItem);
+export default connect(
+  state => ({
+    filteredDefs: defsSearchSelector(state)
+  }),
+  dispatch => ({
+    setMapCenterCoords: mapState =>
+      dispatch(setMapCenter(mapState)),
+    setMapZoomParam: mapState =>
+      dispatch(setMapZoom(mapState))
+  })
+)(DefItem);

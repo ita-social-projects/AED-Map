@@ -95,3 +95,8 @@ export const mockMap = {
   lat: 49.842,
   zoom: 12.5
 };
+
+export const mockCurrDef = {
+  id: '',
+  coordinates: []
+};

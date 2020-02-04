@@ -6,3 +6,5 @@ export const DELETE_DEF_POINT = 'DELETE_DEF_POINT';
 export const EDIT_DEF_POINT = 'EDIT_DEF_POINT';
 export const SET_PAGE = 'SET_PAGE';
 export const SET_PER_PAGE = 'SET_PER_PAGE';
+export const ENTER_BUTTON_CODE = 13;
+export const BASE_ZOOM_VALUE = 17;
