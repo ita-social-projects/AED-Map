@@ -56,8 +56,8 @@ const ModalWrapper = ({ ButtonOpen, ModalContent }) => {
 };
 
 ModalWrapper.propTypes = {
-  ButtonOpen: PropTypes.node.isRequired, 
-  ModalContent: PropTypes.node.isRequired
+  ButtonOpen: PropTypes.func.isRequired, 
+  ModalContent: PropTypes.func.isRequired
 };
 
 export default ModalWrapper;
