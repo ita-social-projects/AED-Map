@@ -1,7 +1,7 @@
 import * as types from '../../consts';
 import * as actions from '../filter';
 
-import { mockFilter } from '../../../../../../mocks';
+import { mockFilter } from '../../../../../../../../mocks';
 
 describe('filter actions', () => {
   it(`should create action to ${types.SET_FILTER}`, () => {

@@ -1,9 +1,9 @@
 import filterReducer from '../filterReducer';
 import * as types from '../../consts';
 
-import { mockFilter } from '../../../../../../mocks';
+import { mockFilter } from '../../../../../../../../mocks';
 
-const initialState = '';
+const initialState = null;
 describe('filter reducer', () => {
   it('should return initial state', () => {
     expect(filterReducer(undefined, {})).toEqual(
@@ -25,6 +25,6 @@ describe('filter reducer', () => {
       filterReducer(initialState, {
         type: types.RESET_FILTER
       })
-    ).toEqual('');
+    ).toEqual(null);
   });
 });

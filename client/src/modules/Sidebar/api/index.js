@@ -1,8 +1,8 @@
 import http from '../../../shared/http';
 
 const URL = 'api/defibrillators';
-export function fetchDefItems() {
-  return http.get(URL);
+export function fetchDefItems(params) {
+  return http.get(URL, params);
 }
 export function createItem(data) {
   return http.post(URL, data);

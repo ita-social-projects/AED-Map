@@ -1,6 +1,6 @@
 import { SET_FILTER, RESET_FILTER } from '../consts';
 
-const initialState = '';
+const initialState = null;
 
 export default function(
   state = initialState,
@@ -10,7 +10,7 @@ export default function(
     case SET_FILTER:
       return payload;
     case RESET_FILTER:
-      return '';
+      return null;
     default:
       return state;
   }

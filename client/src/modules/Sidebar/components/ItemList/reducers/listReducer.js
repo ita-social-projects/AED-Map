@@ -52,9 +52,20 @@ export default function listReducer(
 }
 
 export function defsFilterSelector(state) {
-  return state.defs.data.filter(def =>
-    def.address
-      .toLowerCase()
-      .includes(state.filter.toLowerCase())
-  );
+  const { filter, defs } = state;
+
+  if (filter) {
+    return defs.data.filter(def => {
+      const keys = Object.keys(filter);
+
+      return keys.every(key => {
+        if (!def[key]) return true;
+
+        return def[key]
+          .toLowerCase()
+          .includes(filter[key].toLowerCase());
+      });
+    });
+  }
+  return defs.data;
 }

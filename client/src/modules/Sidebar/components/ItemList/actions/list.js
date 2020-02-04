@@ -28,11 +28,11 @@ export function failLoadDef(error) {
   };
 }
 
-export function fetchDefs() {
+export function fetchDefs(params) {
   return async dispatch => {
     dispatch(setLoading(true));
     try {
-      const { data } = await fetchDefItems();
+      const { data } = await fetchDefItems(params);
       dispatch(successLoadDef(data));
       dispatch(setLoading(false));
     } catch (e) {
