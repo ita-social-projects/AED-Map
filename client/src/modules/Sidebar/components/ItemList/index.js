@@ -128,6 +128,6 @@ export default connect(
     filteredDefs: defsFilterSelector(state)
   }),
   dispatch => ({
-    fetchDefItems: url => dispatch(fetchDefs(url))
+    fetchDefItems: () => dispatch(fetchDefs())
   })
 )(ItemList);

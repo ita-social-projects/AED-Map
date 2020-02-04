@@ -8,10 +8,15 @@ const Defibrillator = require('../models/Defibrillator');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
+  const filter = {};
+  Object.keys(req.query).forEach((key) => {
+    filter[key] = { $regex: req.query[key], $options: 'i' };
+  });
+
   try {
-    const defibrillators = await Defibrillator.find().select(
-      'address title location'
-    );
+    const defibrillators = await Defibrillator.find(
+      filter
+    ).select('address title location');
     return res.status(200).send(defibrillators);
   } catch (e) {
     errorHandler(res, e);
