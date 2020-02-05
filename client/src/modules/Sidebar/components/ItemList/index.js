@@ -10,12 +10,17 @@ import {
 import PropTypes from 'prop-types';
 import { fetchDefs } from './actions/list';
 import DefItem from './components/DefItem';
-import { defsFilterSelector } from './reducers/listReducer';
+import { defsSearchSelector } from './reducers/listReducer';
 import cancelToken from '../../../../shared/cancel-token';
 
 const defsCancelToken = cancelToken();
 
 const useStyles = makeStyles({
+  infoMessage: {
+    color: 'white',
+    textAlign: 'center',
+    marginTop: 'calc((100vh - 100px) / 2)'
+  },
   listOuterStyle: {
     width: '100%',
     height: 'calc(100vh - 100px)'
@@ -39,7 +44,12 @@ const useStyles = makeStyles({
   }
 });
 
-const ItemList = ({ filteredDefs, fetchDefItems }) => {
+const ItemList = ({
+  isLoading,
+  defibrillators,
+  searchedDefs,
+  fetchDefItems
+}) => {
   const classes = useStyles();
 
   useEffect(() => {
@@ -66,7 +76,7 @@ const ItemList = ({ filteredDefs, fetchDefItems }) => {
       >
         <DefItem
           styleParam={style}
-          defItemInfo={filteredDefs[index]}
+          defItemInfo={searchedDefs[index]}
         />
       </CellMeasurer>
     );
@@ -74,7 +84,7 @@ const ItemList = ({ filteredDefs, fetchDefItems }) => {
 
   return (
     <div className={classes.listOuterStyle}>
-      {filteredDefs.length > 0 ? (
+      {!isLoading ? (
         <AutoSizer>
           {({ width, height }) => {
             //  AutoSizer expands list to width and height of parent automatically
@@ -84,7 +94,7 @@ const ItemList = ({ filteredDefs, fetchDefItems }) => {
                 width={width}
                 height={height}
                 deferredMeasurementCache={cache}
-                rowCount={filteredDefs.length}
+                rowCount={searchedDefs.length}
                 rowHeight={cache.rowHeight}
                 rowRenderer={rowRenderer}
                 overscanRowCount={10}
@@ -93,18 +103,28 @@ const ItemList = ({ filteredDefs, fetchDefItems }) => {
           }}
         </AutoSizer>
       ) : (
-        <div>Loading</div>
+        <div className={classes.infoMessage}>
+          Завантаження...
+        </div>
+      )}
+      {!isLoading && !defibrillators.length && (
+        <div className={classes.infoMessage}>
+          По заданому фільтру нічого не знайдено...
+        </div>
       )}
     </div>
   );
 };
 ItemList.defaultProps = {
-  filteredDefs: [],
+  searchedDefs: [],
   fetchDefItems: () => null
 };
 
 ItemList.propTypes = {
-  filteredDefs: PropTypes.arrayOf(
+  isLoading: PropTypes.bool.isRequired,
+  defibrillators: PropTypes.arrayOf(PropTypes.object)
+    .isRequired,
+  searchedDefs: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
       title: PropTypes.string,
@@ -128,9 +148,10 @@ ItemList.propTypes = {
 
 export default connect(
   state => ({
-    defsState: state.defs,
+    isLoading: state.defs.loading,
+    defibrillators: state.defs.data,
     filter: state.filter,
-    filteredDefs: defsFilterSelector(state)
+    searchedDefs: defsSearchSelector(state)
   }),
   dispatch => ({
     fetchDefItems: () => dispatch(fetchDefs())

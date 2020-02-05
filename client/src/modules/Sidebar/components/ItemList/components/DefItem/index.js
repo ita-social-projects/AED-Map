@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import { defsFilterSelector } from '../../reducers/listReducer';
 import { setMapCenter } from '../../../../../MapHolder/actions/mapState';
 
 const useStyles = makeStyles({
@@ -102,12 +101,6 @@ DefItem.propTypes = {
   setMapParams: PropTypes.func
 };
 
-export default connect(
-  state => ({
-    filteredDefs: defsFilterSelector(state)
-  }),
-  dispatch => ({
-    setMapParams: mapState =>
-      dispatch(setMapCenter(mapState))
-  })
-)(DefItem);
+export default connect(null, dispatch => ({
+  setMapParams: mapState => dispatch(setMapCenter(mapState))
+}))(DefItem);

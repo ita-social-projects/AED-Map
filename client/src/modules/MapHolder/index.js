@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import Map from './Map';
 import SYMBOL_LAYOUT from './symbolLayout';
 import geoJsonData from './geoJsonData';
-import { defsFilterSelector } from '../Sidebar/components/ItemList/reducers/listReducer';
+import { defsSearchSelector } from '../Sidebar/components/ItemList/reducers/listReducer';
 import {
   setMapCenter,
   setMapZoom
@@ -120,8 +120,7 @@ MapHolder.propTypes = {
 export default connect(
   state => ({
     defsState: state.defs,
-    filter: state.filter,
-    filteredDefs: defsFilterSelector(state),
+    filteredDefs: defsSearchSelector(state),
     mapState: state.mapState
   }),
   dispatch => ({

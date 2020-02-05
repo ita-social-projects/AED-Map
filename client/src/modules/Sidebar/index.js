@@ -1,10 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Header from './components/Header';
 import ItemList from './components/ItemList';
 import AddForm from './components/AddForm';
-import { defsFilterSelector } from './components/ItemList/reducers/listReducer';
 import { sidebarWidth } from './styleConstants';
 
 const useStyles = makeStyles({
@@ -30,6 +28,4 @@ const Sidebar = () => {
   );
 };
 
-export default connect(state => ({
-  isFilterGetResult: defsFilterSelector(state).length
-}))(Sidebar);
+export default Sidebar;
