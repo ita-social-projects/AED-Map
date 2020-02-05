@@ -12,8 +12,10 @@ import { fetchDefs } from '../../../ItemList/actions/list';
 const useStyles = makeStyles(theme => ({
   buttonContainer: {
     display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'center',
-    marginTop: 60
+    width: '100%',
+    marginTop: 30
   },
   button: {
     margin: theme.spacing(1)
@@ -46,7 +48,7 @@ const FormButtons = ({
         endIcon={<ClearIcon />}
         onClick={onClear}
       >
-        CLEAR
+        Очистити
       </Button>
       <Button
         type="submit"
@@ -56,7 +58,7 @@ const FormButtons = ({
         endIcon={<DoneIcon />}
         disabled={isSubmitting}
       >
-        APPLY
+        Застосувати
       </Button>
     </div>
   );

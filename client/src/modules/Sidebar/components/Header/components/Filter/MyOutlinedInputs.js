@@ -68,7 +68,7 @@ export const MySelect = ({
       >
         {options.map(option => (
           <MenuItem key={option} value={option}>
-            {option || <em>Всі</em>}
+            {option || <em>всі</em>}
           </MenuItem>
         ))}
       </Select>

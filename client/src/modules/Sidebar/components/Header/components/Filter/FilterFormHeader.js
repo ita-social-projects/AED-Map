@@ -3,9 +3,9 @@ import { Avatar, Typography } from '@material-ui/core';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   avatar: {
-    margin: 8,
+    margin: `${theme.spacing(1)}px auto`,
     backgroundColor: '#7986cb'
   }
 }));
@@ -19,7 +19,7 @@ const FilterFormHeader = () => {
         <FilterListIcon />
       </Avatar>
       <Typography component="h1" variant="h5">
-        Filter
+        Фільтр
       </Typography>
     </div>
   );

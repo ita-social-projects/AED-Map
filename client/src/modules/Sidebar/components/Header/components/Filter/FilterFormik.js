@@ -9,6 +9,7 @@ import { setFilter, resetFilter } from './actions/filter';
 import { fetchDefs } from '../../../ItemList/actions/list';
 import FilterSchema from './validator';
 import initValues from './initValues';
+import { sidebarWidth } from '../../../../styleConstants';
 
 const useStyles = makeStyles({
   container: {
@@ -16,7 +17,7 @@ const useStyles = makeStyles({
     flexDirection: 'column',
     alignItems: 'center',
     position: 'fixed',
-    left: 360,
+    left: sidebarWidth,
     top: 0,
     width: 320,
     height: '100vh',
@@ -37,10 +38,20 @@ const FilterFormik = ({
   const formValues = { ...initValues, ...filterValues };
 
   const onSubmit = (values, { setSubmitting }) => {
+    if (
+      filter &&
+      Object.keys(values).every(
+        key => values[key] === filter[key]
+      )
+    ) {
+      setSubmitting(false);
+      return;
+    }
+
     if (Object.values(values).some(value => value)) {
       setFilterValue(values);
       fetchDefItems(values);
-    } else {
+    } else if (filter) {
       resetFilterValue();
       fetchDefItems();
     }

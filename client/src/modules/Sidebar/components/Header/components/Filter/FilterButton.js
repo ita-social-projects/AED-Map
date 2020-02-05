@@ -10,8 +10,8 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 
 const FilterButton = ({ isOpen, setIsOpen, filter }) => {
   const tooltipMessage = isOpen
-    ? 'Close the filter'
-    : 'Open the filter';
+    ? 'Закрити фільтр'
+    : 'Відкрити фільтр';
 
   const toggleFilter = () => {
     setIsOpen(prevState => !prevState);

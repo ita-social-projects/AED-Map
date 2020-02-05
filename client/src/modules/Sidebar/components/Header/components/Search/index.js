@@ -2,7 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import { setFilter } from './actions/filter';
+import {
+  setFilter,
+  resetFilter
+} from '../Filter/actions/filter';
 
 const useStyle = makeStyles({
   container: {
@@ -19,16 +22,24 @@ const useStyle = makeStyles({
 });
 
 // This component is a placeholder
-const Search = ({ filter, setFilterValue }) => {
+const Search = ({
+  filter,
+  setFilterValue,
+  resetFilterValue
+}) => {
   const classes = useStyle();
   const { address = '' } = filter || {};
 
   const onChange = ({ value }) => {
     if (filter) {
-      setFilterValue({
-        ...filter,
-        address: value
-      });
+      if (value) {
+        setFilterValue({
+          ...filter,
+          address: value
+        });
+      } else {
+        resetFilterValue();
+      }
     } else {
       setFilterValue({ address: value });
     }
@@ -39,7 +50,7 @@ const Search = ({ filter, setFilterValue }) => {
       <input
         className={classes.search}
         type="text"
-        placeholder="Впишіть сюди назву вулиці"
+        placeholder="Впишіть сюди адресу"
         value={address}
         onChange={event => onChange(event.target)}
       />
@@ -52,12 +63,16 @@ Search.defaultProps = {
 };
 Search.propTypes = {
   filter: PropTypes.oneOfType([PropTypes.object]),
-  setFilterValue: PropTypes.func.isRequired
+  setFilterValue: PropTypes.func.isRequired,
+  resetFilterValue: PropTypes.func.isRequired
 };
 
 export default connect(
   state => ({
     filter: state.filter
   }),
-  { setFilterValue: setFilter }
+  {
+    setFilterValue: setFilter,
+    resetFilterValue: resetFilter
+  }
 )(Search);

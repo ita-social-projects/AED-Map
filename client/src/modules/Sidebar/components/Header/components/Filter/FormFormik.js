@@ -36,10 +36,10 @@ const FormFormik = ({ onSubmit }) => {
       autoComplete="off"
       onSubmit={onSubmit}
     >
-      <OutlinedInput label="Title" name="title" />
-      <OutlinedInput label="Address" name="address" />
+      <OutlinedInput label="Назва" name="title" />
+      <OutlinedInput label="Адреса" name="address" />
       <OutlinedSelect
-        labelTitle="Language interface"
+        labelTitle="Мова інтерфейсу"
         label="language"
         name="language"
         options={selectOptions}

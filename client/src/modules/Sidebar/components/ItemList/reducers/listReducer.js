@@ -51,21 +51,20 @@ export default function listReducer(
   }
 }
 
-export function defsFilterSelector(state) {
+export function defsSearchSelector(state) {
   const { filter, defs } = state;
 
   if (filter) {
-    return defs.data.filter(def => {
-      const keys = Object.keys(filter);
-
-      return keys.every(key => {
-        if (!def[key]) return true;
-
-        return def[key]
-          .toLowerCase()
-          .includes(filter[key].toLowerCase());
-      });
-    });
+    return defs.data.filter(def =>
+      Object.keys(filter).every(key => {
+        return (
+          !def[key] ||
+          def[key]
+            .toLowerCase()
+            .includes(filter[key].toLowerCase())
+        );
+      })
+    );
   }
   return defs.data;
 }
