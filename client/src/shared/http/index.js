@@ -1,5 +1,8 @@
 import axios from 'axios';
 
+const authorization = JSON.parse(localStorage.getItem('authorization'));
+axios.defaults.headers.common.Authorization = authorization;
+
 const http = {
   get(url, params, cancel) {
     return axios({

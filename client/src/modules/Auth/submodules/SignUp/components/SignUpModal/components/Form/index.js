@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import { Form as FormFormik } from 'formik';
-import { MyTextField, MyCheckbox } from '../../../../../../../shared/Fields';
+import { MyTextField } from '../../../../../../../../shared/Fields';
 import InputAdornmentPassword from './components/InputAdornmentPassword';
 
 const useStyles = makeStyles(theme => ({
@@ -51,19 +51,24 @@ const Form = ({ isSubmitting }) => {
         id="password"
         autoComplete="password"
         InputProps={{
-          endAdornment: 
-            (<InputAdornmentPassword 
+          endAdornment:
+            (<InputAdornmentPassword
               showPassword={showPassword}
               handleClickShowPassword={handleClickShowPassword}
-              handleMouseDownPassword={handleMouseDownPassword} 
+              handleMouseDownPassword={handleMouseDownPassword}
             />)
         }}
       />
-      <MyCheckbox
-        color="primary"
-        id="remember"
-        label="Запам'ятати мене"
-        name="remember"
+      <MyTextField
+        variant="outlined"
+        margin="normal"
+        required
+        fullWidth
+        name="passwordConfirm"
+        label="Підтвердження пароля"
+        type={showPassword ? 'text' : 'password'}
+        id="passwordConfirm"
+        autoComplete="passwordConfirm"
       />
       <Button
         type="submit"
@@ -73,7 +78,7 @@ const Form = ({ isSubmitting }) => {
         className={classes.submit}
         disabled={isSubmitting}
       >
-        Вхід
+        Реєстрація
       </Button>
     </FormFormik>
   );

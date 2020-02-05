@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import './App.css';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
+import cancelToken from './shared/cancel-token';
+import { validateUser } from './modules/Auth/api';
+import { successSignIn, failSignIn } from './modules/Auth/actions/user';
 import Sidebar from './modules/Sidebar';
 import MapHolder from './modules/MapHolder';
+
+const ValidateCancelToken = cancelToken();
 
 const useStyles = makeStyles({
   mainStyle: {
@@ -13,8 +19,27 @@ const useStyles = makeStyles({
   }
 });
 
-const App = () => {
+const App = ({ success, fail }) => {
   const classes = useStyles();
+
+  useEffect(() => {
+    async function validate() {
+      try {
+        const { data, headers } = await validateUser();
+        const { authorization } = headers;
+        success(data, authorization);
+      } catch (e) {
+        fail();
+      }
+    }
+
+    validate();
+
+    return () => {
+      ValidateCancelToken.cancel();
+    };
+  });
+
   return (
     <div className="App">
       <div className={classes.mainStyle}>
@@ -25,4 +50,15 @@ const App = () => {
   );
 };
 
-export default connect()(App);
+App.propTypes = {
+  success: PropTypes.func.isRequired,
+  fail: PropTypes.func.isRequired
+};
+
+export default connect(
+  null,
+  dispatch => ({
+    success: (user, authorization) => dispatch(successSignIn(user, authorization)),
+    fail: () => dispatch(failSignIn())
+  })
+)(App);

@@ -3,14 +3,12 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 
-// Handler for error
-const errorHandler = require('../utils/errorHandler');
+// Handler for server error 
+const resServerError = require('../shared/resServerError');
 
-// Validation for routers
-const {
-  registerValidationRules,
-  validate
-} = require('./validation/authRouteValidator');
+// Validation rules and function for routers
+const { signupValidationRules } = require('./validation/authRouteValidator');
+const { validate } = require('../shared/validateRoute');
 
 // Secret key for jwt
 const { SECRET_JWT_KEY } = require('../config/keys');
@@ -18,109 +16,105 @@ const { SECRET_JWT_KEY } = require('../config/keys');
 // Model of the collection 'users'
 const User = require('../models/User');
 
-// Creating router
+// Create router
 const router = express.Router();
 
 // Route for registration
-router.post(
-  '/register',
-  registerValidationRules(),
-  validate,
-  async (req, res) => {
-    // Get email and password from request
-    const { email, password } = req.body;
-    // Search document in collection 'users' with email
-    const candidate = await User.findOne({ email });
-
-    if (candidate) {
-      // Candidate already exists
-      res.status(409).json({
-        message:
-          'Такий email вже зайнятий. Спробуйте інший.'
-      });
-    } else {
-      // How many rounds bcrypt has to hash password
-      // (2^round - 2 involution to power rounds)
-      const salt = bcrypt.genSaltSync(10);
-      // Creation user with email and hashed password
-      const user = new User({
-        email,
-        password: bcrypt.hashSync(password, salt)
-      });
-
-      try {
-        // Save user in collection 'users'
-        await user.save();
-        // Send response with user
-        res.status(201).json(user);
-      } catch (e) {
-        errorHandler(res, e);
-      }
-    }
-  }
-);
-
-// Route for authentication
-router.post('/login', async (req, res) => {
+router.post('/signup', signupValidationRules(), validate, async (req, res) => {
   // Get email and password from request
   const { email, password } = req.body;
   // Search document in collection 'users' with email
   const candidate = await User.findOne({ email });
 
+  // Candidate exists
   if (candidate) {
-    // Comparison password from request and password from database using bcrypt
-    const passwordResult = bcrypt.compareSync(
-      password,
-      candidate.password
-    );
+    // Response [Conflict] - error message
+    res.status(409).json({
+      errors: {
+        email: 'Ця електронна адреса вже комусь належить.\n Спробуйте іншу.'
+      }
+    });
 
-    if (passwordResult) {
-      // Creation jwt token based on email and id, expiration date - 1 hour
-      const token = jwt.sign(
-        {
-          email: candidate.email,
-          userId: candidate._id
-        },
-        SECRET_JWT_KEY,
-        { expiresIn: 60 * 60 }
-      );
+  } else {
+    // How many rounds bcrypt should hash password (2^round - 2 involution to power rounds)
+    const salt = bcrypt.genSaltSync(10);
+    // Create user with email and hashed password
+    const user = new User({
+      email,
+      password: bcrypt.hashSync(password, salt)
+    });
 
-      // Send response with jwt token
-      res.status(200).json({
-        token: `Bearer ${token}`
+    try {
+      // Save user in collection 'users'
+      await user.save();
+      // Response [Created]
+      res.status(201).json({
+        message: 'Вітаємо!\n Регістрація нового користувача пройшла успішно.'
       });
+
+    } catch (e) {
+      resServerError(res, e);
+    }
+  }
+});
+
+// Route for authentication
+router.post('/signin', async (req, res) => {
+  // Get email and password from request
+  const { email, password } = req.body;
+
+  // Search document in collection 'users' with email
+  const candidate = await User.findOne({ email });
+
+  // Candidate exists
+  if (candidate) {
+    // Compare password from request and password from database using bcrypt
+    const passwordResult = bcrypt.compareSync(password, candidate.password);
+
+    // Compare passwords success
+    if (passwordResult) {
+      // Create jwt based on email and id, expiration time - 1 hour
+      const token = jwt.sign({
+        userId: candidate._id,
+        email: candidate.email
+      }, SECRET_JWT_KEY, { expiresIn: 60 * 60 });
+
+      // Response [OK] - jwt and user information
+      res.status(200)
+        .set('Authorization', `Bearer ${token}`)
+        .json({ _id: candidate._id, email: candidate.email });
+
     } else {
-      // Password is not correct
+      // Response [Unauthorized] - error message
       res.status(401).json({
-        message: 'Паролі не збігаються. Спробуйте знову.'
+        message: 'Неправильна електронна адреса або пароль.\n Повторіть спробу.'
       });
     }
+
   } else {
-    // Candidate with this email isn't found
-    res.status(404).json({
-      message: 'Користувач з таким email не знайдений.'
+    // Response [Unauthorized] - error message
+    res.status(401).json({
+      message: 'Неправильна електронна адреса або пароль.\n Повторіть спробу.'
     });
   }
 });
 
 // Route for authorization
-router.get(
-  '/validate',
-  passport.authenticate('jwt', { session: false }),
-  async (req, res) => {
-    try {
-      // Get user from passport authenticate middleware
-      const { user } = req;
+router.get('/validate', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  try {
+    // Get user from passport authentication middleware
+    const { user, headers } = req;
+    const { authorization } = headers;
 
-      // Send response with current user
-      res.status(200).json(user);
-    } catch (e) {
-      // Candidate with this jwt isn't found
-      res.status(401).json({
-        message: 'Користувач з таким jwt не знайдений.'
-      });
-    }
+    // Response [OK] - jwt and user information
+    res.status(200)
+      .set('Authorization', authorization)
+      .json(user);
+
+  } catch (e) {
+    // Response [Unauthorized]
+    res.status(401).end();
   }
-);
+});
 
 module.exports = router;

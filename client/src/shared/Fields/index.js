@@ -1,14 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useField } from 'formik';
+import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Checkbox, FormControlLabel } from '@material-ui/core';
+
+const useStyles = makeStyles({
+  textField: {
+    whiteSpace: 'pre-line'
+  }
+});
 
 const MyTextField = (props) => {
   const [field, meta] = useField(props);
+  const classes = useStyles();
 
   return (
     <TextField
-      className="text-input"
+      className={classes.textField}
       helperText={meta.touched ? meta.error : ''}
       error={meta.touched && Boolean(meta.error)}
       {...field}
@@ -24,6 +32,7 @@ const MyCheckbox = ({ label, ...props }) => {
     <FormControlLabel
       control={(
         <Checkbox
+          className="checkbox"
           {...field}
           {...props}
         />

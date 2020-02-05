@@ -10,33 +10,31 @@ const {
 const { Schema } = mongoose;
 
 /*
-    Model 'Defibrillator'
-    10 properties
+  Model 'Defibrillator'
+  10 properties
 
-    title - String
-    address - String
-    location - Object 
-      + type - String 
-      + coordinates - Array[Number]
-    actual_date - Date
-    storage_place - String
-    accessibility - String
-    language - String
-    informational_plates - String 
-      + available values: 
-          "present", 
-          "missing", 
-          "present in building", 
-          "present near appliance"
-    phone - Array[String]
-    additional_information - String
+  title - String
+  address - String
+  location - Object 
+    + type - String 
+    + coordinates - Array[Number]
+  actual_date - Date
+  storage_place - String
+  accessibility - String
+  language - String
+  informational_plates - String 
+    + available values: 
+        "present", 
+        "missing", 
+        "present in building", 
+        "present near appliance"
+  phone - Array[String]
+  additional_information - String
 
-    Note
-    In property 'location.coordinates' is 
-    Array coordinates of the current address.
-    In this Array first element is 
-    'longitude'(!) and second 'latitude'(!).
-    It is a feature of GeoJSON type in MongoDB.
+  Note
+  There is array coordinates in property 'location.coordinates'.
+  First element of this array is 'longitude'(!) and second 'latitude'(!).
+  It is a feature of GeoJSON type in MongoDB.
 */
 
 const defibrillatorSchema = new Schema({
