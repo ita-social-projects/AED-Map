@@ -6,7 +6,9 @@ import {
   SET_PER_PAGE
 } from '../consts';
 import { fetchDefItems } from '../../../api';
+import cancelToken from '../../../../../shared/cancel-token';
 
+const defsCancelToken = cancelToken();
 export function setLoading(loading) {
   return {
     type: SET_LOADING,
@@ -32,11 +34,14 @@ export function fetchDefs(params) {
   return async dispatch => {
     dispatch(setLoading(true));
     try {
-      const { data } = await fetchDefItems(params);
+      const { data } = await fetchDefItems(
+        params,
+        defsCancelToken.instance
+      );
       dispatch(successLoadDef(data));
-      dispatch(setLoading(false));
     } catch (e) {
       dispatch(failLoadDef(e));
+    } finally {
       dispatch(setLoading(false));
     }
   };

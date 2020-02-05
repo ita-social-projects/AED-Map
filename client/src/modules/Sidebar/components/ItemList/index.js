@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -11,6 +11,9 @@ import PropTypes from 'prop-types';
 import { fetchDefs } from './actions/list';
 import DefItem from './components/DefItem';
 import { defsFilterSelector } from './reducers/listReducer';
+import cancelToken from '../../../../shared/cancel-token';
+
+const defsCancelToken = cancelToken();
 
 const useStyles = makeStyles({
   listOuterStyle: {
@@ -38,12 +41,14 @@ const useStyles = makeStyles({
 
 const ItemList = ({ filteredDefs, fetchDefItems }) => {
   const classes = useStyles();
-  useEffect(
-    useCallback(() => {
-      fetchDefItems();
-    }, [fetchDefItems]),
-    []
-  );
+
+  useEffect(() => {
+    fetchDefItems();
+    return () => {
+      defsCancelToken.cancel();
+    };
+    // eslint-disable-next-line
+  }, []);
   const cache = new CellMeasurerCache({
     fixedWidth: true,
     defaultHeight: 100
