@@ -23,7 +23,8 @@ const useStyles = makeStyles({
   },
   listOuterStyle: {
     width: '100%',
-    height: 'calc(100vh - 100px)'
+    height: 'calc(100vh - 100px)',
+    display: 'block'
   },
   listStyle: {
     borderTop: '1px solid #fff3',
