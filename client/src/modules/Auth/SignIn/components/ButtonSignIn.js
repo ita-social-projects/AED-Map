@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
+import { ExitToApp } from '@material-ui/icons';
 
 const ButtonAuth = ({ handleOpen }) => (
-  <Button color="inherit" onClick={handleOpen}>Вхід</Button>
+  <IconButton color="inherit" onClick={handleOpen}>
+    <ExitToApp />
+  </IconButton>
 );
 
 ButtonAuth.propTypes = {
