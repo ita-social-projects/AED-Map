@@ -24,11 +24,10 @@ const AddInDB = ({
     phone: [phone],
     additional_information
   };
-  axios
-    .post('/api/defibrillators', body)
-    .then(response => {
-      console.log(response);
-    });
+  axios.post('/api/defibrillators', body).then(response => {
+    // eslint-disable-next-line
+    console.log(response);
+  });
 };
 
 export default AddInDB;

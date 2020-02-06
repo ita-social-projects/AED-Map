@@ -36,12 +36,11 @@ describe('fetchDefs action', () => {
     });
     const store = mockStore({ data: [] });
     const expectedActions = [
-      { type: types.SET_LOADING, payload: true },
+      { type: types.START_LOAD_DATA },
       {
         type: types.SUCCESS_LOAD_DATA,
         payload: mockData
-      },
-      { type: types.SET_LOADING, payload: false }
+      }
     ];
     return store.dispatch(actions.fetchDefs()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
@@ -55,12 +54,11 @@ describe('fetchDefs action', () => {
     });
     const store = mockStore({ error: null });
     const expectedActions = [
-      { type: types.SET_LOADING, payload: true },
+      { type: types.START_LOAD_DATA },
       {
         type: types.FAIL_LOAD_DATA,
         payload: mockError
-      },
-      { type: types.SET_LOADING, payload: false }
+      }
     ];
     return store.dispatch(actions.fetchDefs()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);

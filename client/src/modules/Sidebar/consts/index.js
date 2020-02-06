@@ -1,3 +1,0 @@
-export const CREATE_DEF_POINT = 'CREATE_DEF_POINT';
-export const DELETE_DEF_POINT = 'DELETE_DEF_POINT';
-export const EDIT_DEF_POINT = 'EDIT_DEF_POINT';

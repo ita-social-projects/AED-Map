@@ -1,18 +1,13 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import moxios from 'moxios';
-// import http from '../../../../shared/http';
 
 import * as types from '../../consts';
-import {
-  SET_LOADING,
-  FAIL_LOAD_DATA
-} from '../../components/ItemList/consts';
-import * as actions from '../def';
+import * as actions from '../list';
 import {
   mockNewDefInfo,
   mockError
-} from '../../../../mocks';
+} from '../../../../../../mocks';
 
 const { id } = mockNewDefInfo;
 
@@ -47,12 +42,11 @@ describe('defibrillator async CRUD actions', () => {
     });
     const store = mockStore({ defs: [] });
     const expectedActions = [
-      { type: SET_LOADING, payload: true },
+      { type: types.START_LOAD_DATA },
       {
         type: types.CREATE_DEF_POINT,
         payload: mockNewDefInfo
-      },
-      { type: SET_LOADING, payload: false }
+      }
     ];
     return store
       .dispatch(actions.createDefItem(mockNewDefInfo))
@@ -61,19 +55,18 @@ describe('defibrillator async CRUD actions', () => {
       });
   });
 
-  it(`creates ${FAIL_LOAD_DATA} when new def added fails`, () => {
+  it(`creates ${types.FAIL_LOAD_DATA} when new def added fails`, () => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith(mockErrorResponse(mockError));
     });
     const store = mockStore({ error: null });
     const expectedActions = [
-      { type: SET_LOADING, payload: true },
+      { type: types.START_LOAD_DATA },
       {
-        type: FAIL_LOAD_DATA,
+        type: types.FAIL_LOAD_DATA,
         payload: mockError
-      },
-      { type: SET_LOADING, payload: false }
+      }
     ];
     return store
       .dispatch(actions.createDefItem())
@@ -86,19 +79,21 @@ describe('defibrillator async CRUD actions', () => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith(
-        mockSuccessResponse(200, mockNewDefInfo)
+        mockSuccessResponse(200, {
+          defibrillator: mockNewDefInfo
+        })
       );
     });
     const store = mockStore({ defs: [] });
 
     const expectedActions = [
-      { type: SET_LOADING, payload: true },
+      { type: types.START_LOAD_DATA },
       {
         type: types.DELETE_DEF_POINT,
         payload: id
-      },
-      { type: SET_LOADING, payload: false }
+      }
     ];
+
     return store
       .dispatch(actions.deleteDefItem(id))
       .then(() => {
@@ -106,19 +101,18 @@ describe('defibrillator async CRUD actions', () => {
       });
   });
 
-  it(`creates ${FAIL_LOAD_DATA} when def item delete fails`, () => {
+  it(`creates ${types.FAIL_LOAD_DATA} when def item delete fails`, () => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith(mockErrorResponse(mockError));
     });
     const store = mockStore({ error: null });
     const expectedActions = [
-      { type: SET_LOADING, payload: true },
+      { type: types.START_LOAD_DATA },
       {
-        type: FAIL_LOAD_DATA,
+        type: types.FAIL_LOAD_DATA,
         payload: mockError
-      },
-      { type: SET_LOADING, payload: false }
+      }
     ];
     return store
       .dispatch(actions.deleteDefItem(id))
@@ -139,15 +133,14 @@ describe('defibrillator async CRUD actions', () => {
     const store = mockStore({ defs: [] });
 
     const expectedActions = [
-      { type: SET_LOADING, payload: true },
+      { type: types.START_LOAD_DATA },
       {
         type: types.EDIT_DEF_POINT,
         payload: {
           id,
           newDefInfo: mockNewDefInfo
         }
-      },
-      { type: SET_LOADING, payload: false }
+      }
     ];
     return store
       .dispatch(actions.editDefItem(id, mockNewDefInfo))
@@ -156,19 +149,18 @@ describe('defibrillator async CRUD actions', () => {
       });
   });
 
-  it(`creates ${FAIL_LOAD_DATA} when def item edit fails`, () => {
+  it(`creates ${types.FAIL_LOAD_DATA} when def item edit fails`, () => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith(mockErrorResponse(mockError));
     });
     const store = mockStore({ error: null });
     const expectedActions = [
-      { type: SET_LOADING, payload: true },
+      { type: types.START_LOAD_DATA },
       {
-        type: FAIL_LOAD_DATA,
+        type: types.FAIL_LOAD_DATA,
         payload: mockError
-      },
-      { type: SET_LOADING, payload: false }
+      }
     ];
     return store
       .dispatch(actions.editDefItem(id, mockNewDefInfo))

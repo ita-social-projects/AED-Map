@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
 import PropTypes from 'prop-types';
-import { createDefPoint } from '../../actions/def';
+import { createDefPoint } from '../ItemList/actions/list';
 import AddAdressText from './AddAdressText';
 import PlatesSelect from './PlatesSelect';
 import AddTelephone from './AddTelephone';
@@ -101,7 +101,7 @@ const MyForm = ({ createDef }) => {
               <TextField
                 name="title"
                 value={values.title}
-                label="Введіть назву"               
+                label="Введіть назву"
                 className={classes.DefaultStyle}
                 onChange={handleChange}
               />

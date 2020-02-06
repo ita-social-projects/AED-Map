@@ -28,16 +28,14 @@ describe('defibrillators LOAD part reducer', () => {
     ).toEqual(initialState);
   });
 
-  it(`should handle ${types.SET_LOADING} action`, () => {
+  it(`should handle ${types.START_LOAD_DATA} action`, () => {
     const expectedState = {
       ...initialState,
       loading: true
     };
-
     expect(
       listReducer(initialState, {
-        type: types.SET_LOADING,
-        payload: true
+        type: types.START_LOAD_DATA
       })
     ).toEqual(expectedState);
   });

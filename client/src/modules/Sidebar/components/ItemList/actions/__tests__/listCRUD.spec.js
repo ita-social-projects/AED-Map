@@ -1,7 +1,7 @@
 import * as types from '../../consts';
-import * as actions from '../def';
+import * as actions from '../list';
 
-import { mockNewDefInfo } from '../../../../mocks';
+import { mockNewDefInfo } from '../../../../../../mocks';
 
 describe('defibrillator CRUD actions', () => {
   it(`should create action to ${types.CREATE_DEF_POINT}`, () => {
