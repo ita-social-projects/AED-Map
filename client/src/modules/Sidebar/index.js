@@ -23,9 +23,11 @@ const useStyles = makeStyles({
     flexShrink: 0
   },
   addButtonStyle: {
-    marginTop: '10px'
+    width: '100%',
+    marginTop: 10
   }
 });
+
 const Sidebar = () => {
   const classes = useStyles();
 
@@ -43,7 +45,7 @@ const Sidebar = () => {
               color="primary"
               startIcon={<AddIcon />}
             >
-              Додати новий дефебрилятор
+              Додати новий дефібрилятор
             </Button>
           </Link>
         </Route>

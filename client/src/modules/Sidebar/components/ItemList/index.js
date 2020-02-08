@@ -10,17 +10,13 @@ import {
 import PropTypes from 'prop-types';
 import { fetchDefs } from './actions/list';
 import DefItem from './components/DefItem';
+import InfoMessage from './components/InfoMessage';
 import { defsSearchSelector } from './reducers/listReducer';
 import cancelToken from '../../../../shared/cancel-token';
 
 const defsCancelToken = cancelToken();
 
 const useStyles = makeStyles({
-  infoMessage: {
-    color: 'white',
-    textAlign: 'center',
-    marginTop: 'calc((100vh - 100px) / 2)'
-  },
   listOuterStyle: {
     width: '100%',
     height: 'calc(100vh - 100px)',
@@ -49,9 +45,14 @@ const ItemList = ({
   isLoading,
   defibrillators,
   searchedDefs,
-  fetchDefItems
+  fetchDefItems,
+  filter
 }) => {
   const classes = useStyles();
+  const noFilteredDefs =
+    !isLoading && filter && !defibrillators.length;
+  const isDatabaseEmpty =
+    !isLoading && !filter && !defibrillators.length;
 
   useEffect(() => {
     fetchDefItems();
@@ -104,21 +105,23 @@ const ItemList = ({
           }}
         </AutoSizer>
       ) : (
-        <div className={classes.infoMessage}>
-          Завантаження...
-        </div>
+        <InfoMessage>Завантаження...</InfoMessage>
       )}
-      {!isLoading && !defibrillators.length && (
-        <div className={classes.infoMessage}>
+      {noFilteredDefs && (
+        <InfoMessage>
           По заданому фільтру нічого не знайдено...
-        </div>
+        </InfoMessage>
+      )}
+      {isDatabaseEmpty && (
+        <InfoMessage>База даних пуста...</InfoMessage>
       )}
     </div>
   );
 };
 ItemList.defaultProps = {
   searchedDefs: [],
-  fetchDefItems: () => null
+  fetchDefItems: () => null,
+  filter: null
 };
 
 ItemList.propTypes = {
@@ -144,7 +147,8 @@ ItemList.propTypes = {
       additional_information: PropTypes.string
     })
   ),
-  fetchDefItems: PropTypes.func
+  fetchDefItems: PropTypes.func,
+  filter: PropTypes.oneOfType([PropTypes.object])
 };
 
 export default connect(

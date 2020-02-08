@@ -34,6 +34,7 @@ const FormButtons = ({
     if (filter) {
       fetchDefItems();
     }
+
     resetFilterValue();
     handleReset();
   };

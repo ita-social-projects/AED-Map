@@ -37,7 +37,7 @@ const FilterFormik = ({
   const filterValues = filter || {};
   const formValues = { ...initValues, ...filterValues };
 
-  const onSubmit = (values, { setSubmitting }) => {
+  const onSubmit = async (values, { setSubmitting }) => {
     if (
       filter &&
       Object.keys(values).every(
@@ -49,12 +49,13 @@ const FilterFormik = ({
     }
 
     if (Object.values(values).some(value => value)) {
+      await fetchDefItems(values);
       setFilterValue(values);
-      fetchDefItems(values);
     } else if (filter) {
+      await fetchDefItems();
       resetFilterValue();
-      fetchDefItems();
     }
+
     setSubmitting(false);
   };
 
