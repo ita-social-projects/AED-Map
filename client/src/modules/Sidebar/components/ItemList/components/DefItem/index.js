@@ -2,18 +2,48 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import EditIcon from '@material-ui/icons/Edit';
+import { defsSearchSelector } from '../../reducers/listReducer';
 import { setMapCenter } from '../../../../../MapHolder/actions/mapState';
+import {
+  deleteDefPoint,
+  editDefPoint
+} from '../../actions/list';
+import DeleteBtn from './DeleteBtn';
+import ModalContent from './ModalContent';
+import ModalWrapper from '../../../../../../shared/ModalWrapper';
 
 const useStyles = makeStyles({
   pointCard: {
-    padding: '20px 10px',
     minHeight: '100px',
+    display: 'flex',
     '&:not(:last-of-type)': {
-      borderBottom: '1px solid #fff'
+      borderBottom: '1px solid #fff',
+      padding: '0px'
     },
     overflow: 'hidden',
     '&:hover': {
       background: '#686c7458',
+      cursor: 'pointer',
+      '& div:last-child': {
+        visibility: 'visible '
+      }
+    }
+  },
+  pointCardInfo: {
+    flex: '5',
+    padding: '20px 10px'
+  },
+  pointCardButtons: {
+    visibility: 'hidden',
+    flex: '1',
+    '& button': {
+      border: '2px solid #000',
+      width: '100%',
+      height: '50%',
+      backgroundColor: '#fff',
+      opacity: '.7',
+      transform: 'scale(0.8)',
       cursor: 'pointer'
     }
   },
@@ -57,22 +87,42 @@ const DefItem = ({
       setMapParams(mapParams);
     }
   };
-
   return (
     <div
       className={classes.pointCard}
       style={styleParam}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      role="button"
-      tabIndex={0}
+
     >
-      <h3 className={classes.titleStyle}>
-        {defItemInfo.title}
-      </h3>
-      <p className={classes.descStyle}>
-        {defItemInfo.address}
-      </p>
+      <div
+        className={classes.pointCardInfo}
+        onClick={handleClick}
+        role="button"
+        tabIndex={0}
+        onKeyDown={handleKeyDown}
+      >
+        <h3 className={classes.titleStyle}>
+          {defItemInfo.title}
+        </h3>
+        <p className={classes.descStyle}>
+          {defItemInfo.address}
+        </p>
+      </div>
+      <div className={classes.pointCardButtons}>
+        <button type="button">
+          <EditIcon />
+        </button>
+        <ModalWrapper
+          ButtonOpen={DeleteBtn}
+          ModalContent={params => (
+            <ModalContent
+              {...params}
+              /* eslint-disable */
+              id={defItemInfo._id}
+              /* eslint-enable */
+            />
+          )}
+        />
+      </div>
     </div>
   );
 };
@@ -101,6 +151,15 @@ DefItem.propTypes = {
   setMapParams: PropTypes.func
 };
 
-export default connect(null, dispatch => ({
-  setMapParams: mapState => dispatch(setMapCenter(mapState))
-}))(DefItem);
+export default connect(
+  state => ({
+    filteredDefs: defsSearchSelector(state)
+  }),
+  dispatch => ({
+    setMapParams: mapState =>
+      dispatch(setMapCenter(mapState)),
+    deleteDefibrPoint: id => dispatch(deleteDefPoint(id)),
+    editDefibrPoint: (id, ...data) =>
+      dispatch(editDefPoint(id, ...data))
+  })
+)(DefItem);
