@@ -1,6 +1,7 @@
 export const mockData = [
   {
     id: '423432fsd4',
+    _id: '423432fsd4',
     title: 'Львівська Ратуша',
     address: 'м. Львів, пл. Ринок, 1',
     location: {
@@ -18,6 +19,7 @@ export const mockData = [
   },
   {
     id: 'djsgherjt45658ure7wy',
+    _id: 'djsgherjt45658ure7wy',
     title: 'Львівський міжнародний аеропорт',
     address: 'м. Львів, вул. Любінська, 168',
     location: {
@@ -36,6 +38,7 @@ export const mockData = [
   },
   {
     id: 'gfdsjhdshjt5h65utu8',
+    _id: 'gfdsjhdshjt5h65utu8',
     title: 'Медичний центр \'Профідент-плюс\'',
     address:
       'м. Львів, вул. Єфремова, 85 (вхід з вул. Конотопська)',
@@ -53,6 +56,14 @@ export const mockData = [
     additional_information: ''
   }
 ];
+
+export const mockState = {
+  data: mockData,
+  loading: false,
+  error: null,
+  page: 1,
+  perPage: 10
+};
 
 export const mockNewDefInfo = {
   id: '576uyjty',

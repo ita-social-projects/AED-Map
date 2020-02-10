@@ -7,14 +7,11 @@ import {
 } from '../../../../../../mocks';
 
 describe('defibrillator LOAD actions', () => {
-  it(`should create action to ${types.SET_LOADING}`, () => {
+  it(`should create action to ${types.START_LOAD_DATA}`, () => {
     const expectedAction = {
-      type: types.SET_LOADING,
-      payload: false
+      type: types.START_LOAD_DATA
     };
-    expect(actions.setLoading(false)).toEqual(
-      expectedAction
-    );
+    expect(actions.startLoadDef()).toEqual(expectedAction);
   });
 
   it(`should create action to ${types.SUCCESS_LOAD_DATA}`, () => {

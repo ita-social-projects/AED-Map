@@ -19,9 +19,9 @@ const AddAdressText = ({ formik, className }) => {
     if (value.length > 2) {
       axios
         .get(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${value}.json?access_token=pk.eyJ1Ijoic2FyYXRlYyIsImEiOiJjazViYjY4eHIxZXNlM2txeGJvY20waHpkIn0.LEO4h63DwhRB458fESisKg` 
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${value}.json?access_token=pk.eyJ1Ijoic2FyYXRlYyIsImEiOiJjazViYjY4eHIxZXNlM2txeGJvY20waHpkIn0.LEO4h63DwhRB458fESisKg`
         )
-        .then(function(response) {
+        .then(response => {
           const countries = response.data;
           if (active) {
             setOptions(
@@ -31,8 +31,9 @@ const AddAdressText = ({ formik, className }) => {
             );
           }
         })
-        .catch(function(error) {
-          console.log(`EROR is ${  error}`);
+        .catch(error => {
+          // eslint-disable-next-line
+          console.log(`EROR is ${error}`);
         });
     } else {
       setOpen(false);

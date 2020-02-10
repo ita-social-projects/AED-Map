@@ -10,7 +10,7 @@
     "start": "node start.js",
     "lint": "eslint server.js ./config ./consts ./middleware ./models ./routes ./utils --ext .js",
     "test-client": "cd client/ && yarn test",
-    "test-server": "cross-env NODE_ENV=node jest routes"
+    "test-server": "cross-env NODE_ENV=node jest routes --coverage"
   },
   "jest": {
     "testEnvironment": "node",
@@ -18,7 +18,8 @@
       "/client/"
     ],
     "coveragePathIgnorePatterns": [
-      "/node_modules/"
+      "/node_modules/",
+      "/middleware"
     ]
   },
   "husky": {
