@@ -46,6 +46,8 @@ const ItemList = ({
   defibrillators,
   searchedDefs,
   fetchDefItems,
+  totalCount,
+  page,
   filter
 }) => {
   const classes = useStyles();
@@ -66,6 +68,17 @@ const ItemList = ({
     defaultHeight: 100
   });
 
+  const handleScroll = event => {
+    if (
+      totalCount >= page &&
+      event.scrollTop &&
+      event.scrollHeight - event.scrollTop ===
+        event.clientHeight
+    ) {
+      fetchDefItems({ page, ...filter });
+    }
+  };
+
   // eslint-disable-next-line react/prop-types
   const rowRenderer = ({ key, index, style, parent }) => {
     return (
@@ -84,37 +97,41 @@ const ItemList = ({
     );
   };
 
+  const show =
+    isLoading || noFilteredDefs || isDatabaseEmpty;
+
+  let message = '';
+  if (isLoading) {
+    message = 'Завантаження...';
+  }
+  if (noFilteredDefs) {
+    message = 'По заданому фільтру нічого не знайдено...';
+  }
+  if (isDatabaseEmpty) {
+    message = 'База даних пуста...';
+  }
+
   return (
     <div className={classes.listOuterStyle}>
-      {!isLoading ? (
-        <AutoSizer>
-          {({ width, height }) => {
-            //  AutoSizer expands list to width and height of parent automatically
-            return (
-              <List
-                className={classes.listStyle}
-                width={width}
-                height={height}
-                deferredMeasurementCache={cache}
-                rowCount={searchedDefs.length}
-                rowHeight={cache.rowHeight}
-                rowRenderer={rowRenderer}
-                overscanRowCount={10}
-              />
-            );
-          }}
-        </AutoSizer>
-      ) : (
-        <InfoMessage>Завантаження...</InfoMessage>
-      )}
-      {noFilteredDefs && (
-        <InfoMessage>
-          По заданому фільтру нічого не знайдено...
-        </InfoMessage>
-      )}
-      {isDatabaseEmpty && (
-        <InfoMessage>База даних пуста...</InfoMessage>
-      )}
+      <AutoSizer>
+        {({ width, height }) => {
+          //  AutoSizer expands list to width and height of parent automatically
+          return (
+            <List
+              className={classes.listStyle}
+              width={width}
+              height={height}
+              deferredMeasurementCache={cache}
+              rowCount={searchedDefs.length}
+              rowHeight={cache.rowHeight}
+              rowRenderer={rowRenderer}
+              overscanRowCount={10}
+              onScroll={handleScroll}
+            />
+          );
+        }}
+      </AutoSizer>
+      <InfoMessage show={show}>{message}</InfoMessage>
     </div>
   );
 };
@@ -156,9 +173,12 @@ export default connect(
     isLoading: state.defs.loading,
     defibrillators: state.defs.data,
     filter: state.filter,
-    searchedDefs: defsSearchSelector(state)
+    searchedDefs: defsSearchSelector(state),
+    totalCount: state.defs.totalCount,
+    page: state.defs.page
   }),
+
   dispatch => ({
-    fetchDefItems: () => dispatch(fetchDefs())
+    fetchDefItems: params => dispatch(fetchDefs(params))
   })
 )(ItemList);

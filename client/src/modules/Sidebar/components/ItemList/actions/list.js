@@ -1,5 +1,6 @@
 import {
   START_LOAD_DATA,
+  SET_DATA,
   SUCCESS_LOAD_DATA,
   FAIL_LOAD_DATA,
   CREATE_DEF_POINT,
@@ -29,6 +30,12 @@ export function successLoadDef(defs) {
     payload: defs
   };
 }
+export function setData(data) {
+  return {
+    type: SET_DATA,
+    payload: data
+  };
+}
 
 export function failLoadDef(error) {
   return {
@@ -46,6 +53,7 @@ export function fetchDefs(params) {
         defsCancelToken.instance
       );
       dispatch(successLoadDef(data));
+      dispatch(setPage());
     } catch (e) {
       dispatch(failLoadDef(e));
     }

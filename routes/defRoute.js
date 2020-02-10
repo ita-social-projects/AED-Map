@@ -10,18 +10,31 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     const filter = {};
+    const skipKeys = ['page', 'per_page'];
     Object.keys(req.query).forEach((key) => {
-      filter[key] = {
-        $regex: req.query[key],
-        $options: 'i'
-      };
+      if (!skipKeys.includes(key)) {
+        filter[key] = {
+          $regex: req.query[key],
+          $options: 'i'
+        };
+      }
     });
-
+    const perPage = Number(req.query.per_page) || 10;
+    const page = Number(req.query.page) || 1;
     const defibrillators =
-      (await Defibrillator.find(filter).select(
-        'address title location'
-      )) || [];
-    return res.status(200).send(defibrillators);
+      (await Defibrillator.find(filter)
+        .select('address title location')
+        .skip(perPage * (page - 1))
+        .limit(perPage)) || [];
+    const allDefibrillators = await Defibrillator.find(
+      filter
+    ).count();
+    const totalCount = Math.ceil(
+      allDefibrillators / perPage
+    );
+    return res
+      .status(200)
+      .send({ defibrillators, totalCount });
   } catch (e) {
     errorHandler(res, e);
   }

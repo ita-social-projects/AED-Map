@@ -35,7 +35,9 @@ describe('get method', () => {
       '/api/defibrillators'
     );
     expect(response.status).toBe(200);
-    expect(response.body.length >= 0).toBe(true);
+    expect(response.body.defibrillators.length >= 0).toBe(
+      true
+    );
   });
 });
 

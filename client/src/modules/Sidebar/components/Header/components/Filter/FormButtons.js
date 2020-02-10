@@ -7,7 +7,11 @@ import ClearIcon from '@material-ui/icons/Clear';
 import DoneIcon from '@material-ui/icons/Done';
 import { makeStyles } from '@material-ui/core/styles';
 import { resetFilter } from './actions/filter';
-import { fetchDefs } from '../../../ItemList/actions/list';
+import {
+  fetchDefs,
+  setPage,
+  setData
+} from '../../../ItemList/actions/list';
 
 const useStyles = makeStyles(theme => ({
   buttonContainer: {
@@ -26,7 +30,9 @@ const FormButtons = ({
   formik: { handleReset, isSubmitting },
   resetFilterValue,
   fetchDefItems,
-  filter
+  filter,
+  resetData,
+  resetPage
 }) => {
   const classes = useStyles();
 
@@ -36,6 +42,8 @@ const FormButtons = ({
     }
 
     resetFilterValue();
+    resetData([]);
+    resetPage(1);
     handleReset();
   };
 
@@ -84,6 +92,8 @@ export default connect(
   }),
   {
     resetFilterValue: resetFilter,
-    fetchDefItems: fetchDefs
+    fetchDefItems: fetchDefs,
+    resetPage: page => setPage(page),
+    resetData: data => setData(data)
   }
 )(connectFormik(FormButtons));

@@ -6,7 +6,11 @@ import { Formik } from 'formik';
 import FormFormik from './FormFormik';
 import FilterHeader from './FilterFormHeader';
 import { setFilter, resetFilter } from './actions/filter';
-import { fetchDefs } from '../../../ItemList/actions/list';
+import {
+  fetchDefs,
+  setPage,
+  setData
+} from '../../../ItemList/actions/list';
 import FilterSchema from './validator';
 import initValues from './initValues';
 import { sidebarWidth } from '../../../../styleConstants';
@@ -31,7 +35,9 @@ const FilterFormik = ({
   filter,
   setFilterValue,
   resetFilterValue,
-  fetchDefItems
+  fetchDefItems,
+  resetData,
+  resetPage
 }) => {
   const classes = useStyles();
   const filterValues = filter || {};
@@ -49,11 +55,14 @@ const FilterFormik = ({
     }
 
     if (Object.values(values).some(value => value)) {
-      await fetchDefItems(values);
       setFilterValue(values);
+      resetData([]);
+      resetPage(1);
+      await fetchDefItems(values);
     } else if (filter) {
-      await fetchDefItems();
       resetFilterValue();
+      resetPage(1);
+      await fetchDefItems();
     }
 
     setSubmitting(false);
@@ -93,6 +102,8 @@ export default connect(
   {
     setFilterValue: setFilter,
     resetFilterValue: resetFilter,
-    fetchDefItems: params => fetchDefs(params)
+    fetchDefItems: params => fetchDefs(params),
+    resetPage: page => setPage(page),
+    resetData: data => setData(data)
   }
 )(FilterFormik);
