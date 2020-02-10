@@ -34,6 +34,15 @@ describe('defibrillator LOAD actions', () => {
     );
   });
 
+  it(`should create action to ${types.SET_DATA}`, () => {
+    const expectedAction = {
+      type: types.SET_DATA,
+      payload: mockData
+    };
+    expect(actions.setData(mockData)).toEqual(
+      expectedAction
+    );
+  });
   it(`should create action to ${types.SET_PAGE}`, () => {
     const expectedAction = {
       type: types.SET_PAGE,

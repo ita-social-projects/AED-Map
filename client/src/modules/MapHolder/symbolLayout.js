@@ -1,8 +1,8 @@
 const SYMBOL_LAYOUT = {
-  'icon-image': 'map-pin-custom-1',
+  'icon-name': 'map-pin-custom-1',
   'icon-size': 1.5,
   'icon-offset': [0, -15],
-  'text-field': ['get', 'title'],
+  'text-field': '{title}',
   'text-font': [
     'Open Sans Semibold',
     'Arial Unicode MS Bold'

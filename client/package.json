@@ -31,10 +31,26 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "cross-env CI=true react-scripts test --env=jsdom  --coverage",
+    "test": "cross-env CI=true react-scripts test --env=jsdom --coverage",
     "test-server": "cd ../ && yarn test-server",
     "eject": "react-scripts eject",
     "lint": "eslint src/**/*.js"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "./src/modules/**/(api|actions|reducers|consts)/*.js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    }
   },
   "husky": {
     "hooks": {
