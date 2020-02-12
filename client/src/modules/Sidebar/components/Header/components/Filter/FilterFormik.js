@@ -12,7 +12,7 @@ import {
   setData
 } from '../../../ItemList/actions/list';
 import FilterSchema from './validator';
-import initValues from './initValues';
+import INITIAL_VALUES from './consts/initialValues';
 import { sidebarWidth } from '../../../../styleConstants';
 
 const useStyles = makeStyles({
@@ -40,23 +40,14 @@ const FilterFormik = ({
   resetPage
 }) => {
   const classes = useStyles();
-  const filterValues = filter || {};
-  const formValues = { ...initValues, ...filterValues };
+  const initialValues = { ...INITIAL_VALUES, ...filter };
 
   const onSubmit = async (values, { setSubmitting }) => {
-    if (
-      filter &&
-      Object.keys(values).every(
-        key => values[key] === filter[key]
-      )
-    ) {
-      setSubmitting(false);
-      return;
-    }
     const resetPagination = (page, data) => {
       resetPage(page);
       resetData(data);
     };
+
     if (Object.values(values).some(value => value)) {
       resetPagination(1, []);
       setFilterValue(values);
@@ -74,7 +65,7 @@ const FilterFormik = ({
     <div className={classes.container}>
       <FilterHeader />
       <Formik
-        initialValues={formValues}
+        initialValues={initialValues}
         onSubmit={onSubmit}
         validationSchema={FilterSchema}
         enableReinitialize
