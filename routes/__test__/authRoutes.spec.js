@@ -31,7 +31,8 @@ describe('auth routes', () => {
       })
       .expect({
         errors: {
-          email: 'Ця електронна адреса вже комусь належить.\n Спробуйте іншу.'
+          email:
+            'Ця електронна адреса вже комусь належить.\n Спробуйте іншу.'
         }
       })
       .expect(409);
@@ -46,9 +47,14 @@ describe('auth routes', () => {
         password: mockPassword,
         passwordConfirm: mockPassword
       })
+      .expect({
+        message:
+          'Вітаємо!\n Регістрація нового користувача пройшла успішно.'
+      })
       .expect(201);
-    const id = res.body._id;
-    await User.findByIdAndDelete(id);
+
+    const user = await User.findOne({ email: mockEmail });
+    await User.findByIdAndDelete(user._id);
   });
 
   it('should return status 404 when user not found', async () => {
@@ -57,10 +63,11 @@ describe('auth routes', () => {
       .post(`${BASEURL}/signin`)
       .send({
         email: mockEmail,
-        password: mockPassword,
+        password: mockPassword
       })
       .expect({
-        message: 'Неправильна електронна адреса або пароль.\n Повторіть спробу.'
+        message:
+          'Неправильна електронна адреса або пароль.\n Повторіть спробу.'
       })
       .expect(401);
   });
@@ -74,7 +81,8 @@ describe('auth routes', () => {
           '$2a$10$i.0VgohTBtx8arWSKs4/AOY2IFgYbKLjHsDKs8raOHXnLz86HLcQKd'
       })
       .expect({
-        message: 'Неправильна електронна адреса або пароль.\n Повторіть спробу.'
+        message:
+          'Неправильна електронна адреса або пароль.\n Повторіть спробу.'
       })
       .expect(401);
   });
