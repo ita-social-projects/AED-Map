@@ -16,11 +16,11 @@ const options = {
 
 module.exports = passport => {
   passport.use(
-    // Creation jwt-strategy in 'passport'
+    // Create jwt-strategy in 'passport'
     new JwtStrategy(options, async (payload, done) => {
       try {
         // Search document in collection 'users' with id
-        const user = await User.findById(payload.userId).select('email id');
+        const user = await User.findById(payload.userId).select('id email');
 
         if (user) {
           // Callback with user

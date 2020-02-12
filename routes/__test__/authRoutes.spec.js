@@ -23,14 +23,16 @@ describe('auth routes', () => {
 
   it('should return status 409 when user already exist', async () => {
     const res = await request
-      .post(`${BASEURL}/register`)
+      .post(`${BASEURL}/signup`)
       .send({
         email: mockEmailForRegister,
-        password: mockPassword
+        password: mockPassword,
+        passwordConfirm: mockPassword
       })
       .expect({
-        message:
-          'Такий email вже зайнятий. Спробуйте інший.'
+        errors: {
+          email: 'Ця електронна адреса вже комусь належить.\n Спробуйте іншу.'
+        }
       })
       .expect(409);
   });
@@ -38,10 +40,11 @@ describe('auth routes', () => {
   it('should return status 201 when user created', async () => {
     const mockEmail = 'whatever1@gmail.com';
     const res = await request
-      .post(`${BASEURL}/register`)
+      .post(`${BASEURL}/signup`)
       .send({
         email: mockEmail,
-        password: mockPassword
+        password: mockPassword,
+        passwordConfirm: mockPassword
       })
       .expect(201);
     const id = res.body._id;
@@ -49,42 +52,42 @@ describe('auth routes', () => {
   });
 
   it('should return status 404 when user not found', async () => {
-    const mockEmail = 'whatever1@gmail.com';
+    const mockEmail = 'whatever2@gmail.com';
     const res = await request
-      .post(`${BASEURL}/login`)
+      .post(`${BASEURL}/signin`)
       .send({
         email: mockEmail,
-        password: mockPassword
+        password: mockPassword,
       })
       .expect({
-        message: 'Користувач з таким email не знайдений.'
+        message: 'Неправильна електронна адреса або пароль.\n Повторіть спробу.'
       })
-      .expect(404);
+      .expect(401);
   });
 
   it('should return status 401 when password don\'t match', async () => {
     const res = await request
-      .post(`${BASEURL}/login`)
+      .post(`${BASEURL}/signin`)
       .send({
         email: mockEmailForRegister,
         password:
           '$2a$10$i.0VgohTBtx8arWSKs4/AOY2IFgYbKLjHsDKs8raOHXnLz86HLcQKd'
       })
       .expect({
-        message: 'Паролі не збігаються. Спробуйте знову.'
+        message: 'Неправильна електронна адреса або пароль.\n Повторіть спробу.'
       })
       .expect(401);
   });
 
   it('should return status 200 when user exist', async () => {
     const res = await request
-      .post(`${BASEURL}/login`)
+      .post(`${BASEURL}/signin`)
       .send({
         email: mockEmailForRegister,
         password: mockPassword
       })
       .expect(200);
-    expect(res.body.token).toBeTruthy();
+    expect(res.headers.authorization).toBeTruthy();
   });
 
   it('should validate and get 401 when user non authorized', async () => {

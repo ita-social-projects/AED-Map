@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 
-const errorHandler = require('../utils/errorHandler');
+const resServerError = require('../shared/resServerError');
 
 const Defibrillator = require('../models/Defibrillator');
 
@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
       )) || [];
     return res.status(200).send(defibrillators);
   } catch (e) {
-    errorHandler(res, e);
+    resServerError(res, e);
   }
 });
 
@@ -40,7 +40,7 @@ router.post(
         defibrillator
       });
     } catch (e) {
-      errorHandler(res, e);
+      resServerError(res, e);
     }
   }
 );
@@ -61,7 +61,7 @@ router.put(
         defibrillator
       });
     } catch (e) {
-      errorHandler(res, e);
+      resServerError(res, e);
     }
   }
 );
@@ -80,7 +80,7 @@ router.delete(
         defibrillator
       });
     } catch (e) {
-      errorHandler(res, e);
+      resServerError(res, e);
     }
   }
 );

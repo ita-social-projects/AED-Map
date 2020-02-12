@@ -8137,6 +8137,11 @@ pascalcase@^0.1.1:
   resolved "https://registry.yarnpkg.com/pascalcase/-/pascalcase-0.1.1.tgz#b363e55e8006ca6fe21784d2db22bd15d7917f14"
   integrity sha1-s2PlXoAGym/iF4TS2yK9FdeRfxQ=
 
+password-validator@^5.0.3:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/password-validator/-/password-validator-5.0.3.tgz#0811077d1c09e0ea372f1670ef5b8153cee94625"
+  integrity sha512-VqdJkw/WAeDRPGx9sVAWAp/xe+pKKmD2Az7qNY4WvFwEvQ7DMQ3mzi02WnCVNJ/Zt6eiAEoih/cfWXY2WodFZA==
+
 path-browserify@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/path-browserify/-/path-browserify-0.0.1.tgz#e6c4ddd7ed3aa27c68a20cc4e50e1a4ee83bbc4a"
