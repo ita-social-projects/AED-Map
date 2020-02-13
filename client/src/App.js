@@ -1,5 +1,8 @@
+/* eslint-disable prefer-template */
+/* eslint-disable no-unused-vars */
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import io from 'socket.io-client';
 import './App.css';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
@@ -23,21 +26,49 @@ const App = ({ success, fail }) => {
   const classes = useStyles();
 
   useEffect(() => {
-    async function validate() {
-      try {
-        const { data, headers } = await validateUser();
-        const { authorization } = headers;
-        success(data, authorization);
-      } catch (e) {
-        fail();
-      }
-    }
+    // async function validate() {
+    //   try {
+    //     const { data, headers } = await validateUser();
+    //     const { authorization } = headers;
+    //     success(data, authorization);
+    //   } catch (e) {
+    //     fail();
+    //   }
+    // }
 
-    validate();
+    // validate();
 
-    return () => {
-      ValidateCancelToken.cancel();
-    };
+    // return () => {
+    //   ValidateCancelToken.cancel();
+    // };
+
+    const token = JSON.parse(localStorage.getItem('authorization'));
+    const authorization = token && token.slice(7);
+    // const socket = io('ws://localhost:3012', { transports: ["websocket"] });
+
+    // socket.on('connect', function () {
+    //   console.log('client connected');
+
+    //   socket.emit('authenticate', { token: authorization });
+
+    //   socket.on('authenticated', () => {
+    //     console.log('authenticated')
+    //   });
+
+    //   socket.on('unauthorized', () => {
+    //     console.log('unauthorized')
+    //   });
+    // });
+
+    const socket = io('http://localhost:3012', { query: 'auth_token=' + authorization });
+
+    socket.on('error', () => {
+      console.log('unauthorized');
+    });
+
+    socket.on('success', data => {
+      console.dir(data.user);
+    });
   });
 
   return (
