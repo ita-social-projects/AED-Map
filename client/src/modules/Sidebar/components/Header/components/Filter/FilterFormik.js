@@ -6,7 +6,11 @@ import { Formik } from 'formik';
 import FormFormik from './FormFormik';
 import FilterHeader from './FilterFormHeader';
 import { setFilter, resetFilter } from './actions/filter';
-import { fetchDefs } from '../../../ItemList/actions/list';
+import {
+  fetchDefs,
+  setPage,
+  setData
+} from '../../../ItemList/actions/list';
 import FilterSchema from './validator';
 import initValues from './initValues';
 import { sidebarWidth } from '../../../../styleConstants';
@@ -31,7 +35,9 @@ const FilterFormik = ({
   filter,
   setFilterValue,
   resetFilterValue,
-  fetchDefItems
+  fetchDefItems,
+  resetData,
+  resetPage
 }) => {
   const classes = useStyles();
   const filterValues = filter || {};
@@ -47,13 +53,18 @@ const FilterFormik = ({
       setSubmitting(false);
       return;
     }
-
+    const resetPagination = (page, data) => {
+      resetPage(page);
+      resetData(data);
+    };
     if (Object.values(values).some(value => value)) {
-      await fetchDefItems(values);
+      resetPagination(1, []);
       setFilterValue(values);
+      await fetchDefItems(values);
     } else if (filter) {
-      await fetchDefItems();
       resetFilterValue();
+      resetPagination(1, []);
+      await fetchDefItems();
     }
 
     setSubmitting(false);
@@ -83,7 +94,9 @@ FilterFormik.propTypes = {
   filter: PropTypes.oneOfType([PropTypes.object]),
   setFilterValue: PropTypes.func.isRequired,
   resetFilterValue: PropTypes.func.isRequired,
-  fetchDefItems: PropTypes.func.isRequired
+  fetchDefItems: PropTypes.func.isRequired,
+  resetData: PropTypes.func.isRequired,
+  resetPage: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -93,6 +106,8 @@ export default connect(
   {
     setFilterValue: setFilter,
     resetFilterValue: resetFilter,
-    fetchDefItems: params => fetchDefs(params)
+    fetchDefItems: params => fetchDefs(params),
+    resetPage: page => setPage(page),
+    resetData: data => setData(data)
   }
 )(FilterFormik);

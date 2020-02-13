@@ -46,7 +46,9 @@ const ItemList = ({
   defibrillators,
   searchedDefs,
   fetchDefItems,
-  filter
+  filter,
+  totalCount,
+  page
 }) => {
   const classes = useStyles();
   const noFilteredDefs =
@@ -66,6 +68,20 @@ const ItemList = ({
     defaultHeight: 100
   });
 
+  const handleScroll = event => {
+    const {
+      scrollHeight,
+      scrollTop,
+      clientHeight
+    } = event.target;
+    if (
+      totalCount >= page &&
+      scrollHeight - Math.ceil(scrollTop) <= clientHeight
+    ) {
+      fetchDefItems({ page, ...filter });
+    }
+  };
+
   // eslint-disable-next-line react/prop-types
   const rowRenderer = ({ key, index, style, parent }) => {
     return (
@@ -84,37 +100,48 @@ const ItemList = ({
     );
   };
 
+  const show =
+    isLoading || noFilteredDefs || isDatabaseEmpty;
+
+  let message;
+
+  switch (true) {
+    case isLoading:
+      message = 'Завантаження...';
+      break;
+    case isDatabaseEmpty:
+      message = 'База даних пуста...';
+      break;
+    case noFilteredDefs:
+      message = 'По заданому фільтру нічого не знайдено...';
+      break;
+    default:
+      message = '';
+  }
+
   return (
-    <div className={classes.listOuterStyle}>
-      {!isLoading ? (
-        <AutoSizer>
-          {({ width, height }) => {
-            //  AutoSizer expands list to width and height of parent automatically
-            return (
-              <List
-                className={classes.listStyle}
-                width={width}
-                height={height}
-                deferredMeasurementCache={cache}
-                rowCount={searchedDefs.length}
-                rowHeight={cache.rowHeight}
-                rowRenderer={rowRenderer}
-                overscanRowCount={10}
-              />
-            );
-          }}
-        </AutoSizer>
-      ) : (
-        <InfoMessage>Завантаження...</InfoMessage>
-      )}
-      {noFilteredDefs && (
-        <InfoMessage>
-          По заданому фільтру нічого не знайдено...
-        </InfoMessage>
-      )}
-      {isDatabaseEmpty && (
-        <InfoMessage>База даних пуста...</InfoMessage>
-      )}
+    <div
+      className={classes.listOuterStyle}
+      onScroll={handleScroll}
+    >
+      <AutoSizer>
+        {({ width, height }) => {
+          //  AutoSizer expands list to width and height of parent automatically
+          return (
+            <List
+              className={classes.listStyle}
+              width={width}
+              height={height}
+              deferredMeasurementCache={cache}
+              rowCount={searchedDefs.length}
+              rowHeight={cache.rowHeight}
+              rowRenderer={rowRenderer}
+              overscanRowCount={10}
+            />
+          );
+        }}
+      </AutoSizer>
+      <InfoMessage show={show}>{message}</InfoMessage>
     </div>
   );
 };
@@ -148,7 +175,9 @@ ItemList.propTypes = {
     })
   ),
   fetchDefItems: PropTypes.func,
-  filter: PropTypes.oneOfType([PropTypes.object])
+  filter: PropTypes.oneOfType([PropTypes.object]),
+  totalCount: PropTypes.number.isRequired,
+  page: PropTypes.number.isRequired
 };
 
 export default connect(
@@ -156,9 +185,11 @@ export default connect(
     isLoading: state.defs.loading,
     defibrillators: state.defs.data,
     filter: state.filter,
-    searchedDefs: defsSearchSelector(state)
+    searchedDefs: defsSearchSelector(state),
+    totalCount: state.defs.totalCount,
+    page: state.defs.page
   }),
   dispatch => ({
-    fetchDefItems: () => dispatch(fetchDefs())
+    fetchDefItems: params => dispatch(fetchDefs(params))
   })
 )(ItemList);

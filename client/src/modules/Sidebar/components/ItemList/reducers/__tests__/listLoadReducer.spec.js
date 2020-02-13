@@ -11,7 +11,8 @@ const initialState = {
   error: null,
   data: [],
   page: 1,
-  perPage: 10
+  perPage: 10,
+  totalCount: 0
 };
 
 describe('defibrillators LOAD part reducer', () => {
@@ -63,7 +64,7 @@ describe('defibrillators LOAD part reducer', () => {
     expect(
       listReducer(initialState, {
         type: types.SUCCESS_LOAD_DATA,
-        payload: mockData
+        payload: { defibrillators: mockData, totalCount: 0 }
       })
     ).toEqual(expected);
   });
@@ -71,7 +72,7 @@ describe('defibrillators LOAD part reducer', () => {
   it(`should have length ${mockData.length} if handle SUCCESS_LOAD`, () => {
     const data = listReducer(initialState, {
       type: types.SUCCESS_LOAD_DATA,
-      payload: mockData
+      payload: { defibrillators: mockData, totalCount: 0 }
     });
     expect(data.data.length).toBe(mockData.length);
   });

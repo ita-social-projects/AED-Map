@@ -7,7 +7,11 @@ import ClearIcon from '@material-ui/icons/Clear';
 import DoneIcon from '@material-ui/icons/Done';
 import { makeStyles } from '@material-ui/core/styles';
 import { resetFilter } from './actions/filter';
-import { fetchDefs } from '../../../ItemList/actions/list';
+import {
+  fetchDefs,
+  setPage,
+  setData
+} from '../../../ItemList/actions/list';
 
 const useStyles = makeStyles(theme => ({
   buttonContainer: {
@@ -26,15 +30,22 @@ const FormButtons = ({
   formik: { handleReset, isSubmitting },
   resetFilterValue,
   fetchDefItems,
-  filter
+  filter,
+  resetPage,
+  resetData
 }) => {
   const classes = useStyles();
 
+  const resetPagination = (page, data) => {
+    resetPage(page);
+    resetData(data);
+  };
+
   const onClear = () => {
     if (filter) {
+      resetPagination(1, []);
       fetchDefItems();
     }
-
     resetFilterValue();
     handleReset();
   };
@@ -75,7 +86,9 @@ FormButtons.propTypes = {
   }).isRequired,
   resetFilterValue: PropTypes.func.isRequired,
   fetchDefItems: PropTypes.func.isRequired,
-  filter: PropTypes.oneOfType([PropTypes.object])
+  filter: PropTypes.oneOfType([PropTypes.object]),
+  resetPage: PropTypes.func.isRequired,
+  resetData: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -84,6 +97,8 @@ export default connect(
   }),
   {
     resetFilterValue: resetFilter,
-    fetchDefItems: fetchDefs
+    fetchDefItems: fetchDefs,
+    resetPage: page => setPage(page),
+    resetData: data => setData(data)
   }
 )(connectFormik(FormButtons));

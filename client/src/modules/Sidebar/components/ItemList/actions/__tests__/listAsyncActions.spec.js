@@ -38,10 +38,14 @@ describe('fetchDefs action', () => {
     const expectedActions = [
       { type: types.START_LOAD_DATA },
       {
+        type: types.SET_PAGE
+      },
+      {
         type: types.SUCCESS_LOAD_DATA,
         payload: mockData
       }
     ];
+
     return store.dispatch(actions.fetchDefs()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });

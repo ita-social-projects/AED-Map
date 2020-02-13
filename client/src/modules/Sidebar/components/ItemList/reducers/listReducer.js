@@ -1,6 +1,7 @@
 import {
   START_LOAD_DATA,
   SUCCESS_LOAD_DATA,
+  SET_DATA,
   FAIL_LOAD_DATA,
   CREATE_DEF_POINT,
   DELETE_DEF_POINT,
@@ -13,6 +14,7 @@ const initialState = {
   loading: false,
   error: null,
   data: [],
+  totalCount: 0,
   page: 1,
   perPage: 10
 };
@@ -29,11 +31,18 @@ export default function listReducer(
         loading: true,
         error: null
       };
-    case SUCCESS_LOAD_DATA:
+    case SET_DATA:
       return {
         ...state,
         loading: false,
         data: payload
+      };
+    case SUCCESS_LOAD_DATA:
+      return {
+        ...state,
+        data: [...state.data, ...payload.defibrillators],
+        totalCount: payload.totalCount,
+        loading: false
       };
     case FAIL_LOAD_DATA:
       return {
@@ -69,7 +78,8 @@ export default function listReducer(
       return {
         ...state,
         loading: false,
-        page: payload
+        page: payload || state.page + 1,
+        totalCount: payload === 1 ? 0 : state.totalCount
       };
     case SET_PER_PAGE:
       return {

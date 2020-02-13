@@ -19,6 +19,7 @@ const useStyles = makeStyles({
     '&:not(:last-of-type)': {
       borderBottom: '1px solid #fff'
     },
+    background: '#282c34',
     overflow: 'hidden',
     '&:hover': {
       background: '#686c7458',
