@@ -7,6 +7,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import {connect} from 'formik';
 import PropTypes from 'prop-types';
+import options from './const';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -19,17 +20,15 @@ const PlatesSelect = ({formik}) => {
   return (
     <div>
       <FormControl component="fieldset" className={classes.formControl}>
-        <FormLabel component="legend">Можливість використання</FormLabel>
+        <FormLabel component="legend">Відповідні підказки в будівлі</FormLabel>
         <RadioGroup
-          aria-label="gender"
-          name="gender1"
           onChange={e =>formik.setFieldValue('informational_plates',e.target.value)}
           value={formik.values.informational_plates}
         >
-          <FormControlLabel value="PRESENT" control={<Radio />} label="Портативний" />
-          <FormControlLabel value="PRESENT_IN_BUILDING" control={<Radio />} label="Тільки в будівлі" />
-          <FormControlLabel value="PRESENT_NEAR_APPLIANCE" control={<Radio />} label="Лише біля AED" />
-          <FormControlLabel value="MISSING" control={<Radio />} label="Неможливо" />
+          {options.map(value =>
+            <FormControlLabel key={value} value={value} control={<Radio />} label={value} />
+          )}
+         
         </RadioGroup>
       </FormControl>
     </div>
