@@ -2,11 +2,20 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const passport = require('passport');
+const http = require('http');
+const socketio = require('socket.io');
 
 const authRoute = require('./routes/authRoute');
 const defRoute = require('./routes/defRoute');
 
+const { authEvent } = require('./websocket/authEvent');
+
 const app = express();
+const server = http.Server(app);
+const io = socketio(server);
+
+// Websocket event for sign out
+authEvent(io);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -39,4 +48,4 @@ app.get('*', (req, res) => {
   );
 });
 
-module.exports = { app, mongoose };
+module.exports = { server, app, mongoose };
