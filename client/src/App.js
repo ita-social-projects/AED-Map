@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import './App.css';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
+import { watcherStart } from './shared/websocket';
 import cancelToken from './shared/cancel-token';
 import { validateUser } from './modules/Auth/api';
 import { successSignIn, failSignIn } from './modules/Auth/actions/user';
@@ -28,6 +29,7 @@ const App = ({ success, fail }) => {
         const { data, headers } = await validateUser();
         const { authorization } = headers;
         success(data, authorization);
+        watcherStart();
       } catch (e) {
         fail();
       }

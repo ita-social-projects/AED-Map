@@ -2,13 +2,21 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button } from '@material-ui/core';
+import { watcherStop } from '../../../../../shared/websocket';
 import { signOut } from '../../../actions/user';
 
-const ButtonSignIn = ({ handleOpen, user, signOutSubmit }) => (
-  <Button variant="contained" color="primary" onClick={user ? signOutSubmit : handleOpen}>
-    {user ? 'Вихід' : 'Вхід'}
-  </Button>
-);
+const ButtonSignIn = ({ handleOpen, user, signOutSubmit }) => {
+  const handleSignOut = () => {
+    signOutSubmit();
+    watcherStop();
+  };
+
+  return (
+    <Button variant="contained" color="primary" onClick={user ? handleSignOut : handleOpen}>
+      {user ? 'Вихід' : 'Вхід'}
+    </Button>
+  );
+};
 
 ButtonSignIn.defaultProps = {
   user: null
