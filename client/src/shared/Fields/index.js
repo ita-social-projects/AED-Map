@@ -1,8 +1,16 @@
-import React from 'react';
+﻿import React, { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useField } from 'formik';
 import { makeStyles } from '@material-ui/core/styles';
-import { TextField, Checkbox, FormControlLabel } from '@material-ui/core';
+import {
+  TextField,
+  Checkbox,
+  FormControlLabel,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select
+} from '@material-ui/core';
 
 const useStyles = makeStyles({
   textField: {
@@ -10,7 +18,7 @@ const useStyles = makeStyles({
   }
 });
 
-const MyTextField = (props) => {
+const MyTextField = props => {
   const [field, meta] = useField(props);
   const classes = useStyles();
 
@@ -46,4 +54,54 @@ MyCheckbox.propTypes = {
   label: PropTypes.string.isRequired
 };
 
-export { MyTextField, MyCheckbox };
+const MySelect = ({
+  label,
+  labelTitle,
+  options,
+  variant,
+  classes,
+  ...props
+}) => {
+  const [field] = useField(props);
+  const inputLabel = useRef(null);
+  const [labelWidth, setLabelWidth] = useState(0);
+
+  useEffect(() => {
+    setLabelWidth(inputLabel.current.offsetWidth);
+  }, []);
+
+  return (
+    <FormControl className={classes} variant={variant}>
+      <InputLabel id={label} ref={inputLabel}>
+        {labelTitle}
+      </InputLabel>
+      <Select
+        labelId={label}
+        labelWidth={labelWidth}
+        {...field}
+        {...props}
+      >
+        {options.map(option => (
+          <MenuItem key={option} value={option}>
+            {option || <em>всі</em>}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  );
+};
+
+MySelect.defaultProps = {
+  variant: null,
+  classes: null
+};
+
+MySelect.propTypes = {
+  labelTitle: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  options: PropTypes.arrayOf(PropTypes.string).isRequired,
+  variant: PropTypes.string,
+  classes: PropTypes.string
+};
+
+export { MyTextField, MyCheckbox, MySelect };
