@@ -40,6 +40,10 @@ describe('auth routes', () => {
 
   it('should return status 201 when user created', async () => {
     const mockEmail = 'whatever1@gmail.com';
+    const user = await User.findOne({ email: mockEmail });
+    if (user) {
+      await User.findByIdAndDelete(user._id);
+    }
     const res = await request
       .post(`${BASEURL}/signup`)
       .send({
@@ -49,12 +53,9 @@ describe('auth routes', () => {
       })
       .expect({
         message:
-          'Вітаємо!\n Регістрація нового користувача пройшла успішно.'
+          'Вітаємо!\n Реєстрація нового користувача пройшла успішно.'
       })
       .expect(201);
-
-    const user = await User.findOne({ email: mockEmail });
-    await User.findByIdAndDelete(user._id);
   });
 
   it('should return status 404 when user not found', async () => {
@@ -72,7 +73,7 @@ describe('auth routes', () => {
       .expect(401);
   });
 
-  it('should return status 401 when password don\'t match', async () => {
+  it('should return status 401 when password dont match', async () => {
     const res = await request
       .post(`${BASEURL}/signin`)
       .send({

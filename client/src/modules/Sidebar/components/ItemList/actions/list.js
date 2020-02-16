@@ -1,5 +1,6 @@
 import {
   START_LOAD_DATA,
+  SET_DATA,
   SUCCESS_LOAD_DATA,
   FAIL_LOAD_DATA,
   CREATE_DEF_POINT,
@@ -30,6 +31,20 @@ export function successLoadDef(defs) {
   };
 }
 
+export function setData(data) {
+  return {
+    type: SET_DATA,
+    payload: data
+  };
+}
+
+export function setPage(page) {
+  return {
+    type: SET_PAGE,
+    payload: page
+  };
+}
+
 export function failLoadDef(error) {
   return {
     type: FAIL_LOAD_DATA,
@@ -45,6 +60,7 @@ export function fetchDefs(params) {
         params,
         defsCancelToken.instance
       );
+      dispatch(setPage());
       dispatch(successLoadDef(data));
     } catch (e) {
       dispatch(failLoadDef(e));
@@ -92,7 +108,6 @@ export function deleteDefItem(id) {
     dispatch(startLoadDef());
     try {
       const { data } = await deleteItem(id);
-      /* eslint-disable-next-line */
       dispatch(deleteDefPoint(data.defibrillator._id));
     } catch (e) {
       dispatch(failLoadDef(e));
@@ -107,19 +122,11 @@ export function editDefItem(id, newDefInfo) {
       const { data } = await editItem(id, newDefInfo);
       const { defibrillator } = data;
       dispatch(
-        /* eslint-disable-next-line */
         editDefPoint(defibrillator._id, defibrillator)
       );
     } catch (e) {
       dispatch(failLoadDef(e));
     }
-  };
-}
-
-export function setPage(page) {
-  return {
-    type: SET_PAGE,
-    payload: page
   };
 }
 
