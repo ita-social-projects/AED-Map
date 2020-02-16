@@ -10,10 +10,6 @@ pwSchema
   .has().not().spaces();
 
 const SignUpSchema = object().shape({
-  email: string()
-    .required('Поле обов\'язкове.')
-    .email('Некоректно введена електронна адреса.'),
-
   password: string()
     .required('Поле обов\'язкове.')
     .min(8, 'Довжина пароля повинна бути від 8 до 64 символів.')

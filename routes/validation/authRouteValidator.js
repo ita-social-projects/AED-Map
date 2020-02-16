@@ -14,8 +14,8 @@ pwSchema
   .has().symbols()
   .has().not().spaces();
 
-// Rules for registration router
-const signupValidationRules = () => {
+// Rules for registration router - create
+const signupSendmailValidationRules = () => {
   return [
     // Email - required and structure email
     body('email')
@@ -23,7 +23,12 @@ const signupValidationRules = () => {
       .withMessage('Поле обов\'язкове.')
       .isEmail()
       .withMessage('Некоректно введена електронна адреса.'),
+  ];
+};
 
+// Rules for registration router
+const signupValidationRules = () => {
+  return [
     // Password - required, length 8 - 64 symbols and password validation
     body('password')
       .notEmpty()
@@ -44,5 +49,6 @@ const signupValidationRules = () => {
 };
 
 module.exports = {
+  signupSendmailValidationRules,
   signupValidationRules
 };

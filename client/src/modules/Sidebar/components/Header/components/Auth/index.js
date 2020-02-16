@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import SignIn from '../../../../../Auth/submodules/SignIn';
-import SignUp from '../../../../../Auth/submodules/SignUp';
+import SignUpSendmail from '../../../../../Auth/submodules/SignUp/submodules/SignUpSendmail';
 
 const useStyle = makeStyles({
   auth: {
@@ -17,11 +17,10 @@ const Auth = () => {
 
   return (
     <div className={classes.auth}>
-      <SignUp />
+      <SignUpSendmail />
       <SignIn />
     </div>
   );
-
 };
 
 export default Auth;

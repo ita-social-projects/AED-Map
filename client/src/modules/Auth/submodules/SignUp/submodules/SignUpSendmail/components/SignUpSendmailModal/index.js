@@ -2,17 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container } from '@material-ui/core';
 import { Formik } from 'formik';
-import cancelToken from '../../../../../../shared/cancel-token';
-import { signUpUser } from '../../../../api';
+import cancelToken from '../../../../../../../../shared/cancel-token';
+import { signUpSendmail } from '../../../../../../api';
 import { INITIAL_VALUES } from './const';
-import SignUpSchema from './validator';
+import SignUpSendmailSchema from './validator';
 import Header from './components/Header';
 import Form from './components/Form';
 import Footer from './components/Footer';
 
-const SignUpCancelToken = cancelToken();
+const SignUpSendmailCancelToken = cancelToken();
 
 const useStyles = makeStyles(() => ({
+  container: {
+    width: 444
+  },
   paper: {
     display: 'flex',
     flexDirection: 'column',
@@ -20,13 +23,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const SignUpModal = () => {
+const SignUpSendmailModal = () => {
   const classes = useStyles();
   const [success, setSuccess] = useState('');
 
   const handleSubmit = async (values, { resetForm, setErrors, setSubmitting }) => {
     try {
-      const { data } = await signUpUser(values);
+      const { data } = await signUpSendmail(values);
       const { message } = data;
       resetForm();
       setSuccess(message);
@@ -40,18 +43,18 @@ const SignUpModal = () => {
 
   useEffect(() => {
     return () => {
-      SignUpCancelToken.cancel();
+      SignUpSendmailCancelToken.cancel();
     };
   }, []);
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container className={classes.container} component="main" maxWidth="xs">
       <div className={classes.paper}>
         <Header />
 
         <Formik
           initialValues={INITIAL_VALUES}
-          validationSchema={SignUpSchema}
+          validationSchema={SignUpSendmailSchema}
           onSubmit={handleSubmit}
         >
           {({ isSubmitting }) => <Form isSubmitting={isSubmitting} />}
@@ -63,4 +66,4 @@ const SignUpModal = () => {
   );
 };
 
-export default SignUpModal;
+export default SignUpSendmailModal;

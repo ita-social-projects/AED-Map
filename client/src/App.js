@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Switch, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import './App.css';
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,6 +13,7 @@ import {
 } from './modules/Auth/actions/user';
 import Sidebar from './modules/Sidebar';
 import MapHolder from './modules/MapHolder';
+import SignUpPassword from './modules/Auth/submodules/SignUp/submodules/SignUpPassword';
 
 const ValidateCancelToken = cancelToken();
 
@@ -22,6 +24,13 @@ const useStyles = makeStyles({
     width: '100%'
   }
 });
+
+const Main = () => (
+  <>
+    <Sidebar />
+    <MapHolder />
+  </>
+);
 
 const App = ({ success, fail }) => {
   const classes = useStyles();
@@ -46,8 +55,10 @@ const App = ({ success, fail }) => {
   return (
     <div className="App">
       <div className={classes.mainStyle}>
-        <Sidebar />
-        <MapHolder />
+        <Switch>
+          <Route path="/" exact component={Main} />
+          <Route path="/signup/:email/:token" component={SignUpPassword} />
+        </Switch>
       </div>
     </div>
   );
