@@ -4,9 +4,9 @@ const path = require('path');
 const passport = require('passport');
 const http = require('http');
 const socketio = require('socket.io');
-
 const authRoute = require('./routes/authRoute');
 const defRoute = require('./routes/defRoute');
+const gmapRoute = require('./routes/gMapRoute');
 
 const { authEvent } = require('./websocket/authEvent');
 
@@ -20,8 +20,10 @@ authEvent(io);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('client/build'));
+app.use(express.static('client/testing'));
 
 app.use('/api/auth', authRoute);
+app.use('/api/gmap', gmapRoute);
 app.use('/api/defibrillators', defRoute);
 
 // Middlewares for passport

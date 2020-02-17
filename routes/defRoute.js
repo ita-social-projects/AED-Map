@@ -1,16 +1,21 @@
 const express = require('express');
 const passport = require('passport');
-
 const {
   resServerError
 } = require('../shared/resServerError');
 
-const { defChangePermission } = require('../middleware/permission');
+const {
+  defChangePermission
+} = require('../middleware/permission');
 
 const Defibrillator = require('../models/Defibrillator');
 
-const router = express.Router();
+const {
+  deffValidationRules
+} = require('./validation/deffRouteValidator');
+const { validate } = require('../middleware/validate');
 
+const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     const filter = {};
@@ -44,11 +49,13 @@ router.get('/', async (req, res) => {
 router.post(
   '/',
   passport.authenticate('jwt', { session: false }),
+  deffValidationRules(),
+  validate,
   async (req, res) => {
     try {
-      const defibrillator = await Defibrillator.create({ 
-        ...req.body, 
-        owner: req.user._id 
+      const defibrillator = await Defibrillator.create({
+        ...req.body,
+        owner: req.user._id
       });
       return res.status(201).send({
         error: false,
@@ -81,7 +88,6 @@ router.put(
     }
   }
 );
-
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
