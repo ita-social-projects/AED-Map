@@ -19,3 +19,4 @@ export function editItem(params) {
 export function deleteItem(id) {
   return http.delete(`${URL}/${id}`);
 }
+

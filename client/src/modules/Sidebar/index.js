@@ -11,6 +11,8 @@ import Header from './components/Header';
 import ItemList from './components/ItemList';
 import AddForm from './components/AddForm';
 import { sidebarWidth } from './styleConstants';
+import Alert from '../../shared/Alert';
+import useAlert from '../../shared/Alert/useAlert';
 
 const useStyles = makeStyles({
   sidebarStyle: {
@@ -23,22 +25,31 @@ const useStyles = makeStyles({
     flexShrink: 0
   },
   addButtonStyle: {
-    width: '100%',
-    marginTop: 10
+    marginTop: '10px'
+  },
+  LinkStyle: {
+    textDecoration: 'none'
   }
 });
 
 const Sidebar = () => {
   const classes = useStyles();
-
+  const [alert, ShowAlert] = useAlert();
   return (
     <Router>
       <div className={classes.sidebarStyle}>
         <Header />
-        <Route path="/" exact component={ItemList} />
-        <Route path="/add-form" component={AddForm} />
         <Route path="/" exact>
-          <Link to="/add-form">
+          <ItemList />
+        </Route>
+        <Route path="/add-form">
+          <AddForm />
+        </Route>
+        <Route path="/" exact>
+          <Link
+            to="/add-form"
+            className={classes.LinkStyle}
+          >
             <Button
               className={classes.addButtonStyle}
               variant="contained"
@@ -49,6 +60,12 @@ const Sidebar = () => {
             </Button>
           </Link>
         </Route>
+        <Alert
+          open={alert.open}
+          massage={alert.massage}
+          severity={alert.severity}
+          handleClose={() => ShowAlert({ open: false })}
+        />
       </div>
     </Router>
   );

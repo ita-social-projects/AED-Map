@@ -18,13 +18,21 @@ const AddTelephone = ({ className, formik }) => {
     <div>
       <p style={mystyle}>Ваш номер телефону</p>
       <MuiPhoneNumber
+        name='phone'
         className={className}
         value={formik.values.phone}
         onChange={value =>
           formik.setFieldValue('phone', value)
         }
+        onBlur={formik.handleBlur}
         defaultCountry="ua"
         regions="europe"
+        helperText={
+          formik.errors.phone &&
+          formik.touched.phone &&
+          formik.errors.phone
+        }
+        error={formik.errors.phone && formik.touched.phone}
       />
     </div>
   );
@@ -36,7 +44,14 @@ AddTelephone.propTypes = {
     values: PropTypes.shape({
       phone: PropTypes.string
     }),
-    setFieldValue: PropTypes.func.isRequired
+    errors: PropTypes.shape({
+      phone: PropTypes.string
+    }),
+    touched: PropTypes.shape({
+      phone: PropTypes.bool
+    }),
+    setFieldValue: PropTypes.func.isRequired,
+    handleBlur: PropTypes.func.isRequired
   }).isRequired
 };
 

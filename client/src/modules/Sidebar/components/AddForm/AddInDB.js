@@ -1,33 +1,18 @@
 /* eslint-disable camelcase */
-import axios from 'axios';
+import { createItem } from '../../api';
 
-const AddInDB = ({
-  title,
-  adress,
-  coordinates,
-  floor,
-  location,
-  accessibility,
-  phone,
-  additional_information,
-  actual_date
-}) => {
+const AddInDB = data => {
   const body = {
-    title,
-    address: adress,
-    location: { type: 'Point', coordinates },
-    actual_date,
-    storage_place: `Поверх ${floor}, ${location}`,
-    accessibility,
+    ...data,
+    location: {
+      type: 'Point',
+      coordinates: data.coordinates
+    },
+    storage_place: `Поверх ${data.floor}, ${data.location}`,
     language: 'Україномовний',
-    informational_plates: 'Присутні тільки біля приладу',
-    phone: [phone],
-    additional_information
+    phone: [data.phone]
   };
-  axios.post('/api/defibrillators', body).then(response => {
-    // eslint-disable-next-line
-    console.log(response);
-  });
+  createItem(body);
 };
 
 export default AddInDB;

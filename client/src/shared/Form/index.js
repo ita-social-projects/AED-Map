@@ -1,19 +1,18 @@
+/* eslint-disable camelcase */
 import React from 'react';
-
-import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
+import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
 import PropTypes from 'prop-types';
-import { createDefPoint } from '../ItemList/actions/list';
 import AddAdressText from './AddAdressText';
 import PlatesSelect from './PlatesSelect';
 import AddTelephone from './AddTelephone';
 import AddMoreInfo from './AddMoreInfo';
-import AddItRedux from './AddItRedux';
-import AddInDB from './AddInDB';
+import FormValidation from './validator';
+import useAlert from '../Alert/useAlert';
+import { MyTextField } from '../Fields';
 
 const useStyles = makeStyles({
   DefaultStyle: {
@@ -32,15 +31,16 @@ const useStyles = makeStyles({
     '& input:valid:focus + fieldset': {
       borderLeftWidth: 6,
       borderColor: 'yellow',
-      padding: '10px !important' // override inline-style
+      padding: '10px !important'
     },
     '& input:valid:hover + fieldset': {
       borderLeftWidth: 6,
       borderColor: 'yellow',
-      padding: '10px !important' // override inline-style
+      padding: '10px !important'
     }
   },
   FormStyle: {
+    backgroundColor: 'white',
     padding: '5%',
     overflowX: 'hidden',
     overflowY: 'scroll',
@@ -62,75 +62,60 @@ const useStyles = makeStyles({
   }
 });
 
-const MyForm = ({ createDef }) => {
+const MyForm = ({ INITIAL_VALUES, SubmitAction }) => {
   const classes = useStyles();
+  const [, ShowAlert] = useAlert();
+  const history = useHistory();
+
+  const handleSubmit = data => {
+    const date = new Date();
+    const month = date.getMonth();
+    // відформатована поточна дата
+    const actual_date = `${date.getFullYear()}-${
+      month < 10 ? `0${month + 1}` : month + 1
+    }-${date.getDate()}`;
+    SubmitAction({ ...data, actual_date });
+    history.push('/');
+  };
 
   return (
     <div className={classes.FormStyle}>
       <Formik
-        initialValues={{
-          title: '',
-          adress: '',
-          floor: 0,
-          informational_plates: 'PRESENT',
-          phone: '',
-          additional_information: '',
-          location: '',
-          accessibility: '',
-          coordinates: [] //  [Longitude,Latitude]
-        }}
-        onSubmit={(data, { setSubmitting }) => {
-          setSubmitting(true);
-          const date = new Date();
-          const month = date.getMonth();
-          // eslint-disable-next-line camelcase
-          const actual_date = `${date.getFullYear()}-${
-            month < 10 ? `0${month + 1}` : month + 1
-          }-${date.getDate()}`; // відформатована поточна дата
-          AddItRedux({ ...data, actual_date }, createDef);
-          AddInDB({ ...data, actual_date });
-          setSubmitting(false);
+        initialValues={INITIAL_VALUES}
+        validationSchema={FormValidation}
+        onSubmit={data => {
+          handleSubmit(data);
         }}
       >
-        {({ values, handleChange }) => {
+        {({isValid }) => {
           return (
             <Form>
               <AddAdressText
                 className={classes.DefaultStyle}
               />
-              <TextField
+              <MyTextField
                 name="title"
-                value={values.title}
                 label="Введіть назву"
                 className={classes.DefaultStyle}
-                onChange={handleChange}
               />
-              <TextField
+              <MyTextField
                 name="accessibility"
                 label="Коли доступний пристрій?"
                 className={classes.DefaultStyle}
-                value={values.accessibility}
-                onChange={handleChange}
               />
-              <TextField
-                name="location"
+              <MyTextField
+                name="storage_place"
                 label="Де розташований в будівлі?"
                 className={classes.DefaultStyle}
-                value={values.location}
-                onChange={handleChange}
               />
-              <TextField
+              <MyTextField
                 className={classes.DefaultStyle}
-                onChange={handleChange}
-                value={
-                  values.floor === 0 ? '' : values.floor
-                }
                 name="floor"
                 label="На якому поверсі знаходиться?"
                 type="number"
-                min="0"
-                max="10"
-                step="1"
+                InputProps={{
+                  inputProps: { min: 0, max: 20 }
+                }}
               />
               <PlatesSelect name="informational_plates" />
               <AddTelephone
@@ -148,6 +133,21 @@ const MyForm = ({ createDef }) => {
                 size="large"
                 type="submit"
                 startIcon={<SaveIcon />}
+                onClick={() => {
+                  if (isValid === true)
+                    ShowAlert({
+                      open: true,
+                      severity: 'success',
+                      massage: 'Додавання пройшло успішно'
+                    });
+                  else
+                    ShowAlert({
+                      open: true,
+                      severity: 'error',
+                      massage:
+                        'Дані полів введені некоректно'
+                    });
+                }}
               >
                 Зберегти
               </Button>
@@ -160,9 +160,18 @@ const MyForm = ({ createDef }) => {
 };
 
 MyForm.propTypes = {
-  createDef: PropTypes.func.isRequired
+  INITIAL_VALUES: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    address: PropTypes.string.isRequired,
+    floor: PropTypes.string.isRequired,
+    informational_plates: PropTypes.string.isRequired,
+    phone: PropTypes.string.isRequired,
+    additional_information: PropTypes.string.isRequired,
+    storage_place: PropTypes.string.isRequired,
+    accessibility: PropTypes.string.isRequired,
+    coordinates: PropTypes.array.isRequired
+  }).isRequired,
+  SubmitAction: PropTypes.func.isRequired
 };
 
-export default connect(null, { createDef: createDefPoint })(
-  MyForm
-);
+export default MyForm;
