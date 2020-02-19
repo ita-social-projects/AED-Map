@@ -2,14 +2,14 @@ import http from '../../shared/http';
 
 const URL = '/api/auth';
 
-export function signInUser(data) {
+export const signInUser = data => {
   return http.post(`${URL}/signin`, data);
-}
+};
 
-export function signUpUser(data) {
+export const signUpUser = data => {
   return http.post(`${URL}/signup`, data);
-}
+};
 
-export function validateUser(data) {
+export const validateUser = data => {
   return http.get(`${URL}/validate`, data);
-}
+};

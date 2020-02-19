@@ -10,10 +10,10 @@ const initialState = {
   user: null
 };
 
-export default function (
+export default (
   state = initialState,
   { type, payload }
-) {
+) => {
   switch (type) {
     case START_SIGNIN:
       return {
@@ -34,4 +34,4 @@ export default function (
     default:
       return state;
   }
-}
+};

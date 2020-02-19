@@ -2,10 +2,10 @@ import { SHOW_POPUP, HIDE_POPUP } from '../consts';
 
 const initialState = null;
 
-export default function(
+export default (
   state = initialState,
   { type, payload }
-) {
+) => {
   switch (type) {
     case SHOW_POPUP: {
       if (state && state.id === payload.id) {
@@ -23,4 +23,4 @@ export default function(
     default:
       return state;
   }
-}
+};

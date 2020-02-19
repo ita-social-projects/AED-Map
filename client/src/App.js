@@ -6,7 +6,10 @@ import { connect } from 'react-redux';
 import { watcherStart } from './shared/websocket';
 import cancelToken from './shared/cancel-token';
 import { validateUser } from './modules/Auth/api';
-import { successSignIn, failSignIn } from './modules/Auth/actions/user';
+import {
+  successSignIn,
+  failSignIn
+} from './modules/Auth/actions/user';
 import Sidebar from './modules/Sidebar';
 import MapHolder from './modules/MapHolder';
 
@@ -24,7 +27,7 @@ const App = ({ success, fail }) => {
   const classes = useStyles();
 
   useEffect(() => {
-    async function validate() {
+    (async () => {
       try {
         const { data, headers } = await validateUser();
         const { authorization } = headers;
@@ -33,9 +36,7 @@ const App = ({ success, fail }) => {
       } catch (e) {
         fail();
       }
-    }
-
-    validate();
+    })();
 
     return () => {
       ValidateCancelToken.cancel();
@@ -57,10 +58,8 @@ App.propTypes = {
   fail: PropTypes.func.isRequired
 };
 
-export default connect(
-  null,
-  dispatch => ({
-    success: (user, authorization) => dispatch(successSignIn(user, authorization)),
-    fail: () => dispatch(failSignIn())
-  })
-)(App);
+export default connect(null, dispatch => ({
+  success: (user, authorization) =>
+    dispatch(successSignIn(user, authorization)),
+  fail: () => dispatch(failSignIn())
+}))(App);

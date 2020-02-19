@@ -5,31 +5,34 @@ import {
   SIGNOUT
 } from '../const';
 
-export function startSignIn() {
+export const startSignIn = () => {
   return {
     type: START_SIGNIN
   };
-}
+};
 
-export function successSignIn(user, authorization) {
-  localStorage.setItem('authorization', JSON.stringify(authorization));
+export const successSignIn = (user, authorization) => {
+  localStorage.setItem(
+    'authorization',
+    JSON.stringify(authorization)
+  );
 
   return {
     type: SUCCESS_SIGNIN,
     payload: user
   };
-}
+};
 
-export function failSignIn() {
+export const failSignIn = () => {
   return {
     type: FAIL_SIGNIN
   };
-}
+};
 
-export function signOut() {
+export const signOut = () => {
   localStorage.removeItem('authorization');
 
   return {
     type: SIGNOUT
   };
-}
+};

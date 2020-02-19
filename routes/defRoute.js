@@ -28,7 +28,7 @@ router.get('/', async (req, res) => {
         .limit(perPage)) || [];
     const allDefibrillators = await Defibrillator.find(
       filter
-    ).count();
+    ).countDocuments();
     const totalCount = Math.ceil(
       allDefibrillators / perPage
     );
