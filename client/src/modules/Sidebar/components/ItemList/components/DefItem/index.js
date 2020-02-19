@@ -1,12 +1,19 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import EditIcon from '@material-ui/icons/Edit';
 import { defsSearchSelector } from '../../reducers/listReducer';
+
 import {
   setMapCenter,
   setMapZoom
 } from '../../../../../MapHolder/actions/mapState';
+import DeleteBtn from './DeleteBtn';
+import ConfirmationModalWrapper from '../../../../../../shared/ConfirmationModalWrapper';
+import {
+  deleteDefItem} from '../../actions/list';
 import {
   ENTER_BUTTON_CODE,
   BASE_ZOOM_VALUE
@@ -14,16 +21,57 @@ import {
 
 const useStyles = makeStyles({
   pointCard: {
-    padding: '20px 10px',
     minHeight: 100,
+    display: 'flex',
     '&:not(:last-of-type)': {
-      borderBottom: '1px solid #fff'
+      borderBottom: '1px solid #fff',
+      padding: 0
     },
     background: '#282c34',
     overflow: 'hidden',
     '&:hover': {
       background: '#686c7458',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      '& div:last-child': {
+        visibility: 'visible',
+        '& button':{
+          '&:hover': {
+            '& span':{
+              background: '#dadada'
+            }          
+          }
+        }
+      }
+    }
+  },
+  pointCardInfo: {
+    flex: '5',
+    padding: '20px 10px'
+  },
+  pointCardButtons: {
+    visibility: 'hidden',
+    height: '100%',
+    flex: '1',
+
+    '& button': {
+      opacity: '.7',
+      cursor: 'pointer',
+      height: '50%',
+      width: '100%',
+      backgroundColor: '#3E424A',
+      justifyContent: 'center',
+
+      border: 'none',
+      '& span': {
+        display: 'block',
+        backgroundColor: '#fff',
+        transform: 'scale(1.2)',
+        borderRadius: '50%',
+        height: 30,
+        width: 30,
+        justifyContent: 'center',
+        paddingTop: 3
+      }
     }
   },
   titleStyle: {
@@ -42,7 +90,8 @@ const DefItem = ({
   setMapCenterCoords,
   setMapZoomParam,
   // eslint-disable-next-line react/prop-types
-  styleParam
+  styleParam,
+  deleteDefibrPoint
 }) => {
   const classes = useStyles();
   const [lng, lat] = defItemInfo.location.coordinates;
@@ -63,33 +112,51 @@ const DefItem = ({
       });
     }
   };
-
   return (
-    <div
-      className={classes.pointCard}
-      style={styleParam}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      role="button"
-      tabIndex={0}
-    >
-      <h3 className={classes.titleStyle}>
-        {defItemInfo.title}
-      </h3>
-      <p className={classes.descStyle}>
-        {defItemInfo.address}
-      </p>
+    <div className={classes.pointCard} style={styleParam}>
+      <div
+        className={classes.pointCardInfo}
+        onClick={handleClick}
+        role="button"
+        tabIndex={0}
+        onKeyDown={handleKeyDown}
+      >
+        <h3 className={classes.titleStyle}>
+          {defItemInfo.title}
+        </h3>
+        <p className={classes.descStyle}>
+          {defItemInfo.address}
+        </p>
+      </div>
+      <div className={classes.pointCardButtons}>
+        <Link to="/edit-form">
+          <button type="button">
+            <span>
+              <EditIcon />
+            </span>
+          </button>
+        </Link>
+        <ConfirmationModalWrapper
+          ButtonOpen={DeleteBtn}
+          confirmHandle={() =>
+            deleteDefibrPoint(defItemInfo._id)
+          }
+          message="Видалити мітку?"
+        />
+      </div>
     </div>
   );
 };
 DefItem.defaultProps = {
   defItemInfo: {},
   setMapCenterCoords: () => null,
-  setMapZoomParam: () => null
+  setMapZoomParam: () => null,
+  deleteDefibrPoint: () => null
 };
+
 DefItem.propTypes = {
   defItemInfo: PropTypes.shape({
-    id: PropTypes.string,
+    _id: PropTypes.string,
     title: PropTypes.string,
     address: PropTypes.string,
     location: PropTypes.shape({
@@ -106,7 +173,8 @@ DefItem.propTypes = {
     additional_information: PropTypes.string
   }),
   setMapCenterCoords: PropTypes.func,
-  setMapZoomParam: PropTypes.func
+  setMapZoomParam: PropTypes.func,
+  deleteDefibrPoint: PropTypes.func
 };
 
 export default connect(
@@ -117,6 +185,7 @@ export default connect(
     setMapCenterCoords: mapState =>
       dispatch(setMapCenter(mapState)),
     setMapZoomParam: mapState =>
-      dispatch(setMapZoom(mapState))
+      dispatch(setMapZoom(mapState)),
+    deleteDefibrPoint: id => dispatch(deleteDefItem(id))
   })
 )(DefItem);
