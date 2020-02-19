@@ -5,10 +5,10 @@ const initialState = {
   lat: 49.842,
   zoom: 12.5
 };
-export default function(
+export default (
   state = initialState,
   { type, payload }
-) {
+) => {
   switch (type) {
     case SET_MAP_CENTER: {
       if (
@@ -25,4 +25,4 @@ export default function(
     default:
       return state;
   }
-}
+};

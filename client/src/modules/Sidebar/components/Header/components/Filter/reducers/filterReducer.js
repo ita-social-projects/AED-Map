@@ -2,10 +2,10 @@ import { SET_FILTER, RESET_FILTER } from '../consts';
 
 const initialState = null;
 
-export default function(
+export default (
   state = initialState,
   { type, payload }
-) {
+) => {
   switch (type) {
     case SET_FILTER:
       return payload;
@@ -14,4 +14,4 @@ export default function(
     default:
       return state;
   }
-}
+};

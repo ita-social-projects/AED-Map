@@ -18,41 +18,41 @@ import {
 import cancelToken from '../../../../../shared/cancel-token';
 
 const defsCancelToken = cancelToken();
-export function startLoadDef() {
+export const startLoadDef = () => {
   return {
     type: START_LOAD_DATA
   };
-}
+};
 
-export function successLoadDef(defs) {
+export const successLoadDef = defs => {
   return {
     type: SUCCESS_LOAD_DATA,
     payload: defs
   };
-}
+};
 
-export function setData(data) {
+export const setData = data => {
   return {
     type: SET_DATA,
     payload: data
   };
-}
+};
 
-export function setPage(page) {
+export const setPage = page => {
   return {
     type: SET_PAGE,
     payload: page
   };
-}
+};
 
-export function failLoadDef(error) {
+export const failLoadDef = error => {
   return {
     type: FAIL_LOAD_DATA,
     payload: error
   };
-}
+};
 
-export function fetchDefs(params) {
+export const fetchDefs = params => {
   return async dispatch => {
     dispatch(startLoadDef());
     try {
@@ -66,22 +66,22 @@ export function fetchDefs(params) {
       dispatch(failLoadDef(e));
     }
   };
-}
+};
 
-export function createDefPoint(newDef) {
+export const createDefPoint = newDef => {
   return {
     type: CREATE_DEF_POINT,
     payload: newDef
   };
-}
+};
 
-export function deleteDefPoint(id) {
+export const deleteDefPoint = id => {
   return {
     type: DELETE_DEF_POINT,
     payload: id
   };
-}
-export function editDefPoint(id, newDefInfo) {
+};
+export const editDefPoint = (id, newDefInfo) => {
   return {
     type: EDIT_DEF_POINT,
     payload: {
@@ -89,9 +89,9 @@ export function editDefPoint(id, newDefInfo) {
       newDefInfo
     }
   };
-}
+};
 
-export function createDefItem(newItem) {
+export const createDefItem = newItem => {
   return async dispatch => {
     dispatch(startLoadDef());
     try {
@@ -101,9 +101,9 @@ export function createDefItem(newItem) {
       dispatch(failLoadDef(e));
     }
   };
-}
+};
 
-export function deleteDefItem(id) {
+export const deleteDefItem = id => {
   return async dispatch => {
     dispatch(startLoadDef());
     try {
@@ -113,9 +113,9 @@ export function deleteDefItem(id) {
       dispatch(failLoadDef(e));
     }
   };
-}
+};
 
-export function editDefItem(id, newDefInfo) {
+export const editDefItem = (id, newDefInfo) => {
   return async dispatch => {
     dispatch(startLoadDef());
     try {
@@ -128,11 +128,11 @@ export function editDefItem(id, newDefInfo) {
       dispatch(failLoadDef(e));
     }
   };
-}
+};
 
-export function setPerPage(perPage) {
+export const setPerPage = perPage => {
   return {
     type: SET_PER_PAGE,
     payload: perPage
   };
-}
+};

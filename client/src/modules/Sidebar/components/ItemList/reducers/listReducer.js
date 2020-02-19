@@ -19,10 +19,10 @@ const initialState = {
   perPage: 10
 };
 
-export default function listReducer(
+const listReducer = (
   state = initialState,
   { type, payload }
-) {
+) => {
   switch (type) {
     // LOAD
     case START_LOAD_DATA:
@@ -90,9 +90,10 @@ export default function listReducer(
     default:
       return state;
   }
-}
+};
+export default listReducer;
 
-export function defsSearchSelector(state) {
+export const defsSearchSelector = state => {
   const { filter, defs } = state;
 
   if (filter) {
@@ -108,4 +109,4 @@ export function defsSearchSelector(state) {
     );
   }
   return defs.data;
-}
+};
