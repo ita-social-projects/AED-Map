@@ -16,7 +16,7 @@ const authEvent = io => {
         }
 
         try {
-          const user = await User.findById(payload.userId);
+          const user = await User.findById(payload._id);
 
           if (!user) {
             socket.disconnect();

@@ -3,6 +3,8 @@ const passport = require('passport');
 
 const { resServerError } = require('../shared/resServerError');
 
+const { defChangePermission } = require('../middleware/permission');
+
 const Defibrillator = require('../models/Defibrillator');
 
 const router = express.Router();
@@ -23,7 +25,7 @@ router.get('/', async (req, res) => {
     const page = Number(req.query.page) || 1;
     const defibrillators =
       (await Defibrillator.find(filter)
-        .select('address title location')
+        .select('address title location owner')
         .skip(perPage * (page - 1))
         .limit(perPage)) || [];
     const allDefibrillators = await Defibrillator.find(
@@ -42,12 +44,13 @@ router.get('/', async (req, res) => {
 
 router.post(
   '/',
-  /*passport.authenticate('jwt', { session: false }),*/
+  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     try {
-      const defibrillator = await Defibrillator.create(
-        req.body
-      );
+      const defibrillator = await Defibrillator.create({ 
+        ...req.body, 
+        owner: req.user._id 
+      });
       return res.status(201).send({
         error: false,
         defibrillator
@@ -60,7 +63,8 @@ router.post(
 
 router.put(
   '/:id',
-  // passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', { session: false }),
+  defChangePermission,
   async (req, res) => {
     try {
       const { id } = req.params;
@@ -94,10 +98,9 @@ router.get('/:id', async (req, res) => {
 
 router.delete(
   '/:id',
-  /*passport.authenticate('jwt', { session: false }),*/ async (
-    req,
-    res
-  ) => {
+  passport.authenticate('jwt', { session: false }),
+  defChangePermission,
+  async ( req, res ) => {
     try {
       const { id } = req.params;
       const defibrillator = await Defibrillator.findByIdAndDelete(

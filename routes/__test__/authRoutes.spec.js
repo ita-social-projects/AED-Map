@@ -7,7 +7,11 @@ const mockDatabaseName = 'mockUsers';
 const mockEmailForRegister = 'admin@gmail.com';
 const mockPassword = '1234AAAaaa__';
 
-let tokenForRegister, tokenForAuth;
+const mockAdminEmail = 'admin@admin.com';
+const mockAdminPassword = 'qwe123Q!';
+const mockAdminPasswordHashed = '$2a$10$9kWs/nlfM7ZIxJq0tj8yquATo47d0OqDl1pv.3tRfRU8fvcWrBK0W';
+
+let tokenForRegister, tokenForAuth, tokenAdmin;
 
 const DBURL = `mongodb://localhost:27017/${mockDatabaseName}`;
 
@@ -20,6 +24,27 @@ describe('auth routes', () => {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
+
+    const admin = await User.findOne({ email: mockAdminEmail });
+
+    if(!admin) {
+      const newAdmin = new User({
+        email: mockAdminEmail,
+        password: mockAdminPasswordHashed,
+        role: 'Admin'
+      });
+      await newAdmin.save();
+    }
+
+    const res = await request
+      .post('/api/auth/signin')
+      .send({
+        email: mockAdminEmail, 
+        password: mockAdminPassword
+      });
+
+    tokenAdmin = res.headers.authorization;
+
     done();
   });
 
@@ -28,9 +53,10 @@ describe('auth routes', () => {
     if (user) {
       await User.findByIdAndDelete(user._id);
     }
-    
+
     const res = await request
       .post(`${BASEURL}/signup/sendmail`)
+      .set('Authorization', tokenAdmin)
       .send({
         email: mockEmailForRegister
       })
@@ -64,6 +90,7 @@ describe('auth routes', () => {
   it('should return status 409 when user already exist', async () => {
     const res = await request
       .post(`${BASEURL}/signup/sendmail`)
+      .set('Authorization', tokenAdmin)
       .send({
         email: mockEmailForRegister
       })
@@ -166,6 +193,9 @@ describe('auth routes', () => {
   });
 
   afterAll(async (done) => {
+    await mongoose.connection
+      .collection('users')
+      .drop();
     await mongoose.connection.close();
     done();
   });

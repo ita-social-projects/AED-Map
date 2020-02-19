@@ -1,10 +1,16 @@
 const supertest = require('supertest');
 const { app, mongoose } = require('../../server');
 const Defibrillator = require('../../models/Defibrillator');
+const User = require('../../models/User');
 
 const request = supertest(app);
 const databaseName = 'jestTest';
 const url = `mongodb://localhost:27017/${databaseName}`;
+
+const mockAdminEmail = 'admin@admin.com';
+const mockAdminPassword = 'qwe123Q!';
+const mockAdminPasswordHashed = '$2a$10$9kWs/nlfM7ZIxJq0tj8yquATo47d0OqDl1pv.3tRfRU8fvcWrBK0W';
+let tokenAdmin;
 
 const newDefibrillator = {
   title: 'Площа ринок',
@@ -25,7 +31,31 @@ const newDefibrillator = {
 
 beforeAll(async (done) => {
   await mongoose.connection.close();
-  await mongoose.connect(url);
+  await mongoose.connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  });
+
+  const admin = await User.findOne({ email: mockAdminEmail });
+
+  if(!admin) {
+    const newAdmin = new User({
+      email: mockAdminEmail,
+      password: mockAdminPasswordHashed,
+      role: 'Admin'
+    });
+    await newAdmin.save();
+  }
+
+  const res = await request
+    .post('/api/auth/signin')
+    .send({
+      email: mockAdminEmail, 
+      password: mockAdminPassword
+    });
+
+  tokenAdmin = res.headers.authorization;
+
   done();
 });
 
@@ -46,6 +76,7 @@ describe('post method', () => {
     const oldRecords = await Defibrillator.find();
     const response = await request
       .post('/api/defibrillators')
+      .set('Authorization', tokenAdmin)
       .send(newDefibrillator);
     const newRecords = await Defibrillator.find();
     expect(response.status).toBe(201);
@@ -61,11 +92,13 @@ describe('put method', () => {
   it('tests updating existing defibrillator', async () => {
     const response = await request
       .post('/api/defibrillators')
+      .set('Authorization', tokenAdmin)
       .send(newDefibrillator);
     const updateDef = await request
       .put(
         `/api/defibrillators/${response.body.defibrillator._id}`
       )
+      .set('Authorization', tokenAdmin)
       .send({ address: 'updated' });
     expect(updateDef.body.defibrillator.address).toBe(
       'updated'
@@ -80,11 +113,12 @@ describe('delete method', () => {
   it('tests deleting existing defibrillator', async () => {
     const response = await request
       .post('/api/defibrillators')
+      .set('Authorization', tokenAdmin)
       .send(newDefibrillator);
     const oldRecords = await Defibrillator.find();
     const removedDef = await request.delete(
       `/api/defibrillators/${response.body.defibrillator._id}`
-    );
+    ).set('Authorization', tokenAdmin);
     const newRecords = await Defibrillator.find();
     expect(removedDef.status).toBe(200);
     expect(response.body.error).toBe(false);
@@ -96,6 +130,9 @@ afterAll(async (done) => {
   await mongoose.connection
     .collection('defibrillators')
     .drop();
-  mongoose.connection.close();
+  await mongoose.connection
+    .collection('users')
+    .drop();
+  await mongoose.connection.close();
   done();
 });

@@ -5,9 +5,10 @@ const {
   MISSING,
   PRESENT_IN_BUILDING,
   PRESENT_NEAR_APPLIANCE
-} = require('../consts/informational_plate_state.js');
+} = require('../consts/informational_plate_state');
 
 const { Schema } = mongoose;
+const { ObjectId } = Schema.Types;
 
 /*
   Model 'Defibrillator'
@@ -18,18 +19,19 @@ const { Schema } = mongoose;
   location - Object
     + type - String
     + coordinates - Array[Number]
-  actual_date - Date
+  actual_date - String
   storage_place - String
   accessibility - String
   language - String
-  informational_plates - String
-    + available values:
-        "present",
-        "missing",
-        "present in building",
-        "present near appliance"
+  informational_plates - String 
+    + available values: 
+      "present",
+      "missing", 
+      "present in building", 
+      "present near appliance"
   phone - Array[String]
   additional_information - String
+  owner - ObjectId
 
   Note
   There is array coordinates in property 'location.coordinates'.
@@ -62,7 +64,7 @@ const defibrillatorSchema = new Schema({
   },
 
   actual_date: {
-    type: Date,
+    type: String,
     required: true
   },
 
@@ -100,6 +102,12 @@ const defibrillatorSchema = new Schema({
   additional_information: {
     type: String,
     required: false
+  },
+
+  owner: {
+    type: ObjectId,
+    ref: 'users',
+    required: true
   }
 });
 
