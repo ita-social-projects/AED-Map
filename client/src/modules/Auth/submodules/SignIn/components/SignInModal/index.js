@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container } from '@material-ui/core';
 import { Formik } from 'formik';
-import { watcherStart } from '../../../../../../shared/websocket';
+import { socketAuthOpen } from '../../../../../../shared/websocket';
 import cancelToken from '../../../../../../shared/cancel-token';
 import { signInUser } from '../../../../api';
 import { startSignIn, successSignIn, failSignIn } from '../../../../actions/user';
@@ -35,7 +35,7 @@ const SignInModal = ({ handleClose, start, success, fail }) => {
       const { data, headers } = await signInUser(values);
       const { authorization } = headers;
       success(data, authorization);
-      watcherStart();
+      socketAuthOpen();
       handleClose();
     } catch (e) {
       const { message } = e.response.data;
