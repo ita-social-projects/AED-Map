@@ -2,13 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button } from '@material-ui/core';
-import { watcherStop } from '../../../../../shared/websocket';
+import { socketAuthClose } from '../../../../../shared/websocket';
 import { signOut } from '../../../actions/user';
 
 const ButtonSignIn = ({ handleOpen, user, signOutSubmit }) => {
   const handleSignOut = () => {
     signOutSubmit();
-    watcherStop();
+    socketAuthClose();
   };
 
   return (
