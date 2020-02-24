@@ -15,7 +15,7 @@ import {
 const useStyles = makeStyles({
   pointCard: {
     padding: '20px 10px',
-    minHeight: '100px',
+    minHeight: 100,
     '&:not(:last-of-type)': {
       borderBottom: '1px solid #fff'
     },
@@ -28,14 +28,12 @@ const useStyles = makeStyles({
   },
   titleStyle: {
     color: '#fff',
-    fontSize: '19px',
-    lineHeight: '23px',
-    marginBottom: '10px'
+    fontSize: 19,
+    marginBottom: 10
   },
   descStyle: {
     color: '#bbb',
-    fontSize: '13px',
-    lineHeight: '16px'
+    fontSize: 13
   }
 });
 

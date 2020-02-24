@@ -84,7 +84,6 @@ const AddAdressText = ({ formik, className }) => {
           }}
           label="Пошук Адреси"
           fullWidth
-          variant="outlined"
           helperText={
             formik.errors.address && formik.touched.address
               ? formik.errors.address

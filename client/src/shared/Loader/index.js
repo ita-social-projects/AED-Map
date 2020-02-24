@@ -14,6 +14,7 @@ const useStyles = makeStyles(() => ({
     border: '3px solid rgba(0, 0, 0, 0.1)',
     borderTopColor: '#000',
     borderBottomColor: '#000',
+    filter: 'invert(1)',
     animation: '$rotating 0.7s ease infinite'
   }
 }));
