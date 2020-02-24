@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
@@ -16,9 +17,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Form = ({ isSubmitting }) => {
+const Form = ({ email, isSubmitting }) => {
   const classes = useStyles();
   const [showPassword, setShowPassword] = useState(false);
+  const history = useHistory();
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -26,6 +28,10 @@ const Form = ({ isSubmitting }) => {
 
   const handleMouseDownPassword = event => {
     event.preventDefault();
+  };
+
+  const redirectToMainPage = () => {
+    history.push('/');
   };
 
   return (
@@ -39,6 +45,8 @@ const Form = ({ isSubmitting }) => {
         label="Електронна адреса"
         name="email"
         autoComplete="email"
+        value={email}
+        disabled
       />
       <MyTextField
         variant="outlined"
@@ -80,11 +88,22 @@ const Form = ({ isSubmitting }) => {
       >
         Реєстрація
       </Button>
+      <Button
+        type="button"
+        fullWidth
+        variant="contained"
+        color="secondary"
+        className={classes.submit}
+        onClick={redirectToMainPage}
+      >
+        Головна сторінка
+      </Button>
     </FormFormik>
   );
 };
 
 Form.propTypes = {
+  email: PropTypes.string.isRequired,
   isSubmitting: PropTypes.bool.isRequired
 };
 

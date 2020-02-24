@@ -8,7 +8,7 @@
     "server": "nodemon start.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "start": "node start.js",
-    "lint": "eslint server.js ./config ./consts ./middleware ./models ./routes ./shared --ext .js",
+    "lint": "eslint server.js ./config ./consts ./middleware ./models ./routes ./shared ./emails ./websoket --ext .js",
     "test-client": "cd client/ && yarn test",
     "test-server": "cross-env NODE_ENV=node jest routes --coverage"
   },
@@ -19,7 +19,8 @@
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "/middleware"
+      "/middleware",
+      "/websocket"
     ]
   },
   "husky": {
@@ -47,6 +48,7 @@
     "jsonwebtoken": "^8.5.1",
     "long-timeout": "^0.1.1",
     "mongoose": "^5.8.6",
+    "nodemailer": "^6.4.2",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "password-validator": "^5.0.3",

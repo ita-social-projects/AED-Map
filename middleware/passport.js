@@ -3,7 +3,7 @@ const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 
 // Secret key for jwt
-const { SECRET_JWT_KEY } = require('../config/keys');
+const { SECRET_JWT_KEY_AUTH } = require('../config/keys');
 
 // Model of the collection 'users'
 const User = mongoose.model('users');
@@ -11,7 +11,7 @@ const User = mongoose.model('users');
 // Configuration for jwt-strategy in 'passport'
 const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: SECRET_JWT_KEY
+  secretOrKey: SECRET_JWT_KEY_AUTH
 };
 
 module.exports = passport => {

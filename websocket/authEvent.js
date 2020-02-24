@@ -2,14 +2,14 @@ const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const timer = require('long-timeout');
 
-const { SECRET_JWT_KEY } = require('../config/keys');
+const { SECRET_JWT_KEY_AUTH } = require('../config/keys');
 
 const User = mongoose.model('users');
 
 const authEvent = io => {
   io.on('connection', (socket) => {
     socket.on('authorization', authorization => {
-      jwt.verify(authorization, SECRET_JWT_KEY, async (err, payload) => {
+      jwt.verify(authorization, SECRET_JWT_KEY_AUTH, async (err, payload) => {
         if (err) {
           socket.disconnect();
           return;

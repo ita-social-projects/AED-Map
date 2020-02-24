@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 
-const resServerError = require('../shared/resServerError');
+const { resServerError } = require('../shared/resServerError');
 
 const Defibrillator = require('../models/Defibrillator');
 
