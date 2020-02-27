@@ -46,6 +46,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.3.1",
+    "heroku": "^7.38.2",
     "jsonwebtoken": "^8.5.1",
     "long-timeout": "^0.1.1",
     "mongoose": "^5.8.6",
