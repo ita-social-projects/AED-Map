@@ -7,7 +7,7 @@
     "client": "cd client/ && yarn start",
     "server": "nodemon start.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
-    "dev2": "yarn server",
+    "dev2": "yarn client && yarn server",
     "start": "node start.js",
     "lint": "eslint server.js ./config ./consts ./middleware ./models ./routes ./shared ./emails ./websoket --ext .js",
     "test-client": "cd client/ && yarn test",

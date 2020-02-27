@@ -15,6 +15,9 @@ const app = express();
 const server = http.Server(app);
 const io = socketio(server);
 
+process.on('uncaughtException', function(err) {
+  console.log('Caught exception: ' + err);
+});
 // Websocket event for sign out
 authEvent(io);
 
