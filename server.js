@@ -4,6 +4,7 @@ const path = require('path');
 const passport = require('passport');
 const http = require('http');
 const socketio = require('socket.io');
+const dotenv = require('dotenv').config();
 
 const authRoute = require('./routes/authRoute');
 const defRoute = require('./routes/defRoute');
@@ -29,7 +30,7 @@ app.use(passport.initialize());
 require('./middleware/passport')(passport);
 
 mongoose
-  .connect('mongodb://localhost:27017/defibrillatorDB', {
+  .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
