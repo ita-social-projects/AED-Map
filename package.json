@@ -4,7 +4,7 @@
   "description": "backend part of defibrillator project",
   "main": "server.js",
   "scripts": {
-    "client": "cd client/ && yarn start",
+    "client": "cd client/ && yarn install && yarn build",
     "server": "nodemon start.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "dev2": "yarn client && yarn server",
