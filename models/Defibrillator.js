@@ -111,6 +111,7 @@ const defibrillatorSchema = new Schema({
   }
 });
 
+defibrillatorSchema.index({ location: '2dsphere' });
 module.exports = mongoose.model(
   'defibrillators',
   defibrillatorSchema

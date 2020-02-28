@@ -152,7 +152,6 @@ MapHolder.propTypes = {
 export default connect(
   state => ({
     defsState: state.defs,
-    filteredDefs: state.defs.data,
     mapState: state.mapState
   }),
   dispatch => ({

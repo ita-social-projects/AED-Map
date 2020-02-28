@@ -6,11 +6,12 @@ import {
   CREATE_DEF_POINT,
   DELETE_DEF_POINT,
   EDIT_DEF_POINT,
+  SET_ACTIVE,
   SET_PAGE,
   SET_PER_PAGE
 } from '../consts';
 import {
-  fetchDefItems,
+  getDefItems,
   createItem,
   deleteItem,
   editItem
@@ -38,6 +39,13 @@ export const setData = data => {
   };
 };
 
+export const setActive = id => {
+  return {
+    type: SET_ACTIVE,
+    payload: id
+  };
+};
+
 export const setPage = page => {
   return {
     type: SET_PAGE,
@@ -52,15 +60,33 @@ export const failLoadDef = error => {
   };
 };
 
+const getCurrentPosition = (options = {}) => {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      resolve,
+      reject,
+      options
+    );
+  });
+};
+
 export const fetchDefs = params => {
   return async dispatch => {
     dispatch(startLoadDef());
     try {
-      const { data } = await fetchDefItems(
-        params,
+      let userCoordinates;
+      try {
+        const { coords } = await getCurrentPosition();
+        const { latitude, longitude } = coords;
+        userCoordinates = { latitude, longitude };
+      } catch (e) {
+        userCoordinates = null;
+      }
+      dispatch(setPage());
+      const { data } = await getDefItems(
+        { ...params, ...userCoordinates },
         defsCancelToken.instance
       );
-      dispatch(setPage());
       dispatch(successLoadDef(data));
     } catch (e) {
       dispatch(failLoadDef(e));

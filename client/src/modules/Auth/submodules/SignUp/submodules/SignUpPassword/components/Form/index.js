@@ -10,11 +10,11 @@ import InputAdornmentPassword from './components/InputAdornmentPassword';
 const useStyles = makeStyles(theme => ({
   form: {
     width: '100%',
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(1)
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
+    margin: theme.spacing(3, 0, 2)
+  }
 }));
 
 const Form = ({ email, isSubmitting }) => {
@@ -59,12 +59,17 @@ const Form = ({ email, isSubmitting }) => {
         id="password"
         autoComplete="password"
         InputProps={{
-          endAdornment:
-            (<InputAdornmentPassword
+          endAdornment: (
+            <InputAdornmentPassword
               showPassword={showPassword}
-              handleClickShowPassword={handleClickShowPassword}
-              handleMouseDownPassword={handleMouseDownPassword}
-            />)
+              handleClickShowPassword={
+                handleClickShowPassword
+              }
+              handleMouseDownPassword={
+                handleMouseDownPassword
+              }
+            />
+          )
         }}
       />
       <MyTextField

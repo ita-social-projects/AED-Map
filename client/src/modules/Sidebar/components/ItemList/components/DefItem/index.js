@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import EditIcon from '@material-ui/icons/Edit';
+import { NavLink, Link } from 'react-router-dom';
 import permissionService from '../../../../../Auth/permissionService';
 
 import {
@@ -13,7 +13,8 @@ import {
 import DeleteBtn from './DeleteBtn';
 import ConfirmationModalWrapper from '../../../../../../shared/ConfirmationModalWrapper';
 import {
-  deleteDefItem
+  deleteDefItem,
+  setActive
 } from '../../actions/list';
 import {
   ENTER_BUTTON_CODE,
@@ -30,7 +31,9 @@ const useStyles = makeStyles({
       borderBottom: '1px solid #fff',
       padding: 0
     },
-    background: '#282c34',
+    textDecoration: 'none',
+    background: isActive =>
+      isActive ? '#344870' : '#282c34',
     overflow: 'hidden',
     '&:hover': {
       background: '#686c7458',
@@ -49,7 +52,8 @@ const useStyles = makeStyles({
   },
   pointCardInfo: {
     flex: '5',
-    padding: '20px 10px'
+    padding: '20px 10px',
+    outline: 'none'
   },
   pointCardButtons: {
     visibility: 'hidden',
@@ -87,22 +91,32 @@ const useStyles = makeStyles({
     fontSize: 13
   }
 });
-
 const DefItem = ({
+  makeItemActive,
+  activeItemId,
   defItemInfo,
   setMapCenterCoords,
   setMapZoomParam,
   // eslint-disable-next-line react/prop-types
   styleParam,
   deleteDefibrPoint,
-  user
+  user,
+  mapData
 }) => {
-  const classes = useStyles();
-  const [permissionForEdit, changePermissionForEdit] = useState(false);
-  const [permissionForDelete, changePermissionForDelete] = useState(false);
+  const [
+    permissionForEdit,
+    changePermissionForEdit
+  ] = useState(false);
+  const [
+    permissionForDelete,
+    changePermissionForDelete
+  ] = useState(false);
+  const isActive = defItemInfo._id === activeItemId;
+  const classes = useStyles(isActive);
   const [lng, lat] = defItemInfo.location.coordinates;
 
   const handleClick = () => {
+    makeItemActive(defItemInfo._id);
     setMapCenterCoords({
       lng,
       lat
@@ -120,14 +134,38 @@ const DefItem = ({
   };
 
   useEffect(() => {
-    const permissionEdit = permissionService(EDIT_DEF_POINT, user, defItemInfo);
-    const permissionDelete = permissionService(DELETE_DEF_POINT, user, defItemInfo);
+    const coords = mapData.find(
+      def => def._id === activeItemId
+    );
+    if (coords) {
+      const [lng, lat] = coords.location.coordinates;
+      setMapCenterCoords({
+        lng,
+        lat
+      });
+      setMapZoomParam(BASE_ZOOM_VALUE);
+    }
+
+    const permissionEdit = permissionService(
+      EDIT_DEF_POINT,
+      user,
+      defItemInfo
+    );
+    const permissionDelete = permissionService(
+      DELETE_DEF_POINT,
+      user,
+      defItemInfo
+    );
     changePermissionForEdit(permissionEdit);
     changePermissionForDelete(permissionDelete);
   }, [user, defItemInfo]);
 
   return (
-    <div className={classes.pointCard} style={styleParam}>
+    <NavLink
+      to={`?id=${defItemInfo._id}`}
+      className={classes.pointCard}
+      style={styleParam}
+    >
       <div
         className={classes.pointCardInfo}
         onClick={handleClick}
@@ -162,12 +200,14 @@ const DefItem = ({
           />
         )}
       </div>
-    </div>
+    </NavLink>
   );
 };
 
 DefItem.defaultProps = {
   defItemInfo: {},
+  mapData: [],
+  activeItemId: () => null,
   setMapCenterCoords: () => null,
   setMapZoomParam: () => null,
   deleteDefibrPoint: () => null,
@@ -192,6 +232,17 @@ DefItem.propTypes = {
     phone: PropTypes.arrayOf(PropTypes.string),
     additional_information: PropTypes.string
   }),
+  mapData: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string,
+      title: PropTypes.string,
+      address: PropTypes.string,
+      location: PropTypes.shape({
+        type: PropTypes.string,
+        coordinates: PropTypes.arrayOf(PropTypes.number)
+      })
+    })
+  ),
   user: PropTypes.shape({
     _id: PropTypes.string,
     email: PropTypes.string,
@@ -199,15 +250,19 @@ DefItem.propTypes = {
   }),
   setMapCenterCoords: PropTypes.func,
   setMapZoomParam: PropTypes.func,
-  deleteDefibrPoint: PropTypes.func
+  deleteDefibrPoint: PropTypes.func,
+  activeItemId: PropTypes.string,
+  makeItemActive: PropTypes.func.isRequired
 };
 
 export default connect(
   state => ({
     user: state.user.user,
-    filteredDefs: state.defs.data
+    activeItemId: state.defs.active,
+    mapData: state.defs.mapData
   }),
   dispatch => ({
+    makeItemActive: itemId => dispatch(setActive(itemId)),
     setMapCenterCoords: mapState =>
       dispatch(setMapCenter(mapState)),
     setMapZoomParam: mapState =>

@@ -37,7 +37,8 @@ describe('fetchDefs action', () => {
     const expectedActions = [
       { type: types.START_LOAD_DATA },
       {
-        type: types.SET_PAGE
+        type: types.SET_PAGE,
+        payload: undefined
       },
       {
         type: types.SUCCESS_LOAD_DATA,
@@ -56,10 +57,14 @@ describe('fetchDefs action', () => {
       request.respondWith(mockSuccessResponse(mockData));
     });
     const store = mockStore({ data: [] });
+
     return store.dispatch(actions.fetchDefs()).then(() => {
-      expect(store.getActions()[2].payload.length).toEqual(
-        3
-      );
+      expect(
+        store.getActions()[2].payload.listDefs.length
+      ).toEqual(3);
+      expect(
+        store.getActions()[2].payload.mapDefs.length
+      ).toEqual(1);
     });
   });
 
@@ -71,6 +76,7 @@ describe('fetchDefs action', () => {
     const store = mockStore({ error: null });
     const expectedActions = [
       { type: types.START_LOAD_DATA },
+      { type: types.SET_PAGE, payload: undefined },
       {
         type: types.FAIL_LOAD_DATA,
         payload: mockError
@@ -88,7 +94,7 @@ describe('fetchDefs action', () => {
     });
     const store = mockStore({ error: null });
     return store.dispatch(actions.fetchDefs()).then(() => {
-      expect(store.getActions()[1].payload).toBeTruthy();
+      expect(store.getActions()[2].payload).toBeTruthy();
     });
   });
 });

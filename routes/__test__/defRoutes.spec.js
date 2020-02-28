@@ -9,7 +9,8 @@ const url = `mongodb://localhost:27017/${databaseName}`;
 
 const mockAdminEmail = 'admin@admin.com';
 const mockAdminPassword = 'qwe123Q!';
-const mockAdminPasswordHashed = '$2a$10$9kWs/nlfM7ZIxJq0tj8yquATo47d0OqDl1pv.3tRfRU8fvcWrBK0W';
+const mockAdminPasswordHashed =
+  '$2a$10$9kWs/nlfM7ZIxJq0tj8yquATo47d0OqDl1pv.3tRfRU8fvcWrBK0W';
 let tokenAdmin;
 
 const newDefibrillator = {
@@ -36,9 +37,11 @@ beforeAll(async (done) => {
     useUnifiedTopology: true
   });
 
-  const admin = await User.findOne({ email: mockAdminEmail });
+  const admin = await User.findOne({
+    email: mockAdminEmail
+  });
 
-  if(!admin) {
+  if (!admin) {
     const newAdmin = new User({
       email: mockAdminEmail,
       password: mockAdminPasswordHashed,
@@ -47,12 +50,10 @@ beforeAll(async (done) => {
     await newAdmin.save();
   }
 
-  const res = await request
-    .post('/api/auth/signin')
-    .send({
-      email: mockAdminEmail, 
-      password: mockAdminPassword
-    });
+  const res = await request.post('/api/auth/signin').send({
+    email: mockAdminEmail,
+    password: mockAdminPassword
+  });
 
   tokenAdmin = res.headers.authorization;
 
@@ -65,9 +66,22 @@ describe('get method', () => {
       '/api/defibrillators'
     );
     expect(response.status).toBe(200);
-    expect(response.body.defibrillators.length >= 0).toBe(
-      true
+    expect(response.body.listDefs.length >= 0).toBe(true);
+    expect(response.body.mapDefs.length >= 0).toBe(true);
+  });
+  it('get more information by id', async () => {
+    const response = await request
+      .post('/api/defibrillators')
+      .set('Authorization', tokenAdmin)
+      .send(newDefibrillator);
+    const defId = response.body.defibrillator._id;
+    const moreInfo = await request.get(
+      `/api/defibrillators/${defId}`
     );
+    expect(moreInfo.status).toBe(200);
+    expect(typeof response.body).toBe('object');
+    expect(response.body.error).toBe(false);
+    expect(moreInfo.body.defibrillator._id).toBe(defId);
   });
 });
 
@@ -116,9 +130,11 @@ describe('delete method', () => {
       .set('Authorization', tokenAdmin)
       .send(newDefibrillator);
     const oldRecords = await Defibrillator.find();
-    const removedDef = await request.delete(
-      `/api/defibrillators/${response.body.defibrillator._id}`
-    ).set('Authorization', tokenAdmin);
+    const removedDef = await request
+      .delete(
+        `/api/defibrillators/${response.body.defibrillator._id}`
+      )
+      .set('Authorization', tokenAdmin);
     const newRecords = await Defibrillator.find();
     expect(removedDef.status).toBe(200);
     expect(response.body.error).toBe(false);
@@ -130,9 +146,7 @@ afterAll(async (done) => {
   await mongoose.connection
     .collection('defibrillators')
     .drop();
-  await mongoose.connection
-    .collection('users')
-    .drop();
+  await mongoose.connection.collection('users').drop();
   await mongoose.connection.close();
   done();
 });
