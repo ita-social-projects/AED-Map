@@ -5,6 +5,7 @@ const passport = require('passport');
 const http = require('http');
 const socketio = require('socket.io');
 const dotenv = require('dotenv').config();
+const cors = require('cors');
 
 const authRoute = require('./routes/authRoute');
 const defRoute = require('./routes/defRoute');
@@ -12,6 +13,7 @@ const defRoute = require('./routes/defRoute');
 const { authEvent } = require('./websocket/authEvent');
 
 const app = express();
+app.use(cors());
 const server = http.Server(app);
 const io = socketio(server);
 
