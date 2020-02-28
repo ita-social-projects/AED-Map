@@ -1,11 +1,17 @@
 import axios from 'axios';
 
+const instance = axios.create({
+  baseURL: 'https://deffsserver.herokuapp.com',
+  timeout: 1000,
+  headers: {'X-Custom-Header': 'foobar'}
+});
+
 const authorization = JSON.parse(localStorage.getItem('authorization'));
 axios.defaults.headers.common.Authorization = authorization;
 
 const http = {
   get(url, params, cancel) {
-    return axios({
+    return instance({
       method: 'get',
       url,
       params,
@@ -13,7 +19,7 @@ const http = {
     });
   },
   post(url, params, cancel) {
-    return axios({
+    return instance({
       method: 'post',
       url,
       data: params,
@@ -21,7 +27,7 @@ const http = {
     });
   },
   delete(url, params, cancel) {
-    return axios({
+    return instance({
       method: 'delete',
       url,
       data: params,
@@ -29,7 +35,7 @@ const http = {
     });
   },
   put(url, params, cancel) {
-    return axios({
+    return instance({
       method: 'put',
       url,
       data: params,
