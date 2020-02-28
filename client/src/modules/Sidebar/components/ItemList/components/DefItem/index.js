@@ -126,6 +126,7 @@ const DefItem = ({
     </div>
   );
 };
+
 DefItem.defaultProps = {
   defItemInfo: {},
   setMapParams: () => null
