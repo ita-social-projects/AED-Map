@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
 
+const {
+  ADMIN,
+  USER
+} = require('../consts/user_role_state');
+
 const { Schema } = mongoose;
 
 /*
@@ -8,6 +13,10 @@ const { Schema } = mongoose;
 
   email - String
   password - String
+  role - String
+    + available values:
+      "admin",
+      "user"
 */
 
 const userSchema = new Schema({
@@ -19,6 +28,15 @@ const userSchema = new Schema({
 
   password: {
     type: String,
+    required: true
+  },
+
+  role: {
+    type: String,
+    enum: [
+      ADMIN,
+      USER
+    ],
     required: true
   }
 });

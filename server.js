@@ -10,6 +10,8 @@ const defRoute = require('./routes/defRoute');
 
 const { authEvent } = require('./websocket/authEvent');
 
+const User = mongoose.model('users');
+
 const app = express();
 const server = http.Server(app);
 const io = socketio(server);
@@ -35,8 +37,23 @@ mongoose
     useFindAndModify: false,
     useCreateIndex: true
   })
-  .then(() => {
+  .then(async () => {
     console.log('connection to database established');
+
+    const adminEmail = 'admin@admin.com';
+    const adminPassword = 'qwe123Q!';
+    const adminPasswordHashed = '$2a$10$9kWs/nlfM7ZIxJq0tj8yquATo47d0OqDl1pv.3tRfRU8fvcWrBK0W';
+
+    const admin = await User.findOne({ email: adminEmail });
+
+    if (!admin) {
+      const newAdmin = new User({
+        email: adminEmail,
+        password: adminPasswordHashed,
+        role: 'Admin'
+      });
+      await newAdmin.save();
+    }
   })
   .catch((err) => {
     console.log(`db error ${err.message}`);
