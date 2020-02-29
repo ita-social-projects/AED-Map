@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 const features = points => {
   return points.map(point => {
     return {

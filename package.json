@@ -21,7 +21,18 @@
       "/node_modules/",
       "/middleware",
       "/websocket"
-    ]
+    ],
+    "collectCoverageFrom": [
+      "./routes/*.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 70,
+        "functions": 60,
+        "lines": 70,
+        "statements": 70
+      }
+    }
   },
   "husky": {
     "hooks": {

@@ -100,3 +100,10 @@ export const mockCurrDef = {
   id: '',
   coordinates: []
 };
+
+export const mockUser = {
+  email: 'mock@gmail.com',
+  password: 'dsajjd3jej3hk333DDSFDS___2s'
+};
+export const mockToken =
+  'Bearer daskjfih43uit.dsaodowiidi3988rifk.dsadsagerkjgk';

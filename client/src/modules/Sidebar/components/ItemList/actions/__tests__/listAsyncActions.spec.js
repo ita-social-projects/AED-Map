@@ -1,7 +1,6 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import moxios from 'moxios';
-// import http from '../../../../../../shared/http';
 
 import * as types from '../../consts';
 import * as actions from '../list';
@@ -51,6 +50,19 @@ describe('fetchDefs action', () => {
     });
   });
 
+  it('should have payload data when fetching defs has been done', () => {
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith(mockSuccessResponse(mockData));
+    });
+    const store = mockStore({ data: [] });
+    return store.dispatch(actions.fetchDefs()).then(() => {
+      expect(store.getActions()[2].payload.length).toEqual(
+        3
+      );
+    });
+  });
+
   it(`creates ${types.FAIL_LOAD_DATA} when fetching defs failed`, () => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
@@ -66,6 +78,17 @@ describe('fetchDefs action', () => {
     ];
     return store.dispatch(actions.fetchDefs()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
+
+  it('should have error payload when fetching defs failed', () => {
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith(mockErrorResponse(mockError));
+    });
+    const store = mockStore({ error: null });
+    return store.dispatch(actions.fetchDefs()).then(() => {
+      expect(store.getActions()[1].payload).toBeTruthy();
     });
   });
 });

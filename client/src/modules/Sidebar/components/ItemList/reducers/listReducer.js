@@ -60,13 +60,11 @@ const listReducer = (
       return {
         ...state,
         loading: false,
-        /* eslint-disable-next-line */
         data: state.data.filter(def => def._id !== payload)
       };
     case EDIT_DEF_POINT: {
       const { id, newDefInfo } = payload;
       const newData = state.data.map(def => {
-        /* eslint-disable-next-line */
         if (def._id === id) {
           return { ...def, ...newDefInfo };
         }
@@ -95,7 +93,6 @@ export default listReducer;
 
 export const defsSearchSelector = state => {
   const { filter, defs } = state;
-
   if (filter) {
     return defs.data.filter(def =>
       Object.keys(filter).every(key => {

@@ -15,18 +15,18 @@ const { Schema } = mongoose;
 
   title - String
   address - String
-  location - Object 
-    + type - String 
+  location - Object
+    + type - String
     + coordinates - Array[Number]
   actual_date - Date
   storage_place - String
   accessibility - String
   language - String
-  informational_plates - String 
-    + available values: 
-        "present", 
-        "missing", 
-        "present in building", 
+  informational_plates - String
+    + available values:
+        "present",
+        "missing",
+        "present in building",
         "present near appliance"
   phone - Array[String]
   additional_information - String
