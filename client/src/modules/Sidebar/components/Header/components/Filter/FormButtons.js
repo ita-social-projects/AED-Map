@@ -7,6 +7,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import DoneIcon from '@material-ui/icons/Done';
 import { makeStyles } from '@material-ui/core/styles';
 import { resetFilter } from './actions/filter';
+import { hidePopup } from '../../../../../MapHolder/actions/popupDisplay';
 import {
   fetchDefs,
   setPage,
@@ -31,6 +32,8 @@ const FormButtons = ({
   resetFilterValue,
   fetchDefItems,
   filter,
+  popupData,
+  hidePopup,
   resetPage,
   resetData
 }) => {
@@ -43,6 +46,10 @@ const FormButtons = ({
 
   const onClear = () => {
     if (filter) {
+      if (popupData) {
+        hidePopup();
+      }
+
       resetPagination(1, []);
       fetchDefItems();
     }
@@ -77,7 +84,8 @@ const FormButtons = ({
 };
 
 FormButtons.defaultProps = {
-  filter: null
+  filter: null,
+  popupData: null
 };
 FormButtons.propTypes = {
   formik: PropTypes.shape({
@@ -88,18 +96,22 @@ FormButtons.propTypes = {
   resetFilterValue: PropTypes.func.isRequired,
   fetchDefItems: PropTypes.func.isRequired,
   filter: PropTypes.oneOfType([PropTypes.object]),
+  popupData: PropTypes.oneOfType([PropTypes.object]),
+  hidePopup: PropTypes.func.isRequired,
   resetPage: PropTypes.func.isRequired,
   resetData: PropTypes.func.isRequired
 };
 
 export default connect(
   state => ({
-    filter: state.filter
+    filter: state.filter,
+    popupData: state.popupData
   }),
   {
     resetFilterValue: resetFilter,
     fetchDefItems: fetchDefs,
     resetPage: page => setPage(page),
-    resetData: data => setData(data)
+    resetData: data => setData(data),
+    hidePopup
   }
 )(connectFormik(FormButtons));
