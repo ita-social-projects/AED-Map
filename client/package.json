@@ -38,7 +38,7 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "./src/modules/**/(api|actions|reducers|consts)/*.js"
+      "./src/modules/**/(api|actions|reducers)/*.js"
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/"

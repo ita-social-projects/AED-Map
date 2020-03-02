@@ -32,11 +32,13 @@ const useStyles = makeStyles(() => ({
   },
   markerWrapper: {
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: 14,
+    fontWeight: 'bold',
+    textShadow: '1px 1px 2px white',
     cursor: 'pointer'
   },
   title: {
-    width: 300
+    width: 200
   },
   pin: {
     width: 30,
@@ -100,6 +102,7 @@ const DefibrillatorPinLayer = ({
       ClusterMarkerFactory={clusterMarker}
       zoomOnClick
       zoomOnClickPadding={80}
+      radius={100}
     >
       {clusterRender}
     </Cluster>
