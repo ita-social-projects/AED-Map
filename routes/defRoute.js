@@ -1,7 +1,9 @@
 const express = require('express');
 const passport = require('passport');
 
-const { resServerError } = require('../shared/resServerError');
+const {
+  resServerError
+} = require('../shared/resServerError');
 
 const { defChangePermission } = require('../middleware/permission');
 
@@ -15,10 +17,7 @@ router.get('/', async (req, res) => {
     const skipKeys = ['page', 'per_page'];
     Object.keys(req.query).forEach((key) => {
       if (!skipKeys.includes(key)) {
-        filter[key] = {
-          $regex: req.query[key],
-          $options: 'i'
-        };
+        filter[key] = new RegExp(req.query[key], 'i');
       }
     });
     const perPage = Number(req.query.per_page) || 10;

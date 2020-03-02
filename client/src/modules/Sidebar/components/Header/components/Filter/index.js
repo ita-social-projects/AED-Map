@@ -17,7 +17,7 @@ const Filter = () => {
   return (
     <div className={classes.container}>
       <FilterButton isOpen={isOpen} setIsOpen={setIsOpen} />
-      {isOpen && <FilterFormik />}
+      {isOpen && <FilterFormik setIsOpen={setIsOpen} />}
     </div>
   );
 };

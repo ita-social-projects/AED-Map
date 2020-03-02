@@ -7,6 +7,10 @@ import {
   MyTextField,
   MySelect
 } from '../../../../../../shared/Fields';
+import {
+  languageInterface,
+  informationalPlates
+} from './consts/formConsts';
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -26,12 +30,6 @@ const useStyles = makeStyles(theme => ({
 
 const FormFormik = ({ onSubmit }) => {
   const classes = useStyles();
-  const languageInterface = [
-    '',
-    'англомовний',
-    'україномовний',
-    'російськомовний'
-  ];
 
   return (
     <Form
@@ -42,13 +40,11 @@ const FormFormik = ({ onSubmit }) => {
       <MyTextField
         label="Назва"
         name="title"
-        variant="outlined"
         className={classes.inputs}
       />
       <MyTextField
         label="Адреса"
         name="address"
-        variant="outlined"
         className={classes.inputs}
       />
       <MySelect
@@ -56,7 +52,13 @@ const FormFormik = ({ onSubmit }) => {
         label="language"
         name="language"
         options={languageInterface}
-        variant="outlined"
+        classes={classes.inputs}
+      />
+      <MySelect
+        labelTitle="Інформаційні таблички"
+        label="informational_plates"
+        name="informational_plates"
+        options={informationalPlates}
         classes={classes.inputs}
       />
       <FormButtons />

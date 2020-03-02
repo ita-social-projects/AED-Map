@@ -17,27 +17,7 @@ import { MyTextField } from '../Fields';
 const useStyles = makeStyles({
   DefaultStyle: {
     width: '100%',
-    paddingTop: '10px',
-    marginBottom: '24px',
-    borderColor: 'green',
-    '& input:valid + fieldset': {
-      color: 'red',
-      borderWidth: 2
-    },
-    '& input:invalid + fieldset': {
-      borderColor: 'red',
-      borderWidth: 2
-    },
-    '& input:valid:focus + fieldset': {
-      borderLeftWidth: 6,
-      borderColor: 'yellow',
-      padding: '10px !important'
-    },
-    '& input:valid:hover + fieldset': {
-      borderLeftWidth: 6,
-      borderColor: 'yellow',
-      padding: '10px !important'
-    }
+    marginBottom: 24
   },
   FormStyle: {
     backgroundColor: 'white',
@@ -46,12 +26,11 @@ const useStyles = makeStyles({
     overflowY: 'scroll',
     borderTop: '1px solid #fff3',
     borderBottom: '1px solid #fff3',
-    paddingRight: '5px',
     '&:focus': {
       outline: 'none'
     },
     '&::-webkit-scrollbar': {
-      width: '5px'
+      width: 5
     },
     '&::-webkit-scrollbar-track': {
       backgroundColor: 'rgba(0,0,0,0.1)'
@@ -87,7 +66,7 @@ const MyForm = ({ INITIAL_VALUES, SubmitAction }) => {
           handleSubmit(data);
         }}
       >
-        {({isValid }) => {
+        {({ isValid }) => {
           return (
             <Form>
               <AddAdressText
@@ -132,7 +111,7 @@ const MyForm = ({ INITIAL_VALUES, SubmitAction }) => {
                 color="primary"
                 size="large"
                 type="submit"
-                startIcon={<SaveIcon />}
+                endIcon={<SaveIcon />}
                 onClick={() => {
                   if (isValid === true)
                     ShowAlert({

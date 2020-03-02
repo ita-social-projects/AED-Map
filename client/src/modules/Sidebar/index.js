@@ -25,7 +25,8 @@ const useStyles = makeStyles({
     flexShrink: 0
   },
   addButtonStyle: {
-    marginTop: '10px'
+    marginTop: 10,
+    width: '100%'
   },
   LinkStyle: {
     textDecoration: 'none'
@@ -54,7 +55,7 @@ const Sidebar = () => {
               className={classes.addButtonStyle}
               variant="contained"
               color="primary"
-              startIcon={<AddIcon />}
+              endIcon={<AddIcon />}
             >
               Додати новий дефібрилятор
             </Button>

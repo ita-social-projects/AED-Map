@@ -1,28 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
+import Loader from '../../../../../../shared/Loader';
 
 const useStyles = makeStyles({
   infoMessage: {
     position: 'absolute',
-    zIndex: '10',
     width: '98%',
     height: '98%',
     top: '50%',
+    transform: 'translateY(-50%)',
+    display: show => (show ? 'flex' : 'none'),
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     background: '#282c34',
-    display: show => (show ? 'flex' : 'none'),
-    transform: 'translateY(-50%)',
     color: 'white',
-    textAlign: 'center'
+    textAlign: 'center',
+    zIndex: 10
   }
 });
 
 const InfoMessage = ({ children, show }) => {
   const classes = useStyles(show);
   return (
-    <div className={classes.infoMessage}>{children}</div>
+    <div className={classes.infoMessage}>
+      {children === 'Завантаження...' && <Loader />}
+      <p>{children}</p>
+    </div>
   );
 };
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -12,7 +12,7 @@ import {
   setData
 } from '../../../ItemList/actions/list';
 import FilterSchema from './validator';
-import INITIAL_VALUES from './consts/initialValues';
+import { INITIAL_VALUES } from './consts/formConsts';
 import { sidebarWidth } from '../../../../styleConstants';
 
 const useStyles = makeStyles({
@@ -25,7 +25,7 @@ const useStyles = makeStyles({
     top: 0,
     width: 320,
     height: '100vh',
-    zIndex: 3,
+    zIndex: 20,
     backgroundColor: 'white',
     boxShadow: '5px 0 10px -2px black'
   }
@@ -37,7 +37,8 @@ const FilterFormik = ({
   resetFilterValue,
   fetchDefItems,
   resetData,
-  resetPage
+  resetPage,
+  setIsOpen
 }) => {
   const classes = useStyles();
   const initialValues = { ...INITIAL_VALUES, ...filter };
@@ -60,6 +61,31 @@ const FilterFormik = ({
 
     setSubmitting(false);
   };
+
+  useEffect(() => {
+    const handleClick = ({ target }) => {
+      if (target.tagName === 'CANVAS') {
+        setIsOpen(false);
+      }
+    };
+
+    const handleKeyDown = ({ code }) => {
+      if (code === 'Escape') {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClick);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('click', handleClick);
+      document.removeEventListener(
+        'keydown',
+        handleKeyDown
+      );
+    };
+  });
 
   return (
     <div className={classes.container}>
@@ -87,7 +113,8 @@ FilterFormik.propTypes = {
   resetFilterValue: PropTypes.func.isRequired,
   fetchDefItems: PropTypes.func.isRequired,
   resetData: PropTypes.func.isRequired,
-  resetPage: PropTypes.func.isRequired
+  resetPage: PropTypes.func.isRequired,
+  setIsOpen: PropTypes.func.isRequired
 };
 
 export default connect(
