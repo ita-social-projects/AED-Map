@@ -61,6 +61,7 @@ const ItemList = ({
     return () => {
       defsCancelToken.cancel();
     };
+    // eslint-disable-next-line
   }, []);
   const cache = new CellMeasurerCache({
     fixedWidth: true,
