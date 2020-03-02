@@ -10,7 +10,13 @@
     "start": "node start.js",
     "lint": "eslint server.js ./config ./consts ./middleware ./models ./routes ./shared ./emails ./websoket --ext .js",
     "test-client": "cd client/ && yarn test",
-    "test-server": "cross-env NODE_ENV=node jest routes --coverage"
+    "test-server": "cross-env NODE_ENV=node jest routes --coverage",
+    "migrate-admin-down": "migrate-mongo down -f ./migrations/adminMigration/migrate-mongo-config.js",
+    "migrate-admin-up": "migrate-mongo up -f ./migrations/adminMigration/migrate-mongo-config.js",
+    "migrate-admin-status": "migrate-mongo status -f ./migrations/adminMigration/migrate-mongo-config.js",
+    "migrate-defibrillators-down": "migrate-mongo down -f ./migrations/defibrillatorsMigration/migrate-mongo-config.js",
+    "migrate-defibrillators-up": "migrate-mongo up -f ./migrations/defibrillatorsMigration/migrate-mongo-config.js",
+    "migrate-defibrillators-status": "migrate-mongo status -f ./migrations/defibrillatorsMigration/migrate-mongo-config.js"
   },
   "jest": {
     "testEnvironment": "node",
@@ -20,7 +26,8 @@
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/middleware",
-      "/websocket"
+      "/websocket",
+      "/migrations"
     ],
     "collectCoverageFrom": [
       "./routes/*.js"
@@ -58,6 +65,7 @@
     "express-validator": "^6.3.1",
     "jsonwebtoken": "^8.5.1",
     "long-timeout": "^0.1.1",
+    "migrate-mongo": "^7.1.0",
     "mongoose": "^5.8.6",
     "nodemailer": "^6.4.2",
     "passport": "^0.4.1",

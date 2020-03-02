@@ -99,7 +99,7 @@ router.delete(
   '/:id',
   passport.authenticate('jwt', { session: false }),
   defChangePermission,
-  async ( req, res ) => {
+  async (req, res) => {
     try {
       const { id } = req.params;
       const defibrillator = await Defibrillator.findByIdAndDelete(

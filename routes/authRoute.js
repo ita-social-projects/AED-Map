@@ -178,7 +178,7 @@ router.post(
 
         // Create jwt based on email and id, expiration time - 1 hour
         const token = jwt.sign(
-          { _id, email },
+          { _id, email, role },
           SECRET_JWT_KEY_AUTH,
           { expiresIn: EXPIRE_TIME_JWT_AUTH }
         );

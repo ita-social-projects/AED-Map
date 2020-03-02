@@ -1,7 +1,17 @@
 import axios from 'axios';
 
-const authorization = JSON.parse(localStorage.getItem('authorization'));
-axios.defaults.headers.common.Authorization = authorization;
+axios.interceptors.request.use(
+  config => {
+    const authorization = JSON.parse(localStorage.getItem('authorization'));
+    if (authorization) {
+      config.headers.Authorization = authorization;
+    }
+    return config;
+  },
+  error => {
+    Promise.reject(error);
+  }
+);
 
 const http = {
   get(url, params, cancel) {
