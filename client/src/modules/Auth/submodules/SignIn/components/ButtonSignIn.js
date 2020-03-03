@@ -26,7 +26,8 @@ ButtonSignIn.propTypes = {
   handleOpen: PropTypes.func.isRequired,
   user: PropTypes.shape({
     _id: PropTypes.string,
-    email: PropTypes.string
+    email: PropTypes.string,
+    role: PropTypes.string
   }),
   signOutSubmit: PropTypes.func.isRequired
 };

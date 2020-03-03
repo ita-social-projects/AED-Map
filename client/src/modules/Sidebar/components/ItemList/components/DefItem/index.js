@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import EditIcon from '@material-ui/icons/Edit';
+import permissionService from '../../../../../Auth/permissionService';
 import { defsSearchSelector } from '../../reducers/listReducer';
 
 import {
@@ -13,10 +14,13 @@ import {
 import DeleteBtn from './DeleteBtn';
 import ConfirmationModalWrapper from '../../../../../../shared/ConfirmationModalWrapper';
 import {
-  deleteDefItem} from '../../actions/list';
+  deleteDefItem
+} from '../../actions/list';
 import {
   ENTER_BUTTON_CODE,
-  BASE_ZOOM_VALUE
+  BASE_ZOOM_VALUE,
+  EDIT_DEF_POINT,
+  DELETE_DEF_POINT
 } from '../../consts';
 
 const useStyles = makeStyles({
@@ -34,11 +38,11 @@ const useStyles = makeStyles({
       cursor: 'pointer',
       '& div:last-child': {
         visibility: 'visible',
-        '& button':{
+        '& button': {
           '&:hover': {
-            '& span':{
+            '& span': {
               background: '#dadada'
-            }          
+            }
           }
         }
       }
@@ -91,9 +95,12 @@ const DefItem = ({
   setMapZoomParam,
   // eslint-disable-next-line react/prop-types
   styleParam,
-  deleteDefibrPoint
+  deleteDefibrPoint,
+  user
 }) => {
   const classes = useStyles();
+  const [permissionForEdit, changePermissionForEdit] = useState(false);
+  const [permissionForDelete, changePermissionForDelete] = useState(false);
   const [lng, lat] = defItemInfo.location.coordinates;
 
   const handleClick = () => {
@@ -112,6 +119,14 @@ const DefItem = ({
       });
     }
   };
+
+  useEffect(() => {
+    const permissionEdit = permissionService(EDIT_DEF_POINT, user, defItemInfo);
+    const permissionDelete = permissionService(DELETE_DEF_POINT, user, defItemInfo);
+    changePermissionForEdit(permissionEdit);
+    changePermissionForDelete(permissionDelete);
+  }, [user, defItemInfo]);
+
   return (
     <div className={classes.pointCard} style={styleParam}>
       <div
@@ -130,28 +145,34 @@ const DefItem = ({
       </div>
       <div className={classes.pointCardButtons}>
         <Link to="/edit-form">
-          <button type="button">
-            <span>
-              <EditIcon />
-            </span>
-          </button>
+          {permissionForEdit && (
+            <button type="button">
+              <span>
+                <EditIcon />
+              </span>
+            </button>
+          )}
         </Link>
-        <ConfirmationModalWrapper
-          ButtonOpen={DeleteBtn}
-          confirmHandle={() =>
-            deleteDefibrPoint(defItemInfo._id)
-          }
-          message="Видалити мітку?"
-        />
+        {permissionForDelete && (
+          <ConfirmationModalWrapper
+            ButtonOpen={DeleteBtn}
+            confirmHandle={() =>
+              deleteDefibrPoint(defItemInfo._id)
+            }
+            message="Видалити мітку?"
+          />
+        )}
       </div>
     </div>
   );
 };
+
 DefItem.defaultProps = {
   defItemInfo: {},
   setMapCenterCoords: () => null,
   setMapZoomParam: () => null,
-  deleteDefibrPoint: () => null
+  deleteDefibrPoint: () => null,
+  user: null
 };
 
 DefItem.propTypes = {
@@ -172,6 +193,11 @@ DefItem.propTypes = {
     phone: PropTypes.arrayOf(PropTypes.string),
     additional_information: PropTypes.string
   }),
+  user: PropTypes.shape({
+    _id: PropTypes.string,
+    email: PropTypes.string,
+    role: PropTypes.string
+  }),
   setMapCenterCoords: PropTypes.func,
   setMapZoomParam: PropTypes.func,
   deleteDefibrPoint: PropTypes.func
@@ -179,6 +205,7 @@ DefItem.propTypes = {
 
 export default connect(
   state => ({
+    user: state.user.user,
     filteredDefs: defsSearchSelector(state)
   }),
   dispatch => ({

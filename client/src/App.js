@@ -56,8 +56,8 @@ const App = ({ success, fail }) => {
     <div className="App">
       <div className={classes.mainStyle}>
         <Switch>
-          <Route path="/" exact component={Main} />
           <Route path="/signup/:email/:token" component={SignUpPassword} />
+          <Route path="/" component={Main} />
         </Switch>
       </div>
     </div>
