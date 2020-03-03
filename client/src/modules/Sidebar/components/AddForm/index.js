@@ -9,13 +9,13 @@ import { createDefPoint } from '../ItemList/actions/list';
 import INITIAL_VALUES from './const';
 
 const AddForm = ({ createDef }) => {
-
   return (
     <MyForm
       INITIAL_VALUES={INITIAL_VALUES}
-      SubmitAction={data => {      
-        AddInDB(data);
-        AddItRedux(data, createDef);     
+      SubmitAction={async data => {
+        const res = await AddInDB(data);
+        const id = res.data.defibrillator._id;
+        AddItRedux(data, createDef,id);
       }}
     />
   );

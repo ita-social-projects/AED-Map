@@ -3,7 +3,7 @@ const INITIAL_VALUES = {
   title: '',
   address: '',
   floor: '',
-  informational_plates: 'PRESENT',
+  informational_plates: 'Відсутні',
   phone: '',
   additional_information: '',
   storage_place: '',

@@ -1,8 +1,12 @@
 import http from '../http';
 
+const URL = 'api/gmap';
+
 const getGeocodingOptions = value => {
-  return http.get(
-    `https://api.mapbox.com/geocoding/v5/mapbox.places/${value}.json?access_token=pk.eyJ1Ijoib3Nrb3ZiYXNpdWsiLCJhIjoiY2s1NWVwcnhhMDhrazNmcGNvZjJ1MnA4OSJ9.56GsGp2cl6zpYh-Ns8ThxA`
-  );
+  return http.get(`${URL}/options/${value}`);
 };
-export default getGeocodingOptions;
+const getGeocodingDetails = id => {
+  return http.get(`${URL}/details/${id}`);
+};
+
+export { getGeocodingOptions, getGeocodingDetails };

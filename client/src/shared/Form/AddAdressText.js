@@ -3,7 +3,10 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import { connect } from 'formik';
 import PropTypes from 'prop-types';
-import getGeocodingOptions from '../api';
+import {
+  getGeocodingOptions,
+  getGeocodingDetails
+} from '../api';
 
 const AddAdressText = ({ formik, className }) => {
   const [open, setOpen] = useState(false);
@@ -20,7 +23,7 @@ const AddAdressText = ({ formik, className }) => {
         const countries = await getGeocodingOptions(value);
         if (active) {
           setOptions(
-            countries.data.features.map(elem => {
+            countries.data.predictions.map(elem => {
               return elem;
             })
           );
@@ -40,6 +43,29 @@ const AddAdressText = ({ formik, className }) => {
     }
   }, [open]);
 
+  const SelectOption = (e, selectedOption) => {
+    if (selectedOption != null) {
+      formik.setFieldValue(
+        'address',
+        selectedOption.description
+      );
+      (async () => {
+        const detailsAboutSelectedLocation = await getGeocodingDetails(
+          selectedOption.place_id
+        );
+        const coordinates =
+          detailsAboutSelectedLocation.data.result.geometry
+            .location;
+        formik.setFieldValue('coordinates', [
+          coordinates.lng,
+          coordinates.lat
+        ]);
+      })();
+      setValue(selectedOption.description);
+      formik.setFieldTouched('address', false);
+    }
+  };
+
   return (
     <Autocomplete
       className={className}
@@ -54,21 +80,8 @@ const AddAdressText = ({ formik, className }) => {
       }}
       inputValue={value}
       onBlur={() => setValue(formik.values.address)}
-      onChange={(e, selectedOption) => {
-        if (selectedOption != null) {
-          formik.setFieldValue(
-            'address',
-            selectedOption.place_name
-          );
-          formik.setFieldValue(
-            'coordinates',
-            selectedOption.center
-          );
-          setValue(selectedOption.place_name);
-          formik.setFieldTouched('address', false);
-        }
-      }}
-      getOptionLabel={option => option.place_name}
+      onChange={SelectOption}
+      getOptionLabel={option => option.description}
       options={options}
       renderInput={params => (
         <TextField
