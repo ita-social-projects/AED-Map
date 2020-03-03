@@ -20,7 +20,7 @@ module.exports = passport => {
     new JwtStrategy(options, async (payload, done) => {
       try {
         // Search document in collection 'users' with id
-        const user = await User.findById(payload._id).select('id email');
+        const user = await User.findById(payload._id).select('email role');
 
         if (user) {
           // Callback with user

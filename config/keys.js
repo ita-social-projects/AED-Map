@@ -6,6 +6,8 @@ const EMAIL_USER = 'defibrillator.lviv@gmail.com';
 const EMAIL_PASSWORD = 'Defibrillator1!';
 const EMAIL_FROM = 'defibrillator.lviv@gmail.com';
 const BASE_URL = 'http://localhost:3000';
+const ADMIN_EMAIL = 'admin@admin.com';
+const ADMIN_PASSWORD = 'qwe123Q!';
 
 module.exports = {
   SECRET_JWT_KEY_AUTH,
@@ -15,5 +17,7 @@ module.exports = {
   EMAIL_USER,
   EMAIL_PASSWORD,
   EMAIL_FROM,
-  BASE_URL
+  BASE_URL,
+  ADMIN_EMAIL,
+  ADMIN_PASSWORD
 };

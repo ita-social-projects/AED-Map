@@ -38,6 +38,7 @@
     "react-hooks/rules-of-hooks": "off",
     "react/jsx-curly-newline": "off",
     "react/jsx-props-no-spreading": "off",
-    "no-shadow": "off"
+    "no-shadow": "off",
+    "no-param-reassign": [2, {"props": false}]
   }
 }
