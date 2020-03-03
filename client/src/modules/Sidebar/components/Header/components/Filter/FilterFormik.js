@@ -6,6 +6,7 @@ import { Formik } from 'formik';
 import FormFormik from './FormFormik';
 import FilterHeader from './FilterFormHeader';
 import { setFilter, resetFilter } from './actions/filter';
+import { hidePopup } from '../../../../../MapHolder/actions/popupDisplay';
 import {
   fetchDefs,
   setPage,
@@ -33,12 +34,14 @@ const useStyles = makeStyles({
 
 const FilterFormik = ({
   filter,
+  popupData,
   setFilterValue,
   resetFilterValue,
   fetchDefItems,
   resetData,
   resetPage,
-  setIsOpen
+  setIsOpen,
+  hidePopup
 }) => {
   const classes = useStyles();
   const initialValues = { ...INITIAL_VALUES, ...filter };
@@ -48,6 +51,10 @@ const FilterFormik = ({
       resetPage(page);
       resetData(data);
     };
+
+    if (popupData) {
+      hidePopup();
+    }
 
     if (Object.values(values).some(value => value)) {
       resetPagination(1, []);
@@ -105,27 +112,32 @@ const FilterFormik = ({
 };
 
 FilterFormik.defaultProps = {
-  filter: null
+  filter: null,
+  popupData: null
 };
 FilterFormik.propTypes = {
   filter: PropTypes.oneOfType([PropTypes.object]),
+  popupData: PropTypes.oneOfType([PropTypes.object]),
   setFilterValue: PropTypes.func.isRequired,
   resetFilterValue: PropTypes.func.isRequired,
   fetchDefItems: PropTypes.func.isRequired,
   resetData: PropTypes.func.isRequired,
   resetPage: PropTypes.func.isRequired,
-  setIsOpen: PropTypes.func.isRequired
+  setIsOpen: PropTypes.func.isRequired,
+  hidePopup: PropTypes.func.isRequired
 };
 
 export default connect(
   state => ({
-    filter: state.filter
+    filter: state.filter,
+    popupData: state.popupData
   }),
   {
     setFilterValue: setFilter,
     resetFilterValue: resetFilter,
     fetchDefItems: params => fetchDefs(params),
     resetPage: page => setPage(page),
-    resetData: data => setData(data)
+    resetData: data => setData(data),
+    hidePopup
   }
 )(FilterFormik);

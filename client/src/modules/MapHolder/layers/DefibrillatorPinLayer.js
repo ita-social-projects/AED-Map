@@ -13,13 +13,14 @@ const useStyles = makeStyles(() => ({
   clusterMarker: {
     width: 50,
     height: 50,
-    borderRadius: '50%',
-    backgroundColor: '#7c7c7c',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: '50%',
+    backgroundColor: 'rgba(124, 124, 124, 0.9)',
+    boxShadow: '1px 1px 3px rgba(124, 124, 124, 0.9)',
     color: 'white',
-    border: '2px solid #7c7c7c',
+    fontWeight: 900,
     cursor: 'pointer'
   },
   marker: {
