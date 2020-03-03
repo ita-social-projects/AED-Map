@@ -51,10 +51,7 @@ const ItemList = ({
   page
 }) => {
   const classes = useStyles();
-  const noFilteredDefs =
-    !isLoading && filter && !defibrillators.length;
-  const isDatabaseEmpty =
-    !isLoading && !filter && !defibrillators.length;
+  const noData = !isLoading && !defibrillators.length;
 
   useEffect(() => {
     fetchDefItems();
@@ -100,8 +97,7 @@ const ItemList = ({
     );
   };
 
-  const show =
-    isLoading || noFilteredDefs || isDatabaseEmpty;
+  const show = isLoading || noData;
 
   let message;
 
@@ -109,11 +105,8 @@ const ItemList = ({
     case isLoading:
       message = 'Завантаження...';
       break;
-    case isDatabaseEmpty:
-      message = 'База даних пуста...';
-      break;
-    case noFilteredDefs:
-      message = 'По заданому фільтру нічого не знайдено...';
+    case noData:
+      message = 'Даних не знайдено...';
       break;
     default:
       message = '';

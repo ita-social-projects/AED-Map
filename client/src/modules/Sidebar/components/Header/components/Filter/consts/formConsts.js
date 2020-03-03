@@ -1,6 +1,5 @@
 export const INITIAL_VALUES = {
   title: '',
-  address: '',
   language: '',
   informational_plates: ''
 };
