@@ -6,15 +6,14 @@ import PropTypes from 'prop-types';
 import EditIcon from '@material-ui/icons/Edit';
 import permissionService from '../../../../../Auth/permissionService';
 
+// import { defsSearchSelector } from '../../reducers/listReducer';
 import {
   setMapCenter,
   setMapZoom
 } from '../../../../../MapHolder/actions/mapState';
 import DeleteBtn from './DeleteBtn';
 import ConfirmationModalWrapper from '../../../../../../shared/ConfirmationModalWrapper';
-import {
-  deleteDefItem
-} from '../../actions/list';
+import { deleteDefItem } from '../../actions/list';
 import {
   ENTER_BUTTON_CODE,
   BASE_ZOOM_VALUE,
@@ -53,9 +52,7 @@ const useStyles = makeStyles({
   },
   pointCardButtons: {
     visibility: 'hidden',
-    height: '100%',
-    flex: '1',
-
+    height: '100%',    
     '& button': {
       opacity: '.7',
       cursor: 'pointer',
@@ -98,8 +95,14 @@ const DefItem = ({
   user
 }) => {
   const classes = useStyles();
-  const [permissionForEdit, changePermissionForEdit] = useState(false);
-  const [permissionForDelete, changePermissionForDelete] = useState(false);
+  const [
+    permissionForEdit,
+    changePermissionForEdit
+  ] = useState(false);
+  const [
+    permissionForDelete,
+    changePermissionForDelete
+  ] = useState(false);
   const [lng, lat] = defItemInfo.location.coordinates;
 
   const handleClick = () => {
@@ -120,11 +123,20 @@ const DefItem = ({
   };
 
   useEffect(() => {
-    const permissionEdit = permissionService(EDIT_DEF_POINT, user, defItemInfo);
-    const permissionDelete = permissionService(DELETE_DEF_POINT, user, defItemInfo);
+    const permissionEdit = permissionService(
+      EDIT_DEF_POINT,
+      user,
+      defItemInfo
+    );
+    const permissionDelete = permissionService(
+      DELETE_DEF_POINT,
+      user,
+      defItemInfo
+    );
     changePermissionForEdit(permissionEdit);
     changePermissionForDelete(permissionDelete);
   }, [user, defItemInfo]);
+  const editionPath = `/edit-form/${defItemInfo._id}`;
 
   return (
     <div className={classes.pointCard} style={styleParam}>
@@ -143,15 +155,16 @@ const DefItem = ({
         </p>
       </div>
       <div className={classes.pointCardButtons}>
-        <Link to="/edit-form">
-          {permissionForEdit && (
+        {permissionForEdit && (
+          <Link to={editionPath}>
             <button type="button">
               <span>
                 <EditIcon />
               </span>
             </button>
-          )}
-        </Link>
+          </Link>
+        )}
+
         {permissionForDelete && (
           <ConfirmationModalWrapper
             ButtonOpen={DeleteBtn}

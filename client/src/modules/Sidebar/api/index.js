@@ -1,6 +1,7 @@
 import http from '../../../shared/http';
 
-const URL = 'api/defibrillators';
+const host=window.location.origin;
+const URL = `${host}/api/defibrillators`;
 
 export const fetchDefItems = (params, cancelToken) => {
   return http.get(URL, params, cancelToken);
