@@ -28,18 +28,19 @@ const useStyles = makeStyles({
     width: '100%',
     '& button': {
       position: 'relative',
-      width: '35px',
       height: '35px',
       background: 'transparent',
       outline: 'none',
       border: '0',
-      margin: '0px',
-      padding: '0px',
+      margin: '0',
+      '&:last-child':{
+        marginLeft: 10
+      }
     }
   },
   headerRight: {
     display: 'flex',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   formControlLabel: {
     display: 'none',

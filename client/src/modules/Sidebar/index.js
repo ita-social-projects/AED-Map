@@ -47,7 +47,6 @@ const Sidebar = ({ user,setVisible,changeVisibilityClass }) => {
     <Router>
       <div className={changeVisibilityClass}>
         <Header setVisible={setVisible} />
-        <Route path="/add-form" component={AddForm} />
         <Route path="/" exact>
           <ItemList />
           <Link
