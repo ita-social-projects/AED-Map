@@ -1,3 +1,5 @@
+const deepEqual = require('deep-equal');
+
 // Model of the collection 'users' and 'defibrillator'
 const User = require('../models/User');
 const Defibrillator = require('../models/Defibrillator');
@@ -28,7 +30,7 @@ const defChangePermission = async (req, res, next) => {
 
   // User have permission
   if((role === ADMIN) || 
-     ((role === USER) && (_id === defibrillator.owner))) return next();
+     ((role === USER) && deepEqual(_id,defibrillator.owner))) return next();
 
   // Response [Forbidden] - error message
   res.status(403).json({
