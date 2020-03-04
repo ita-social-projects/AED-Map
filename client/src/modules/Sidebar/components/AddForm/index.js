@@ -14,8 +14,8 @@ const AddForm = ({ createDef }) => {
       INITIAL_VALUES={INITIAL_VALUES}
       SubmitAction={async data => {
         const res = await AddInDB(data);
-        const id = res.data.defibrillator._id;
-        AddItRedux(data, createDef,id);
+        const {_id,owner} = res.data.defibrillator;
+        AddItRedux(data, createDef,_id,owner);
       }}
     />
   );
