@@ -90,20 +90,3 @@ const listReducer = (
   }
 };
 export default listReducer;
-
-export const defsSearchSelector = state => {
-  const { filter, defs } = state;
-  if (filter) {
-    return defs.data.filter(def =>
-      Object.keys(filter).every(key => {
-        return (
-          !def[key] ||
-          def[key]
-            .toLowerCase()
-            .includes(filter[key].toLowerCase())
-        );
-      })
-    );
-  }
-  return defs.data;
-};

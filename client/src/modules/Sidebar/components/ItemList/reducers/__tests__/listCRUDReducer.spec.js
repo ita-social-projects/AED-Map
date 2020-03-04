@@ -1,12 +1,8 @@
-import listReducer, {
-  defsSearchSelector
-} from '../listReducer';
+import listReducer from '../listReducer';
 import * as types from '../../consts';
 
 import {
   mockState,
-  mockData,
-  mockFilter,
   mockNewDefInfo
 } from '../../../../../../mocks';
 
@@ -134,73 +130,5 @@ describe('defibrillators CRUD part', () => {
     expect(res.data.length).toEqual(
       expectedState.data.length
     );
-  });
-
-  it('should return array of object', () => {
-    const fullState = {
-      defs: mockState,
-      filter: mockFilter
-    };
-    const filteredDefs = defsSearchSelector(fullState);
-    expect(filteredDefs[0]).toEqual(mockData[0]);
-    expect(filteredDefs[1]).toEqual(mockData[1]);
-    expect(filteredDefs[2]).toEqual(mockData[2]);
-  });
-
-  it('should return empty array when filter is not match with defs title', () => {
-    const fullState = {
-      defs: mockState,
-      filter: {
-        title: 'Нічого'
-      }
-    };
-    const filteredDefs = defsSearchSelector(fullState);
-    expect(filteredDefs.length).toEqual(0);
-  });
-
-  it('should return array of one object where address have "Ринок" string', () => {
-    const fullState = {
-      defs: mockState,
-      filter: {
-        address: 'Ринок'
-      }
-    };
-    const filteredDefs = defsSearchSelector(fullState);
-    expect(filteredDefs.length).toEqual(1);
-    expect(filteredDefs[0].title).toEqual(
-      'Львівська Ратуша'
-    );
-  });
-
-  it('should return array of one object address have "РИНОК" string', () => {
-    const fullState = {
-      defs: mockState,
-      filter: {
-        address: 'РИНОК'
-      }
-    };
-    const filteredDefs = defsSearchSelector(fullState);
-    expect(filteredDefs.length).toEqual(1);
-    expect(filteredDefs[0].title).toBe('Львівська Ратуша');
-  });
-
-  it('should return array of one object when title have title have a "Львів" string and address have "РИНОК" string ', () => {
-    const fullState = {
-      defs: mockState,
-      filter: {
-        title: 'Львів',
-        address: 'РИНОК'
-      }
-    };
-    const filteredDefs = defsSearchSelector(fullState);
-    expect(filteredDefs.length).toEqual(1);
-  });
-
-  it('should return array of all object when filter is empty', () => {
-    const fullState = {
-      defs: mockState
-    };
-    const filteredDefs = defsSearchSelector(fullState);
-    expect(filteredDefs.length).toEqual(3);
   });
 });

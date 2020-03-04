@@ -5,7 +5,6 @@ import FilterFormik from './FilterFormik';
 
 const useStyles = makeStyles({
   container: {
-    borderLeft: '1px solid grey',
     backgroundColor: 'white'
   }
 });

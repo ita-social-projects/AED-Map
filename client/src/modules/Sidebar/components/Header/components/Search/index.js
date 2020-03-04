@@ -1,78 +1,123 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
+import { fade, makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import { Formik} from 'formik';
+import {DebounceInput} from 'react-debounce-input';
+import { setSearch } from './actions';
+import { INITIAL_VALUES } from './consts';
+import { MyInputBase } from '../../../../../../shared/Fields';
+import Filter from '../Filter/index';
 import {
-  setFilter,
-  resetFilter
-} from '../Filter/actions/filter';
+  fetchDefs,
+  setPage,
+  setData,
+} from '../../../ItemList/actions/list';
 
-const useStyle = makeStyles({
-  container: {
-    flex: 1
-  },
+const useStyles = makeStyles(theme => ({
   search: {
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.white, 0.15),
+    '&:hover': {
+      backgroundColor: fade(theme.palette.common.white, 0.25),
+    },
+    marginLeft: 0,
     width: '100%',
-    height: '100%',
-    marginBottom: '1rem',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(1),
+      width: 'auto',
+    },
+  },
+  inputRoot: {
+    color: 'inherit',
+  },
+  inputInput: {
+    transition: theme.transitions.create('width'),
+    width: '100%',
     padding: '0.5rem',
-    border: 'none',
-    outline: 'none'
-  }
-});
+    [theme.breakpoints.up('sm')]: {
+      width: 0,
+      '&:focus': {
+        width: '100%',
+      },
+    },
+  },
+  searchWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginBottom: '10px',
+    marginTop: '10px'
+  },
+  inputOuter: {
+    width: '100%',
+    padding: '0.5rem',
+  },
+}));
 
-// This component is a placeholder
-const Search = ({
-  filter,
-  setFilterValue,
-  resetFilterValue
-}) => {
-  const classes = useStyle();
-  const { address = '' } = filter || {};
+// eslint-disable-next-line no-unused-vars
+const Search = ({ fetchDefItems,resetData, resetPage }) => {
 
-  const onChange = ({ value }) => {
-    if (filter) {
-      if (value) {
-        setFilterValue({
-          ...filter,
-          address: value
-        });
-      } else {
-        resetFilterValue();
-      }
-    } else {
-      setFilterValue({ address: value });
+  const classes = useStyles();
+  const onSearch = async (event) => {
+    
+    const resetPagination = (page, data) => {
+      resetPage(page);
+      resetData(data);
+    };
+
+    const values = {
+      address: event.target.value,
+    };    
+
+    if (Object.values(values).some(value => value)) {
+      resetPagination(1, []);
+      await fetchDefItems(values);
+    }else if (values) {
+      resetPagination(1, []);
+      await fetchDefItems();
     }
   };
 
   return (
-    <div className={classes.container}>
-      <input
-        className={classes.search}
-        type="text"
-        placeholder="Впишіть сюди адресу"
-        value={address}
-        onChange={event => onChange(event.target)}
-      />
+    <div className={classes.searchWrapper}>
+      <Formik
+        initialValues={INITIAL_VALUES}
+      >
+        <DebounceInput
+          element={MyInputBase}
+          startAdornment={<Filter />}
+          id="filter"
+          placeholder="Впишіть сюди назву вулиці"
+          name="filter"
+          className={classes.inputOuter}
+          classes={{
+            input: classes.inputInput,
+          }}
+          autoFocus
+          onChange={(event)=>onSearch(event)}
+          minLength={2}
+          debounceTimeout={300}
+        />
+                
+      </Formik>
     </div>
   );
 };
 
-Search.defaultProps = {
-  filter: null
-};
 Search.propTypes = {
-  filter: PropTypes.oneOfType([PropTypes.object]),
-  setFilterValue: PropTypes.func.isRequired,
-  resetFilterValue: PropTypes.func.isRequired
+  fetchDefItems: PropTypes.func.isRequired,
+  resetData: PropTypes.func.isRequired,
+  resetPage: PropTypes.func.isRequired,
 };
-
 export default connect(
   state => ({
-    filter: state.filter
+    search: state.search
   }),
   {
-    setFilterValue: setFilter,
-    resetFilterValue: resetFilter
+    setSearchValue: setSearch,
+    fetchDefItems: params => fetchDefs(params),
+    resetPage: page => setPage(page),
+    resetData: data => setData(data)
   }
 )(Search);

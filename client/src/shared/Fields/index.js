@@ -9,7 +9,8 @@ import {
   InputLabel,
   MenuItem,
   FormControl,
-  Select
+  Select,
+  InputBase,
 } from '@material-ui/core';
 
 const useStyles = makeStyles({
@@ -46,6 +47,20 @@ const MyCheckbox = ({ label, ...props }) => {
         />
       )}
       label={label}
+    />
+  );
+};
+
+const MyInputBase = (props) => {
+  const [field, meta] = useField(props);
+
+  return (
+    <InputBase
+      className="text-input"
+      helperText={meta.touched ? meta.error : ''}
+      error={meta.touched && Boolean(meta.error)}
+      {...field}
+      {...props}
     />
   );
 };
@@ -104,4 +119,4 @@ MySelect.propTypes = {
   classes: PropTypes.string
 };
 
-export { MyTextField, MyCheckbox, MySelect };
+export { MyTextField, MyCheckbox, MySelect, MyInputBase};

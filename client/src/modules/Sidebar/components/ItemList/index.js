@@ -11,12 +11,18 @@ import PropTypes from 'prop-types';
 import { fetchDefs } from './actions/list';
 import DefItem from './components/DefItem';
 import InfoMessage from './components/InfoMessage';
-import { defsSearchSelector } from './reducers/listReducer';
 import cancelToken from '../../../../shared/cancel-token';
 
 const defsCancelToken = cancelToken();
 
 const useStyles = makeStyles({
+  infoMessage: {
+    position: 'relative',
+    top:'50%',
+    transform:'translateY(-50%)',
+    color: 'white',
+    textAlign: 'center',
+  },
   listOuterStyle: {
     width: '100%',
     height: 'calc(100vh - 100px)',
@@ -178,7 +184,7 @@ export default connect(
     isLoading: state.defs.loading,
     defibrillators: state.defs.data,
     filter: state.filter,
-    searchedDefs: defsSearchSelector(state),
+    searchedDefs: state.defs.data,
     totalCount: state.defs.totalCount,
     page: state.defs.page
   }),

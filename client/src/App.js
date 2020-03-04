@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import './App.css';
@@ -14,6 +14,7 @@ import {
 import Sidebar from './modules/Sidebar';
 import MapHolder from './modules/MapHolder';
 import SignUpPassword from './modules/Auth/submodules/SignUp/submodules/SignUpPassword';
+import { sidebarWidth } from './modules/Sidebar/styleConstants';
 
 const ValidateCancelToken = cancelToken();
 
@@ -22,15 +23,41 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'flex-start',
     width: '100%'
+  },
+  sidebarStyle: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    width: sidebarWidth,
+    padding: 20,
+    maxHeight: '100vh',
+    flexShrink: 0
+  },
+  sidebarSetVisible: {
+    display: 'none'
   }
 });
 
-const Main = () => (
-  <>
-    <Sidebar />
-    <MapHolder />
-  </>
-);
+const Main = () => {
+  const [visible, setVisible] = useState(true);
+  const classes = useStyles();
+  const changeVisibilityClass = visible
+    ? classes.sidebarStyle
+    : classes.sidebarSetVisible;
+
+  return (
+    <>
+      <Sidebar
+        setVisible={setVisible}
+        changeVisibilityClass={changeVisibilityClass}
+      />
+      <MapHolder
+        setVisible={setVisible}
+        visible={visible}
+      />
+    </>
+  );
+};
 
 const App = ({ success, fail }) => {
   const classes = useStyles();
