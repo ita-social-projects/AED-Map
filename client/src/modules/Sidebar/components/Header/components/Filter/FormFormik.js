@@ -42,11 +42,6 @@ const FormFormik = ({ onSubmit }) => {
         name="title"
         className={classes.inputs}
       />
-      <MyTextField
-        label="Адреса"
-        name="address"
-        className={classes.inputs}
-      />
       <MySelect
         labelTitle="Мова інтерфейсу"
         label="language"
