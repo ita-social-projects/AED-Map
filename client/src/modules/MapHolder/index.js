@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -18,27 +18,29 @@ const useStyles = makeStyles(() => ({
     position: 'relative',
     height: '100vh',
     overflow: 'hidden',
-    width: '100vw',
+    width: '100vw'
   },
-  mapInner:{
-    display:'flex',
+  mapInner: {
+    display: 'flex',
     height: '100vh',
     overflow: 'hidden',
-    width: '100vw',
+    width: '100vw'
   },
-  showIcon:{
-    position:'fixed',
-    zIndex:'1',
-    height:'64px',
-    backgroundColor:'rgba(33, 150, 243, 0.2)',
-    margin:'10px 0 0 10px',
-    borderRadius:'50%',
+  showIcon: {
+    position: 'fixed',
+    zIndex: '1',
+    height: '64px',
+    backgroundColor: 'rgba(33, 150, 243, 0.2)',
+    margin: '10px 0 0 10px',
+    borderRadius: '50%'
   },
-  showMenuIcon:props=>({
-    height:'35px',
-    width:'35px',
-    transform: `${props.visible ? 'rotate(180deg)' : 'rotate(0)'}`,
-    transition:'0.2s transform',
+  showMenuIcon: props => ({
+    height: '35px',
+    width: '35px',
+    transform: `${
+      props.visible ? 'rotate(180deg)' : 'rotate(0)'
+    }`,
+    transition: '0.2s transform'
   })
 }));
 
@@ -52,11 +54,26 @@ const MapHolder = ({
   setMapCenter,
   hidePopup,
   setVisible,
-  visible,
+  visible
 }) => {
-  const classes = useStyles({visible});
+  const classes = useStyles({ visible });
   // const changeOuterClass = visible ? classes.mapOuter : classes.mapOuterChanged;
   const [map, setLocalMap] = useState(null);
+  const handlePopupClose = event => {
+    if (event.target.tagName === 'CANVAS') {
+      hidePopup();
+    }
+  };
+  useEffect(() => {
+    document.addEventListener('click', handlePopupClose);
+    return () => {
+      document.removeEventListener(
+        'click',
+        handlePopupClose
+      );
+    };
+    // eslint-disable-next-line
+  }, []);
 
   const loadMap = mapRaw => {
     if (mapRaw) {
@@ -83,16 +100,18 @@ const MapHolder = ({
 
   return (
     <div className={classes.mapOuter}>
-      <Button 
+      <Button
         className={classes.showIcon}
-        color='primary'
-        onClick={()=>setVisible(prev => !prev)}
-        size='small'
+        color="primary"
+        onClick={() => setVisible(prev => !prev)}
+        size="small"
       >
-        <ChevronRightIcon className={classes.showMenuIcon} />
+        <ChevronRightIcon
+          className={classes.showMenuIcon}
+        />
       </Button>
       <Map
-      // eslint-disable-next-line react/style-prop-object
+        // eslint-disable-next-line react/style-prop-object
         style="mapbox://styles/oskovbasiuk/ck5nwya36638v1ilpmwxlfv5g"
         className={classes.mapInner}
         center={[lng, lat]}
@@ -114,8 +133,8 @@ MapHolder.defaultProps = {
   mapState: {},
   setVisible: {},
   visible: null,
-  setMapCenter: ()=>{},
-  hidePopup: ()=>{},
+  setMapCenter: () => {},
+  hidePopup: () => {}
 };
 
 MapHolder.propTypes = {
@@ -127,7 +146,7 @@ MapHolder.propTypes = {
   setMapCenter: PropTypes.func,
   hidePopup: PropTypes.func,
   setVisible: PropTypes.func,
-  visible: PropTypes.bool,
+  visible: PropTypes.bool
 };
 
 export default connect(

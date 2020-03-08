@@ -18,10 +18,10 @@ const defsCancelToken = cancelToken();
 const useStyles = makeStyles({
   infoMessage: {
     position: 'relative',
-    top:'50%',
-    transform:'translateY(-50%)',
+    top: '50%',
+    transform: 'translateY(-50%)',
     color: 'white',
-    textAlign: 'center',
+    textAlign: 'center'
   },
   listOuterStyle: {
     width: '100%',
@@ -31,12 +31,12 @@ const useStyles = makeStyles({
   listStyle: {
     borderTop: '1px solid #fff3',
     borderBottom: '1px solid #fff3',
-    paddingRight: '5px',
+    paddingRight: 5,
     '&:focus': {
       outline: 'none'
     },
     '&::-webkit-scrollbar': {
-      width: '5px'
+      width: 5
     },
     '&::-webkit-scrollbar-track': {
       backgroundColor: 'rgba(0,0,0,0.1)'
@@ -54,7 +54,8 @@ const ItemList = ({
   fetchDefItems,
   filter,
   totalCount,
-  page
+  page,
+  search
 }) => {
   const classes = useStyles();
   const noData = !isLoading && !defibrillators.length;
@@ -81,7 +82,7 @@ const ItemList = ({
       totalCount >= page &&
       scrollHeight - Math.ceil(scrollTop) <= clientHeight
     ) {
-      fetchDefItems({ page, ...filter });
+      fetchDefItems({ page, ...filter, ...search });
     }
   };
 
@@ -176,7 +177,10 @@ ItemList.propTypes = {
   fetchDefItems: PropTypes.func,
   filter: PropTypes.oneOfType([PropTypes.object]),
   totalCount: PropTypes.number.isRequired,
-  page: PropTypes.number.isRequired
+  page: PropTypes.number.isRequired,
+  search: PropTypes.shape({
+    address: PropTypes.string.isRequired
+  }).isRequired
 };
 
 export default connect(
@@ -186,7 +190,8 @@ export default connect(
     filter: state.filter,
     searchedDefs: state.defs.data,
     totalCount: state.defs.totalCount,
-    page: state.defs.page
+    page: state.defs.page,
+    search: state.search
   }),
   dispatch => ({
     fetchDefItems: params => dispatch(fetchDefs(params))

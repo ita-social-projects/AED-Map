@@ -1,21 +1,21 @@
 import React from 'react';
-import { Popup } from 'react-mapbox-gl';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Popup } from 'react-mapbox-gl';
 import DefContent from './PopupContent/DefibrillatorPopupContent';
 import { popupOffsets } from '../consts';
 
 const PopupHolder = ({ popupData }) => {
   return (
     <>
-      {popupData ? (
+      {popupData && (
         <Popup
           coordinates={popupData.coordinates}
           offset={popupOffsets}
         >
           <DefContent id={popupData.data.id} />
         </Popup>
-      ) : null}
+      )}
     </>
   );
 };

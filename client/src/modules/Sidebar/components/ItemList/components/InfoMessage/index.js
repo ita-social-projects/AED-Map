@@ -6,8 +6,8 @@ import Loader from '../../../../../../shared/Loader';
 const useStyles = makeStyles({
   infoMessage: {
     position: 'absolute',
-    width: '98%',
-    height: '98%',
+    width: '100%',
+    height: '100%',
     top: '50%',
     transform: 'translateY(-50%)',
     display: show => (show ? 'flex' : 'none'),
