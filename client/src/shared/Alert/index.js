@@ -7,7 +7,7 @@ const Alert = ({
   open,
   handleClose,
   severity,
-  massage
+  message
 }) => {
   return (
     <div>
@@ -22,7 +22,7 @@ const Alert = ({
           onClose={handleClose}
           severity={severity}
         >
-          {massage}
+          {message}
         </MuiAlert>
       </Snackbar>
     </div>
@@ -32,7 +32,7 @@ const Alert = ({
 Alert.propTypes = {
   open: PropTypes.bool.isRequired,
   severity: PropTypes.string.isRequired,
-  massage: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired,
   handleClose: PropTypes.func.isRequired
 };
 

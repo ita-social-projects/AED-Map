@@ -4,7 +4,7 @@ const INITIAL_VALUES = {
   address: '',
   floor: '',
   informational_plates: 'Відсутні',
-  phone: '',
+  phone: [],
   additional_information: '',
   storage_place: '',
   accessibility: '',

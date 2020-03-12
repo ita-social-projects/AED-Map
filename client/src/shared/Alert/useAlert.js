@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 let globalState = {
   open: false,
   severity: 'info',
-  massage: ''
+  message: ''
 };
 
 const listeners = [];

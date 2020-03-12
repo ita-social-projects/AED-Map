@@ -62,16 +62,16 @@ const MyForm = ({ INITIAL_VALUES, SubmitAction }) => {
       ShowAlert({
         open: true,
         severity: 'success',
-        massage: 'Додавання пройшло успішно'
+        message: 'Додавання пройшло успішно'
       });
       history.push('/');
     } catch (error) {
-      const {errors} = error.response.data;
+      const { errors } = error.response.data;
       setErrors({ ...errors, floor: errors.storage_place });
       ShowAlert({
         open: true,
         severity: 'error',
-        massage: 'Дані полів введені некоректно'
+        message: 'Серверна помилка'
       });
     }
   };
@@ -134,7 +134,7 @@ const MyForm = ({ INITIAL_VALUES, SubmitAction }) => {
                     ShowAlert({
                       open: true,
                       severity: 'error',
-                      massage:
+                      message:
                         'Дані полів введені некоректно'
                     });
                 }}
@@ -155,7 +155,7 @@ MyForm.propTypes = {
     address: PropTypes.string.isRequired,
     floor: PropTypes.string.isRequired,
     informational_plates: PropTypes.string.isRequired,
-    phone: PropTypes.string.isRequired,
+    phone: PropTypes.array.isRequired,
     additional_information: PropTypes.string.isRequired,
     storage_place: PropTypes.string.isRequired,
     accessibility: PropTypes.string.isRequired,
