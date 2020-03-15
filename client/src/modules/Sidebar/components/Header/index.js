@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
-import {makeStyles } from '@material-ui/core/styles';
-import {LOGO_IMG} from '../../../../consts/header';
+import { makeStyles } from '@material-ui/core/styles';
+import { LOGO_IMG } from '../../../../consts/header';
 import Search from './components/Search';
 import Auth from './components/Auth';
 
@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   },
   headerLogo: {
     width: '35px',
-    height: '35px',
+    height: '35px'
   },
   headerContainer: {
     display: 'flex',
@@ -33,41 +33,44 @@ const useStyles = makeStyles({
       outline: 'none',
       border: '0',
       margin: '0',
-      '&:last-child':{
+      '&:last-child': {
         marginLeft: 10
       }
     }
   },
   headerRight: {
     display: 'flex',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end'
   },
   formControlLabel: {
-    display: 'none',
+    display: 'none'
   },
   Filter: {
-    margin: '100px',
+    margin: '100px'
   },
   bookmarkIcon: {
     position: 'absolute',
     zIndex: '1',
     transform: 'rotate(-90deg)',
-    top: '10px',
-    left: '10px',
-    height: '35px',
+    top: 10,
+    left: 10,
+    height: 35,
     background: 'none',
-    border: '0',
-  },
+    border: '0'
+  }
 });
 const Header = () => {
-  
   const classes = useStyles();
 
   return (
     <div className={classes.headerWrapper}>
       <div className={classes.headerContainer}>
-        <Link to='/'>
-          <img src={LOGO_IMG} className={classes.headerLogo} alt='logo' />
+        <Link to="/">
+          <img
+            src={LOGO_IMG}
+            className={classes.headerLogo}
+            alt="logo"
+          />
         </Link>
         <div className={classes.headerRight}>
           <Auth />
@@ -75,7 +78,7 @@ const Header = () => {
       </div>
       <Paper>
         <div>
-          <Search /> 
+          <Search />
         </div>
       </Paper>
     </div>

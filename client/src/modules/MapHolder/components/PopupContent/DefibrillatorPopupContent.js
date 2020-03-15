@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core';
+import { Cancel } from '@material-ui/icons';
 import { fetchSingleDefById } from '../../../Sidebar/api';
+import { hidePopup } from '../../actions/popupDisplay';
 import Loader from '../../../../shared/Loader';
+import ModalPhoto from './PhotoGallery';
 import cancelToken from '../../../../shared/cancel-token';
 import { titles } from './consts';
+import { photos } from '../../../../mocks';
 
 const currDefCancelToken = cancelToken();
 
@@ -31,10 +36,28 @@ const useStyle = makeStyles({
   title: {
     color: '#bbb',
     fontWeight: 'bold'
+  },
+  closeBtn: {
+    position: 'fixed',
+    zIndex: 1000,
+    right: 20,
+    top: 10,
+    width: 20,
+    height: 20,
+    cursor: 'pointer',
+    color: 'grey'
+  },
+  imagePreview: {
+    display: 'block',
+    maxWidth: 110,
+    height: 'auto',
+    marginBottom: 5,
+    borderRadius: 5,
+    boxShadow: '0 2px 10px rgba(255, 255, 255, .4)'
   }
 });
 
-const DefibrillatorPopupContent = ({ id }) => {
+const DefibrillatorPopupContent = ({ id, hidePopup }) => {
   const classes = useStyle();
   const [currDef, setCurrDef] = useState(null);
 
@@ -74,6 +97,12 @@ const DefibrillatorPopupContent = ({ id }) => {
 
   return currDef ? (
     <div className={classes.popupContainer}>
+      <img
+        title={photos[0].title}
+        className={classes.imagePreview}
+        src={photos[0].img}
+        alt={photos[0].title}
+      />
       {Object.keys(titles).map(
         key =>
           currDef[key] && (
@@ -86,6 +115,11 @@ const DefibrillatorPopupContent = ({ id }) => {
             </p>
           )
       )}
+      <Cancel
+        className={classes.closeBtn}
+        onClick={hidePopup}
+      />
+      <ModalPhoto />
     </div>
   ) : (
     <Loader />
@@ -93,7 +127,10 @@ const DefibrillatorPopupContent = ({ id }) => {
 };
 
 DefibrillatorPopupContent.propTypes = {
-  id: PropTypes.string.isRequired
+  id: PropTypes.string.isRequired,
+  hidePopup: PropTypes.func.isRequired
 };
 
-export default DefibrillatorPopupContent;
+export default connect(null, dispatch => ({
+  hidePopup: () => dispatch(hidePopup())
+}))(DefibrillatorPopupContent);

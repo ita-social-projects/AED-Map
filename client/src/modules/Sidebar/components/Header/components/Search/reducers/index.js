@@ -1,6 +1,8 @@
-import { SET_SEARCH} from '../consts';
+import { SET_SEARCH } from '../consts';
 
-const initialState = null;
+const initialState = {
+  address: ''
+};
 
 export default function(
   state = initialState,

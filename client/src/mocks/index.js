@@ -107,3 +107,42 @@ export const mockUser = {
 };
 export const mockToken =
   'Bearer daskjfih43uit.dsaodowiidi3988rifk.dsadsagerkjgk';
+
+export const photos = [
+  {
+    img:
+      'https://4.imimg.com/data4/GP/KJ/MY-10640121/automatic-external-defibrillator-500x500.jpg',
+    title: 'Image 1',
+    author: 'author'
+  },
+  {
+    img:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTBEGo9o6eKyGcCPSbrM7HxhOZiNeWW5DPyfb5YsiLIFA7x5h2o',
+    title: 'Image 2',
+    author: 'author 2'
+  },
+  {
+    img:
+      'https://www.defibshop.co.uk/media/catalog/product/cache/1/image/3102d3655b77f202abde6e3fa94697ad/f/r/frx-adult-defibrillation-pad-bundle-defibshop-989803139261b.jpg',
+    title: 'Image 3',
+    author: 'author 3'
+  },
+  {
+    img:
+      'https://estock.stjohnambulance.com.au/application_images/stockitems/0815_1_400.jpg',
+    title: 'Image 4',
+    author: 'author'
+  },
+  {
+    img:
+      'https://cdn.medisave.co.uk/media/catalog/product/cache/1/image/585x585/9df78eab33525d08d6e5fb8d27136e95/d/e/defibsafe_2.jpg',
+    title: 'Image 5',
+    author: 'author 2'
+  },
+  {
+    img:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQaJPYiRcJ0mjke2MdKCKsvsM7hBc4Yg8_HP4pN869_5cRCoOix',
+    title: 'Image 6',
+    author: 'author 3'
+  }
+];

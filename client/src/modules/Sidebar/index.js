@@ -16,9 +16,7 @@ import ItemList from './components/ItemList';
 import AddForm from './components/AddForm';
 import Alert from '../../shared/Alert';
 import useAlert from '../../shared/Alert/useAlert';
-import { 
-  CREATE_DEF_POINT
-} from './components/ItemList/consts';
+import { CREATE_DEF_POINT } from './components/ItemList/consts';
 
 const useStyles = makeStyles({
   addButtonStyle: {
@@ -29,19 +27,29 @@ const useStyles = makeStyles({
     textDecoration: 'none',
     width: '100%',
     marginTop: 10,
-    flexShrink: '0',
+    flexShrink: '0'
   }
 });
 
-const Sidebar = ({ user,setVisible,changeVisibilityClass }) => {
+const Sidebar = ({
+  user,
+  setVisible,
+  changeVisibilityClass
+}) => {
   const classes = useStyles();
   const [alert, ShowAlert] = useAlert();
-  const [permissionForAdd, changePermissionForAdd] = useState(false);
+  const [
+    permissionForAdd,
+    changePermissionForAdd
+  ] = useState(false);
 
   useEffect(() => {
-    const permissionAdd = permissionService(CREATE_DEF_POINT, user);
+    const permissionAdd = permissionService(
+      CREATE_DEF_POINT,
+      user
+    );
     changePermissionForAdd(permissionAdd);
-  },[user]);
+  }, [user]);
 
   return (
     <Router>
@@ -52,7 +60,7 @@ const Sidebar = ({ user,setVisible,changeVisibilityClass }) => {
           <Link
             to="/add-form"
             className={classes.LinkStyle}
-          > 
+          >
             {permissionForAdd && (
               <Button
                 className={classes.addButtonStyle}
@@ -65,7 +73,11 @@ const Sidebar = ({ user,setVisible,changeVisibilityClass }) => {
             )}
           </Link>
         </Route>
-        <PrivateRoute path="/add-form" component={AddForm} permission={permissionForAdd} />
+        <PrivateRoute
+          path="/add-form"
+          component={AddForm}
+          permission={permissionForAdd}
+        />
         <Alert
           open={alert.open}
           massage={alert.massage}
@@ -79,8 +91,8 @@ const Sidebar = ({ user,setVisible,changeVisibilityClass }) => {
 
 Sidebar.defaultProps = {
   user: null,
-  setVisible: null,
-  changeVisibilityClass: '',
+  setVisible: () => {},
+  changeVisibilityClass: ''
 };
 
 Sidebar.propTypes = {
@@ -89,12 +101,10 @@ Sidebar.propTypes = {
     email: PropTypes.string,
     role: PropTypes.string
   }),
-  setVisible: PropTypes.bool,
-  changeVisibilityClass: PropTypes.string,
+  setVisible: PropTypes.func,
+  changeVisibilityClass: PropTypes.string
 };
 
-export default connect(
-  state => ({
-    user: state.user.user
-  })
-)(Sidebar);
+export default connect(state => ({
+  user: state.user.user
+}))(Sidebar);
