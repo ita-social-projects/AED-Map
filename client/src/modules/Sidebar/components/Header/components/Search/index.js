@@ -32,18 +32,15 @@ const useStyles = makeStyles(theme => ({
       width: 'auto'
     }
   },
-  inputRoot: {
-    color: 'inherit'
-  },
   searchWrapper: {
     display: 'flex',
     flexDirection: 'row',
     marginBottom: 10,
     marginTop: 10
   },
-  inputOuter: {
+  searchInput: {
     width: '100%',
-    padding: '0.5rem'
+    paddingRight: '0.5rem'
   }
 }));
 
@@ -77,10 +74,10 @@ const Search = ({
         <DebounceInput
           element={MyInputBase}
           startAdornment={<Filter />}
-          id="filter"
-          placeholder="Впишіть сюди назву вулиці"
-          name="filter"
-          className={classes.inputOuter}
+          id="search"
+          placeholder="Впишіть сюди адресу"
+          name="search"
+          className={classes.searchInput}
           autoFocus
           debounceTimeout={300}
           onChange={event => onSearch(event)}

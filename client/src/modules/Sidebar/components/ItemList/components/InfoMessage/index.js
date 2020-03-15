@@ -10,7 +10,7 @@ const useStyles = makeStyles({
     height: '100%',
     top: '50%',
     transform: 'translateY(-50%)',
-    display: show => (show ? 'flex' : 'none'),
+    display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
@@ -21,8 +21,9 @@ const useStyles = makeStyles({
   }
 });
 
-const InfoMessage = ({ children, show }) => {
-  const classes = useStyles(show);
+const InfoMessage = ({ children }) => {
+  const classes = useStyles();
+
   return (
     <div className={classes.infoMessage}>
       {children === 'Завантаження...' && <Loader />}
@@ -32,8 +33,7 @@ const InfoMessage = ({ children, show }) => {
 };
 
 InfoMessage.propTypes = {
-  children: PropTypes.node.isRequired,
-  show: PropTypes.bool.isRequired
+  children: PropTypes.node.isRequired
 };
 
 export default InfoMessage;

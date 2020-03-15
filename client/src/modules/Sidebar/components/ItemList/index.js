@@ -59,16 +59,20 @@ const ItemList = ({
 }) => {
   const classes = useStyles();
   const noData = !isLoading && !defibrillators.length;
+  const showMessage = isLoading || noData;
+  let message;
 
-  useEffect(() => {
-    if (!defibrillators.length) {
-      fetchDefItems();
-    }
-    return () => {
-      defsCancelToken.cancel();
-    };
-    // eslint-disable-next-line
-  }, []);
+  switch (true) {
+    case isLoading:
+      message = 'Завантаження...';
+      break;
+    case noData:
+      message = 'Даних не знайдено...';
+      break;
+    default:
+      message = '';
+  }
+
   const cache = new CellMeasurerCache({
     fixedWidth: true,
     defaultHeight: 100
@@ -76,9 +80,10 @@ const ItemList = ({
 
   const handleScroll = event => {
     const { scrollHeight, scrollTop, clientHeight } = event;
+
     if (
       totalCount >= page &&
-      scrollHeight - Math.ceil(scrollTop) === clientHeight
+      scrollHeight - Math.ceil(scrollTop) <= clientHeight
     ) {
       fetchDefItems({ page, ...filter, ...search });
     }
@@ -102,20 +107,14 @@ const ItemList = ({
     );
   };
 
-  const show = isLoading || noData;
+  useEffect(() => {
+    fetchDefItems();
 
-  let message;
-
-  switch (true) {
-    case isLoading:
-      message = 'Завантаження...';
-      break;
-    case noData:
-      message = 'Даних не знайдено...';
-      break;
-    default:
-      message = '';
-  }
+    return () => {
+      defsCancelToken.cancel();
+    };
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <div className={classes.listOuterStyle}>
@@ -137,7 +136,7 @@ const ItemList = ({
           );
         }}
       </AutoSizer>
-      <InfoMessage show={show}>{message}</InfoMessage>
+      {showMessage && <InfoMessage>{message}</InfoMessage>}
     </div>
   );
 };

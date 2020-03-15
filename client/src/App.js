@@ -18,8 +18,8 @@ import {
 } from './modules/Auth/actions/user';
 import Sidebar from './modules/Sidebar';
 import MapHolder from './modules/MapHolder';
+import StartModal from './modules/MapHolder/components/StartModal';
 import SignUpPassword from './modules/Auth/submodules/SignUp/submodules/SignUpPassword';
-import { sidebarWidth } from './modules/Sidebar/styleConstants';
 import { setActive } from './modules/Sidebar/components/ItemList/actions/list';
 
 const ValidateCancelToken = cancelToken();
@@ -29,34 +29,15 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'flex-start',
     width: '100%'
-  },
-  sidebarStyle: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    width: sidebarWidth,
-    padding: 20,
-    maxHeight: '100vh',
-    flexShrink: 0
-  },
-  sidebarSetVisible: {
-    display: 'none'
   }
 });
 
 const Main = () => {
   const [visible, setVisible] = useState(true);
-  const classes = useStyles();
-  const changeVisibilityClass = visible
-    ? classes.sidebarStyle
-    : classes.sidebarSetVisible;
 
   return (
     <>
-      <Sidebar
-        setVisible={setVisible}
-        changeVisibilityClass={changeVisibilityClass}
-      />
+      <Sidebar setVisible={setVisible} visible={visible} />
       <MapHolder
         setVisible={setVisible}
         visible={visible}
@@ -74,6 +55,11 @@ const App = ({
 }) => {
   const classes = useStyles();
   const { pathname, search } = location;
+  const [isStartModalOpen, setStartModal] = useState(true);
+
+  if (pathname === '/' && search && mapData.length) {
+    makeItemActive(search.split('=')[1]);
+  }
 
   useEffect(() => {
     (async () => {
@@ -82,6 +68,7 @@ const App = ({
         const { authorization } = headers;
         success(data, authorization);
         socketAuthOpen();
+        setStartModal(false);
       } catch (e) {
         fail();
       }
@@ -90,10 +77,9 @@ const App = ({
     return () => {
       ValidateCancelToken.cancel();
     };
-  });
-  if (pathname === '/' && search && mapData.length) {
-    makeItemActive(search.split('=')[1]);
-  }
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <div className="App">
       <div className={classes.mainStyle}>
@@ -106,6 +92,12 @@ const App = ({
           <Redirect from="*" to="/" />
         </Switch>
       </div>
+      {isStartModalOpen && (
+        <StartModal
+          open={isStartModalOpen}
+          setStartModal={setStartModal}
+        />
+      )}
     </div>
   );
 };
