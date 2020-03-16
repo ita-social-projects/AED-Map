@@ -4,7 +4,9 @@ import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { Cluster, Marker } from 'react-mapbox-gl';
+import { withRouter } from 'react-router-dom';
 import geoJsonData from '../geoJsonData';
+import { setActive } from '../../Sidebar/components/ItemList/actions/list';
 import { showPopup } from '../actions/popupDisplay';
 import mapPin from '../../../icons/map-marker-point.svg';
 
@@ -48,19 +50,24 @@ const useStyles = makeStyles(() => ({
 
 const DefibrillatorPinLayer = ({
   filteredDefs,
-  showPopup
+  showPopup,
+  makeItemActive,
+  history
 }) => {
   const GEO_JSON_DATA = geoJsonData(filteredDefs);
   const classes = useStyles();
   const defibrillatorPinClick = feature => {
     const { defID } = feature.properties;
     const { coordinates } = feature.geometry;
+
     showPopup({
       data: {
         id: defID
       },
       coordinates
     });
+    makeItemActive(defID);
+    history.push(`/?id=${defID}`);
   };
   const clusterRender = GEO_JSON_DATA.features.map(
     feature => {
@@ -142,20 +149,23 @@ DefibrillatorPinLayer.propTypes = {
     })
   ),
   showPopup: PropTypes.func,
+  makeItemActive: PropTypes.func.isRequired,
 
   mapState: PropTypes.shape({
     lng: PropTypes.number,
     lat: PropTypes.number,
     zoom: PropTypes.number
-  }).isRequired
+  }).isRequired,
+  history: PropTypes.shape().isRequired
 };
 
 export default connect(
   state => ({
-    filteredDefs: state.defs.data,
+    filteredDefs: state.defs.mapData,
     mapState: state.mapState
   }),
   dispatch => ({
-    showPopup: popupInfo => dispatch(showPopup(popupInfo))
+    showPopup: popupInfo => dispatch(showPopup(popupInfo)),
+    makeItemActive: itemId => dispatch(setActive(itemId))
   })
-)(DefibrillatorPinLayer);
+)(withRouter(DefibrillatorPinLayer));

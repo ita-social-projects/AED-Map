@@ -9,7 +9,8 @@ import {
 const initialState = {
   loading: false,
   error: null,
-  data: [],
+  listData: [],
+  mapData: [],
   page: 1,
   perPage: 10
 };
@@ -18,7 +19,8 @@ describe('defibrillators CRUD part', () => {
   it(`should handle ${types.CREATE_DEF_POINT} action`, () => {
     const expectedState = {
       ...initialState,
-      data: [mockNewDefInfo, ...initialState.data]
+      listData: [mockNewDefInfo, ...initialState.listData],
+      mapData: [mockNewDefInfo, ...initialState.mapData]
     };
 
     expect(
@@ -29,21 +31,23 @@ describe('defibrillators CRUD part', () => {
     ).toEqual(expectedState);
   });
 
-  it(`should have length ${mockState.data.length} when ${types.CREATE_DEF_POINT} action have`, () => {
+  it(`should have length ${mockState.listData.length} when ${types.CREATE_DEF_POINT} action have`, () => {
     const res = listReducer(initialState, {
       type: types.CREATE_DEF_POINT,
       payload: mockNewDefInfo
     });
-    expect(res.data.length).toBe(
-      initialState.data.length + 1
+
+    expect(res.listData.length).toBe(
+      initialState.listData.length + 1
     );
   });
-
   it(`should handle ${types.DELETE_DEF_POINT} action`, () => {
     const id = 'fdsmgfkgt88gt';
     const expectedState = {
       ...initialState,
-      data: initialState.data.filter(def => def.id !== id)
+      listData: initialState.listData.filter(
+        def => def.id !== id
+      )
     };
 
     expect(
@@ -61,14 +65,17 @@ describe('defibrillators CRUD part', () => {
       type: types.DELETE_DEF_POINT,
       payload: id
     });
-    expect(res.data.length).toBe(mockState.data.length - 1);
+    expect(res.listData.length).toBe(
+      mockState.listData.length - 1
+    );
   });
 
   it(`should handle ${types.EDIT_DEF_POINT}`, () => {
     const id = '576uyjty';
     const expectedState = {
       ...initialState,
-      data: mockState.data.map(def => {
+      mapData: mockState.mapData,
+      listData: mockState.listData.map(def => {
         if (def._id === id) {
           return { ...def, ...mockNewDefInfo };
         }
@@ -86,11 +93,11 @@ describe('defibrillators CRUD part', () => {
 
   it(`should edit title when ${types.EDIT_DEF_POINT} handle`, () => {
     const id = '576uyjty';
-    mockState.data[0].id = id;
-    mockState.data[0]._id = id;
+    mockState.listData[0].id = id;
+    mockState.listData[0]._id = id;
     const expectedState = {
       ...initialState,
-      data: mockState.data.map(def => {
+      newListData: mockState.listData.map(def => {
         if (def._id === id) {
           return { ...def, title: 'mock title' };
         }
@@ -102,13 +109,13 @@ describe('defibrillators CRUD part', () => {
       payload: {
         id,
         newDefInfo: {
-          ...mockState.data,
+          ...mockState.listData,
           title: 'mock title'
         }
       }
     });
-    expect(res.data[0].title).toBe(
-      expectedState.data[0].title
+    expect(res.listData[0].title).toBe(
+      expectedState.newListData[0].title
     );
   });
 
@@ -116,7 +123,7 @@ describe('defibrillators CRUD part', () => {
     const id = '576uyjty';
     const expectedState = {
       ...initialState,
-      data: mockState.data.map(def => {
+      newListData: mockState.listData.map(def => {
         if (def._id === id) {
           return { ...def, ...mockNewDefInfo };
         }
@@ -127,8 +134,8 @@ describe('defibrillators CRUD part', () => {
       type: types.EDIT_DEF_POINT,
       payload: { id, newDefInfo: mockNewDefInfo }
     });
-    expect(res.data.length).toEqual(
-      expectedState.data.length
+    expect(res.listData.length).toEqual(
+      expectedState.newListData.length
     );
   });
 });

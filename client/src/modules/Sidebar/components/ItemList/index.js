@@ -9,8 +9,8 @@ import {
 } from 'react-virtualized';
 import PropTypes from 'prop-types';
 import { fetchDefs } from './actions/list';
-import DefItem from './components/DefItem';
 import InfoMessage from './components/InfoMessage';
+import DefItem from './components/DefItem';
 import cancelToken from '../../../../shared/cancel-token';
 
 const defsCancelToken = cancelToken();
@@ -61,7 +61,9 @@ const ItemList = ({
   const noData = !isLoading && !defibrillators.length;
 
   useEffect(() => {
-    fetchDefItems();
+    if (!defibrillators.length) {
+      fetchDefItems();
+    }
     return () => {
       defsCancelToken.cancel();
     };
@@ -73,14 +75,10 @@ const ItemList = ({
   });
 
   const handleScroll = event => {
-    const {
-      scrollHeight,
-      scrollTop,
-      clientHeight
-    } = event.target;
+    const { scrollHeight, scrollTop, clientHeight } = event;
     if (
       totalCount >= page &&
-      scrollHeight - Math.ceil(scrollTop) <= clientHeight
+      scrollHeight - Math.ceil(scrollTop) === clientHeight
     ) {
       fetchDefItems({ page, ...filter, ...search });
     }
@@ -120,15 +118,13 @@ const ItemList = ({
   }
 
   return (
-    <div
-      className={classes.listOuterStyle}
-      onScroll={handleScroll}
-    >
+    <div className={classes.listOuterStyle}>
       <AutoSizer>
         {({ width, height }) => {
           //  AutoSizer expands list to width and height of parent automatically
           return (
             <List
+              onScroll={handleScroll}
               className={classes.listStyle}
               width={width}
               height={height}
@@ -145,6 +141,7 @@ const ItemList = ({
     </div>
   );
 };
+
 ItemList.defaultProps = {
   searchedDefs: [],
   fetchDefItems: () => null,
@@ -186,9 +183,9 @@ ItemList.propTypes = {
 export default connect(
   state => ({
     isLoading: state.defs.loading,
-    defibrillators: state.defs.data,
+    defibrillators: state.defs.listData,
     filter: state.filter,
-    searchedDefs: state.defs.data,
+    searchedDefs: state.defs.listData,
     totalCount: state.defs.totalCount,
     page: state.defs.page,
     search: state.search

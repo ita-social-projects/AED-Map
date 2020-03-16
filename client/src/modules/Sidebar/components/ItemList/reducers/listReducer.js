@@ -3,6 +3,7 @@ import {
   SUCCESS_LOAD_DATA,
   SET_DATA,
   FAIL_LOAD_DATA,
+  SET_ACTIVE,
   CREATE_DEF_POINT,
   DELETE_DEF_POINT,
   EDIT_DEF_POINT,
@@ -13,10 +14,13 @@ import {
 const initialState = {
   loading: false,
   error: null,
-  data: [],
+  listData: [],
+  mapData: [],
   totalCount: 0,
+  active: null,
   page: 1,
-  perPage: 10
+  perPage: 10,
+  coordinates: null
 };
 
 const listReducer = (
@@ -35,12 +39,13 @@ const listReducer = (
       return {
         ...state,
         loading: false,
-        data: payload
+        listData: payload
       };
     case SUCCESS_LOAD_DATA:
       return {
         ...state,
-        data: [...state.data, ...payload.defibrillators],
+        listData: [...state.listData, ...payload.listDefs],
+        mapData: payload.mapDefs,
         totalCount: payload.totalCount,
         loading: false
       };
@@ -54,24 +59,46 @@ const listReducer = (
       return {
         ...state,
         loading: false,
-        data: [payload, ...state.data]
+        listData: [payload, ...state.listData],
+        mapData: [payload, ...state.mapData]
       };
     case DELETE_DEF_POINT:
       return {
         ...state,
         loading: false,
-        data: state.data.filter(def => def._id !== payload)
+        /* eslint-disable-next-line */
+        listData: state.listData.filter(
+          def => def._id !== payload
+        ),
+        mapData: state.mapData.filter(
+          def => def._id !== payload
+        )
       };
     case EDIT_DEF_POINT: {
       const { id, newDefInfo } = payload;
-      const newData = state.data.map(def => {
+      const updateItem = def => {
+        /* eslint-disable-next-line */
         if (def._id === id) {
           return { ...def, ...newDefInfo };
         }
         return def;
-      });
-      return { ...state, loading: false, data: newData };
+      };
+      const newListData = state.listData.map(updateItem);
+      const newMapData = state.mapData.map(updateItem);
+
+      return {
+        ...state,
+        loading: false,
+        listData: newListData,
+        mapData: newMapData
+      };
     }
+    case SET_ACTIVE:
+      return {
+        ...state,
+        loading: false,
+        active: payload
+      };
     case SET_PAGE:
       return {
         ...state,

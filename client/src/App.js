@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import {
+  Switch,
+  Route,
+  Redirect,
+  withRouter
+} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import './App.css';
 import { makeStyles } from '@material-ui/core/styles';
@@ -15,6 +20,7 @@ import Sidebar from './modules/Sidebar';
 import MapHolder from './modules/MapHolder';
 import SignUpPassword from './modules/Auth/submodules/SignUp/submodules/SignUpPassword';
 import { sidebarWidth } from './modules/Sidebar/styleConstants';
+import { setActive } from './modules/Sidebar/components/ItemList/actions/list';
 
 const ValidateCancelToken = cancelToken();
 
@@ -59,8 +65,15 @@ const Main = () => {
   );
 };
 
-const App = ({ success, fail }) => {
+const App = ({
+  success,
+  fail,
+  location,
+  mapData,
+  makeItemActive
+}) => {
   const classes = useStyles();
+  const { pathname, search } = location;
 
   useEffect(() => {
     (async () => {
@@ -78,13 +91,19 @@ const App = ({ success, fail }) => {
       ValidateCancelToken.cancel();
     };
   });
-
+  if (pathname === '/' && search && mapData.length) {
+    makeItemActive(search.split('=')[1]);
+  }
   return (
     <div className="App">
       <div className={classes.mainStyle}>
         <Switch>
-          <Route path="/signup/:email/:token" component={SignUpPassword} />
+          <Route
+            path="/signup/:email/:token"
+            component={SignUpPassword}
+          />
           <Route path="/" component={Main} />
+          <Redirect from="*" to="/" />
         </Switch>
       </div>
     </div>
@@ -93,11 +112,33 @@ const App = ({ success, fail }) => {
 
 App.propTypes = {
   success: PropTypes.func.isRequired,
-  fail: PropTypes.func.isRequired
+  fail: PropTypes.func.isRequired,
+  mapData: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string,
+      title: PropTypes.string,
+      address: PropTypes.string,
+      location: PropTypes.shape({
+        type: PropTypes.string,
+        coordinates: PropTypes.arrayOf(PropTypes.number)
+      })
+    })
+  ).isRequired,
+  makeItemActive: PropTypes.func.isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+    search: PropTypes.string.isRequired
+  }).isRequired
 };
 
-export default connect(null, dispatch => ({
-  success: (user, authorization) =>
-    dispatch(successSignIn(user, authorization)),
-  fail: () => dispatch(failSignIn())
-}))(App);
+export default connect(
+  state => ({
+    mapData: state.defs.mapData
+  }),
+  dispatch => ({
+    success: (user, authorization) =>
+      dispatch(successSignIn(user, authorization)),
+    fail: () => dispatch(failSignIn()),
+    makeItemActive: itemId => dispatch(setActive(itemId))
+  })
+)(withRouter(App));

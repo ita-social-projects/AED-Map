@@ -3,44 +3,69 @@ const passport = require('passport');
 const {
   resServerError
 } = require('../shared/resServerError');
-
 const {
   defChangePermission
 } = require('../middleware/permission');
-
 const Defibrillator = require('../models/Defibrillator');
-
+const router = express.Router();
 const {
   deffValidationRules
 } = require('./validation/deffRouteValidator');
 const { validate } = require('../middleware/validate');
 
-const router = express.Router();
+const createFilter = (req) => {
+  const filter = {};
+  const skipKeys = [
+    'page',
+    'per_page',
+    'longitude',
+    'latitude'
+  ];
+
+  Object.keys(req.query).forEach((key) => {
+    if (!skipKeys.includes(key)) {
+      filter[key] = new RegExp(req.query[key], 'i');
+    }
+  });
+  return filter;
+};
 router.get('/', async (req, res) => {
   try {
-    const filter = {};
-    const skipKeys = ['page', 'per_page'];
-    Object.keys(req.query).forEach((key) => {
-      if (!skipKeys.includes(key)) {
-        filter[key] = new RegExp(req.query[key], 'i');
-      }
-    });
+    const filter = createFilter(req);
     const perPage = Number(req.query.per_page) || 10;
     const page = Number(req.query.page) || 1;
-    const defibrillators =
-      (await Defibrillator.find(filter)
-        .select('address title location owner')
-        .skip(perPage * (page - 1))
-        .limit(perPage)) || [];
-    const allDefibrillators = await Defibrillator.find(
-      filter
-    ).countDocuments();
-    const totalCount = Math.ceil(
-      allDefibrillators / perPage
+    let listDefs;
+
+    if (req.query.longitude) {
+      listDefs =
+        (await Defibrillator.find(filter)
+          .select('address title location owner')
+          .where('location')
+          .near({
+            center: {
+              type: 'Point',
+              coordinates: [
+                req.query.longitude,
+                req.query.latitude
+              ]
+            }
+          })
+          .skip(perPage * (page - 1))
+          .limit(perPage)) || [];
+    } else {
+      listDefs =
+        (await Defibrillator.find(filter)
+          .skip(perPage * (page - 1))
+          .limit(perPage)) || [];
+    }
+    const mapDefs = await Defibrillator.find(filter).select(
+      'address title location owner'
     );
+    const totalCount = Math.ceil(mapDefs.length / perPage);
+
     return res
       .status(200)
-      .send({ defibrillators, totalCount });
+      .send({ listDefs, mapDefs, totalCount });
   } catch (e) {
     resServerError(res, e);
   }

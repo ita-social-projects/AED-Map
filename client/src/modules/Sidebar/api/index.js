@@ -1,8 +1,8 @@
 import http from '../../../shared/http';
 
-const URL = 'api/defibrillators';
+const URL = '/api/defibrillators';
 
-export const fetchDefItems = (params, cancelToken) => {
+export const getDefItems = (params, cancelToken) => {
   return http.get(URL, params, cancelToken);
 };
 export const fetchSingleDefById = id => {

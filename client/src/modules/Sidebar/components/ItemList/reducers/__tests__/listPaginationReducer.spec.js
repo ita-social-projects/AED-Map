@@ -6,7 +6,7 @@ import { mockData } from '../../../../../../mocks';
 const initialState = {
   loading: false,
   error: null,
-  data: [],
+  listData: [],
   page: 1,
   perPage: 10,
   totalCount: 0
@@ -16,12 +16,12 @@ describe('defibrillators pagination part reducer', () => {
   it(`should handle ${types.SET_DATA} action`, () => {
     const expectedState = {
       ...initialState,
-      data: mockData
+      listData: mockData.listDefs
     };
     expect(
       listReducer(initialState, {
         type: types.SET_DATA,
-        payload: mockData
+        payload: mockData.listDefs
       })
     ).toEqual(expectedState);
   });
