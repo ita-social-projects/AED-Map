@@ -108,8 +108,9 @@ const ItemList = ({
   };
 
   useEffect(() => {
-    fetchDefItems();
-
+    if (!defibrillators.length) {
+      fetchDefItems();
+    }
     return () => {
       defsCancelToken.cancel();
     };
