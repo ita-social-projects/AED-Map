@@ -18,8 +18,6 @@ const deffValidationRules = () => {
       .notEmpty()
       .withMessage('Поле обов\'язкове'),
     body('phone')
-      .notEmpty()
-      .withMessage('Поле обов\'язкове')
       .custom((phones) => {
         phones.map((value) => {
           if (

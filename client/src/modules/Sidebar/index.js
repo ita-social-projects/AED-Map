@@ -80,7 +80,7 @@ const Sidebar = ({
         />
         <Alert
           open={alert.open}
-          massage={alert.massage}
+          message={alert.message}
           severity={alert.severity}
           handleClose={() => ShowAlert({ open: false })}
         />

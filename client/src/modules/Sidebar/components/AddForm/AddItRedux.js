@@ -7,8 +7,7 @@ const AddItRedux = (data,createDef,_id,owner)=> {
     _id,
     owner,
     location: { type: 'Point', coordinates:data.coordinates },
-    language: 'Україномовний',
-    phone: [data.phone],
+    language: 'Україномовний'
   };
   createDef(set_obj);
 };

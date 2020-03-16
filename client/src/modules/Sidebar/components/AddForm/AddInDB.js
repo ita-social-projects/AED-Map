@@ -10,8 +10,7 @@ const AddInDB = async data => {
       coordinates: data.coordinates
     },
     storage_place: `Поверх ${data.floor}, ${data.storage_place}`,
-    language: 'Україномовний',
-    phone: [data.phone]
+    language: 'Україномовний'
   };
   const respond = await createItem(body);
   return respond;

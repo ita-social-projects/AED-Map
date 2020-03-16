@@ -34,7 +34,7 @@ const Content = ({
     ShowAlert({
       open: true,
       severity: 'success',
-      massage:
+      message:
         'Поле успішно видалено'
     });
   };
