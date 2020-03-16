@@ -47,14 +47,67 @@ const useStyles = makeStyles(() => ({
 }));
 
 const DefibrillatorPinLayer = ({
+  map,
   filteredDefs,
   showPopup
 }) => {
   const GEO_JSON_DATA = geoJsonData(filteredDefs);
   const classes = useStyles();
+
   const defibrillatorPinClick = feature => {
     const { defID } = feature.properties;
     const { coordinates } = feature.geometry;
+    console.log(map.getContainer().getBoundingClientRect());
+    const boundariesLeftBottom = Object.values(
+      map.getBounds()._sw
+    );
+    const boundariesRightTop = Object.values(
+      map.getBounds()._ne
+    );
+    const mapCenter = Object.values(map.getCenter());
+
+    const fromX0 = Math.abs(
+      boundariesLeftBottom[0] - coordinates[0]
+    );
+    const fromX1 = Math.abs(
+      boundariesRightTop[0] - coordinates[0]
+    );
+
+    const fromY0 = Math.abs(
+      boundariesLeftBottom[1] - coordinates[1]
+    );
+    const fromY1 = Math.abs(
+      boundariesRightTop[1] - coordinates[1]
+    );
+
+    const results = [fromX0 - fromX1, fromY0 - fromY1];
+
+    let directionFrom = [];
+    if (results[0] > 0) {
+      // console.log('right ');
+      directionFrom[0] = boundariesRightTop[0];
+    } else {
+      // console.log('Left ');
+      directionFrom[0] = boundariesLeftBottom[0];
+    }
+
+    if (results[1] > 0) {
+      // console.log('top ');
+      directionFrom[1] = boundariesRightTop[1];
+    } else {
+      // console.log('bottom ');
+      directionFrom[1] = boundariesLeftBottom[1];
+    }
+
+    let goTo = [];
+    for (let i = 0; i < 2; ++i) {
+      goTo[i] =
+        mapCenter[i] + directionFrom[i] - coordinates[i];
+    }
+    map.flyTo({
+      center: coordinates
+    });
+
     showPopup({
       data: {
         id: defID

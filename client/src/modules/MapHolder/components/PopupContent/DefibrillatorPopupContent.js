@@ -71,9 +71,14 @@ const DefibrillatorPopupContent = ({ id }) => {
       currDefCancelToken.cancel();
     };
   }, [id]);
-
+  const [domref, setDomRef] = useState(React.createRef());
+  useEffect(() => {
+    if (domref.current) {
+      console.log(domref.current.getBoundingClientRect());
+    }
+  });
   return currDef ? (
-    <div className={classes.popupContainer}>
+    <div className={classes.popupContainer} ref={domref}>
       {Object.keys(titles).map(
         key =>
           currDef[key] && (

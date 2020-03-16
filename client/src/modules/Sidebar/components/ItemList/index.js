@@ -18,10 +18,10 @@ const defsCancelToken = cancelToken();
 const useStyles = makeStyles({
   infoMessage: {
     position: 'relative',
-    top:'50%',
-    transform:'translateY(-50%)',
+    top: '50%',
+    transform: 'translateY(-50%)',
     color: 'white',
-    textAlign: 'center',
+    textAlign: 'center'
   },
   listOuterStyle: {
     width: '100%',
