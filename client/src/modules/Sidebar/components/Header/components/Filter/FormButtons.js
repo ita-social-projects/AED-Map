@@ -28,7 +28,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const FormButtons = ({
-  formik: { handleReset, isSubmitting, dirty },
+  formik: {
+    handleReset,
+    isSubmitting,
+    dirty,
+    errors: { title: titleError }
+  },
   resetFilterValue,
   fetchDefItems,
   filter,
@@ -75,7 +80,9 @@ const FormButtons = ({
         color="primary"
         className={classes.button}
         endIcon={<DoneIcon />}
-        disabled={!dirty || isSubmitting}
+        disabled={
+          Boolean(titleError) || !dirty || isSubmitting
+        }
       >
         Застосувати
       </Button>
@@ -91,7 +98,10 @@ FormButtons.propTypes = {
   formik: PropTypes.shape({
     handleReset: PropTypes.func.isRequired,
     isSubmitting: PropTypes.bool.isRequired,
-    dirty: PropTypes.bool.isRequired
+    dirty: PropTypes.bool,
+    errors: PropTypes.shape({
+      title: PropTypes.string
+    })
   }).isRequired,
   resetFilterValue: PropTypes.func.isRequired,
   fetchDefItems: PropTypes.func.isRequired,

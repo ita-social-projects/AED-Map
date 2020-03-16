@@ -12,35 +12,37 @@ import {
 } from './actions/mapState';
 import { hidePopup } from './actions/popupDisplay';
 import DefibrillatorPinLayer from './layers/DefibrillatorPinLayer';
+import { sidebarWidth } from '../Sidebar/styleConstants';
 
 const useStyles = makeStyles(() => ({
-  mapOuter: {
+  mapContainer: ({ visible }) => ({
     position: 'relative',
     height: '100vh',
-    overflow: 'hidden',
-    width: '100vw'
-  },
-  mapInner: {
+    width: visible
+      ? `calc(100vw - ${sidebarWidth})`
+      : '100vw',
+    overflow: 'hidden'
+  }),
+  map: {
     display: 'flex',
-    height: '100vh',
-    overflow: 'hidden',
-    width: '100vw'
+    height: '100%',
+    width: '100%'
   },
   showIcon: {
     position: 'fixed',
-    zIndex: '1',
-    height: '64px',
-    backgroundColor: 'rgba(33, 150, 243, 0.2)',
+    height: 64,
     margin: '10px 0 0 10px',
+    zIndex: 1,
+    backgroundColor: 'rgba(33, 150, 243, 0.2)',
     borderRadius: '50%'
   },
-  showMenuIcon: props => ({
-    height: '35px',
-    width: '35px',
+  showMenuIcon: ({ visible }) => ({
+    height: 35,
+    width: 35,
     transform: `${
-      props.visible ? 'rotate(180deg)' : 'rotate(0)'
+      visible ? 'rotate(180deg)' : 'rotate(0)'
     }`,
-    transition: '0.2s transform'
+    transition: 'transform 0.2s'
   })
 }));
 
@@ -57,7 +59,6 @@ const MapHolder = ({
   visible
 }) => {
   const classes = useStyles({ visible });
-  // const changeOuterClass = visible ? classes.mapOuter : classes.mapOuterChanged;
   const [map, setLocalMap] = useState(null);
   const handlePopupClose = event => {
     if (event.target.tagName === 'CANVAS') {
@@ -98,12 +99,22 @@ const MapHolder = ({
     hidePopup();
   };
 
+  const hideSidebar = () => {
+    if (map) {
+      setVisible(prev => !prev);
+
+      setTimeout(() => {
+        map.resize();
+      }, 100);
+    }
+  };
+
   return (
-    <div className={classes.mapOuter}>
+    <div className={classes.mapContainer}>
       <Button
         className={classes.showIcon}
         color="primary"
-        onClick={() => setVisible(prev => !prev)}
+        onClick={hideSidebar}
         size="small"
       >
         <ChevronRightIcon
@@ -113,7 +124,7 @@ const MapHolder = ({
       <Map
         // eslint-disable-next-line react/style-prop-object
         style="mapbox://styles/oskovbasiuk/ck5nwya36638v1ilpmwxlfv5g"
-        className={classes.mapInner}
+        className={classes.map}
         center={[lng, lat]}
         zoom={[zoom]}
         onStyleLoad={loadMap}

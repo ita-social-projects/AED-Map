@@ -5,7 +5,7 @@ import {
   Badge,
   Tooltip,
   IconButton
-} from '@material-ui/core/';
+} from '@material-ui/core';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
 const FilterButton = ({ isOpen, setIsOpen, filter }) => {

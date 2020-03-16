@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Paper from '@material-ui/core/Paper';
+import { Paper, Tooltip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { LOGO_IMG } from '../../../../consts/header';
 import Search from './components/Search';
@@ -15,11 +15,11 @@ const useStyles = makeStyles({
   },
   headerWrapper: {
     color: 'white',
-    marginBottom: '10px'
+    marginBottom: 10
   },
   headerLogo: {
-    width: '35px',
-    height: '35px'
+    width: 35,
+    height: 35
   },
   headerContainer: {
     display: 'flex',
@@ -28,11 +28,11 @@ const useStyles = makeStyles({
     width: '100%',
     '& button': {
       position: 'relative',
-      height: '35px',
+      height: 35,
+      margin: 0,
       background: 'transparent',
       outline: 'none',
-      border: '0',
-      margin: '0',
+      border: 'none',
       '&:last-child': {
         marginLeft: 10
       }
@@ -45,18 +45,15 @@ const useStyles = makeStyles({
   formControlLabel: {
     display: 'none'
   },
-  Filter: {
-    margin: '100px'
-  },
   bookmarkIcon: {
     position: 'absolute',
-    zIndex: '1',
-    transform: 'rotate(-90deg)',
     top: 10,
     left: 10,
     height: 35,
+    zIndex: 1,
+    transform: 'rotate(-90deg)',
     background: 'none',
-    border: '0'
+    border: 'none'
   }
 });
 const Header = () => {
@@ -66,11 +63,13 @@ const Header = () => {
     <div className={classes.headerWrapper}>
       <div className={classes.headerContainer}>
         <Link to="/">
-          <img
-            src={LOGO_IMG}
-            className={classes.headerLogo}
-            alt="logo"
-          />
+          <Tooltip title="Головна сторінка">
+            <img
+              src={LOGO_IMG}
+              className={classes.headerLogo}
+              alt="logo"
+            />
+          </Tooltip>
         </Link>
         <div className={classes.headerRight}>
           <Auth />

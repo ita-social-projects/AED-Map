@@ -17,26 +17,33 @@ import AddForm from './components/AddForm';
 import Alert from '../../shared/Alert';
 import useAlert from '../../shared/Alert/useAlert';
 import { CREATE_DEF_POINT } from './components/ItemList/consts';
+import { sidebarWidth } from './styleConstants';
 
 const useStyles = makeStyles({
+  sidebarStyle: ({ visible }) => ({
+    display: visible ? 'flex' : 'none',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    width: sidebarWidth,
+    padding: 20,
+    maxHeight: '100vh',
+    flexShrink: 0,
+    backgroundColor: '#282c34'
+  }),
   addButtonStyle: {
     marginTop: 10,
     width: '100%'
   },
-  LinkStyle: {
-    textDecoration: 'none',
+  linkStyle: {
     width: '100%',
     marginTop: 10,
-    flexShrink: '0'
+    flexShrink: 0,
+    textDecoration: 'none'
   }
 });
 
-const Sidebar = ({
-  user,
-  setVisible,
-  changeVisibilityClass
-}) => {
-  const classes = useStyles();
+const Sidebar = ({ user, setVisible, visible }) => {
+  const classes = useStyles({ visible });
   const [alert, ShowAlert] = useAlert();
   const [
     permissionForAdd,
@@ -53,13 +60,13 @@ const Sidebar = ({
 
   return (
     <Router>
-      <div className={changeVisibilityClass}>
+      <div className={classes.sidebarStyle}>
         <Header setVisible={setVisible} />
         <Route path="/" exact>
           <ItemList />
           <Link
             to="/add-form"
-            className={classes.LinkStyle}
+            className={classes.linkStyle}
           >
             {permissionForAdd && (
               <Button
@@ -90,9 +97,7 @@ const Sidebar = ({
 };
 
 Sidebar.defaultProps = {
-  user: null,
-  setVisible: () => {},
-  changeVisibilityClass: ''
+  user: null
 };
 
 Sidebar.propTypes = {
@@ -101,8 +106,8 @@ Sidebar.propTypes = {
     email: PropTypes.string,
     role: PropTypes.string
   }),
-  setVisible: PropTypes.func,
-  changeVisibilityClass: PropTypes.string
+  setVisible: PropTypes.func.isRequired,
+  visible: PropTypes.bool.isRequired
 };
 
 export default connect(state => ({

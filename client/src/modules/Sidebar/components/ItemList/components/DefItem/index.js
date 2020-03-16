@@ -83,7 +83,7 @@ const useStyles = makeStyles({
   },
   titleStyle: {
     color: '#fff',
-    fontSize: 19,
+    fontSize: 17,
     marginBottom: 10
   },
   descStyle: {
@@ -103,6 +103,9 @@ const DefItem = ({
   user,
   mapData
 }) => {
+  const isActive = defItemInfo._id === activeItemId;
+  const classes = useStyles(isActive);
+  const [lng, lat] = defItemInfo.location.coordinates;
   const [
     permissionForEdit,
     changePermissionForEdit
@@ -111,9 +114,6 @@ const DefItem = ({
     permissionForDelete,
     changePermissionForDelete
   ] = useState(false);
-  const isActive = defItemInfo._id === activeItemId;
-  const classes = useStyles(isActive);
-  const [lng, lat] = defItemInfo.location.coordinates;
 
   const handleClick = () => {
     makeItemActive(defItemInfo._id);
