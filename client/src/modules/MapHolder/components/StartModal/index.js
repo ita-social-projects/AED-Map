@@ -36,6 +36,9 @@ const useStyles = makeStyles(() => ({
   warningIcon: {
     marginRight: 20
   },
+  acceptButton: {
+    marginLeft: 20
+  },
   '@keyframes modal': {
     from: {
       bottom: -250
@@ -64,7 +67,11 @@ const StartModal = ({ open, setStartModal }) => {
             Не несемо відповідальності за роботу
             дефібриляторів.
           </p>
-          <Button variant="contained" onClick={handleClose}>
+          <Button
+            className={classes.acceptButton}
+            variant="contained"
+            onClick={handleClose}
+          >
             Зрозуміло!
           </Button>
         </div>
