@@ -10,12 +10,21 @@ import {
   MenuItem,
   FormControl,
   Select,
-  InputBase
+  InputBase,
+  Button
 } from '@material-ui/core';
 
 const useStyles = makeStyles({
   textField: {
     whiteSpace: 'pre-line'
+  },
+  uploadInput: {
+    display: 'none'
+  },
+  uploadLabel: {
+    display: 'inline-block',
+    marginTop: 10,
+    marginBottom: 10
   }
 });
 
@@ -104,6 +113,49 @@ const MySelect = ({
   );
 };
 
+const UploadButton = ({
+  children,
+  handleUpload,
+  htmlFor,
+  ...props
+}) => {
+  const classes = useStyles();
+  return (
+    <>
+      <input
+        accept=".jpg, .jpeg, .png, .svg, .webp"
+        type="file"
+        multiple
+        onChange={handleUpload}
+        id={htmlFor}
+        className={classes.uploadInput}
+      />
+      <label
+        htmlFor={htmlFor}
+        className={classes.uploadLabel}
+      >
+        <Button
+          component="span"
+          variant="contained"
+          color="primary"
+          {...props}
+        >
+          {children}
+        </Button>
+      </label>
+    </>
+  );
+};
+
+UploadButton.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element
+  ]).isRequired,
+  handleUpload: PropTypes.func.isRequired,
+  htmlFor: PropTypes.string.isRequired
+};
+
 MySelect.defaultProps = {
   variant: null,
   classes: null
@@ -117,4 +169,10 @@ MySelect.propTypes = {
   classes: PropTypes.string
 };
 
-export { MyTextField, MyCheckbox, MySelect, MyInputBase };
+export {
+  MyTextField,
+  MyCheckbox,
+  MySelect,
+  MyInputBase,
+  UploadButton
+};

@@ -10,3 +10,4 @@ export const titles = {
   phone: 'Номер телефону: ',
   actual_date: 'Дата внесення: '
 };
+export const GRID_LIST_WIDTH = 500;
