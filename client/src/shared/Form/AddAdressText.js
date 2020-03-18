@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
-import { connect } from 'formik';
+import { connect as connectFormik } from 'formik';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { addNewPoint } from '../../modules/MapHolder/actions/mapState';
 import {
   getGeocodingOptions,
-  getGeocodingDetails
+  getGeocodingDetails,
+  getReverseGeocoding
 } from '../api';
 
-const AddAdressText = ({ formik, className }) => {
+const AddAdressText = ({
+  formik,
+  className,
+  newPoint,
+  addNewPoint
+}) => {
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState([]);
   const [value, setValue] = useState(formik.values.address);
@@ -16,25 +24,39 @@ const AddAdressText = ({ formik, className }) => {
     setValue(formik.values.address);
   }, [formik.values.address]);
 
+  const reverseRequest = async () => {
+    const result = await getReverseGeocoding(newPoint);
+    const {
+      lng,
+      lat
+    } = result.data.results[0].geometry.location;
+    formik.setFieldValue(
+      'address',
+      result.data.results[0].formatted_address
+    );
+    formik.setFieldValue('coordinates', [lng, lat]);
+  };
+
   useEffect(() => {
-    let active = true;
+    if (Object.keys(newPoint).length !== 0)
+      reverseRequest();
+  }, [newPoint]);
+
+  useEffect(() => {
+    return () => {
+      addNewPoint({});
+    };
+  }, []);
+
+  useEffect(() => {
     if (value.length > 2) {
       (async () => {
         const countries = await getGeocodingOptions(value);
-        if (active) {
-          setOptions(
-            countries.data.predictions.map(elem => {
-              return elem;
-            })
-          );
-        }
+        setOptions(countries.data.predictions);
       })();
     } else {
       setOpen(false);
     }
-    return () => {
-      active = false;
-    };
   }, [value]);
 
   useEffect(() => {
@@ -43,7 +65,7 @@ const AddAdressText = ({ formik, className }) => {
     }
   }, [open]);
 
-  const SelectOption = (e, selectedOption) => {
+  const SelectOption = (_, selectedOption) => {
     if (selectedOption != null) {
       formik.setFieldValue(
         'address',
@@ -60,6 +82,10 @@ const AddAdressText = ({ formik, className }) => {
           coordinates.lng,
           coordinates.lat
         ]);
+        addNewPoint({
+          lng: coordinates.lng,
+          lat: coordinates.lat
+        });
       })();
       setValue(selectedOption.description);
       formik.setFieldTouched('address', false);
@@ -113,6 +139,11 @@ const AddAdressText = ({ formik, className }) => {
 
 AddAdressText.propTypes = {
   className: PropTypes.string.isRequired,
+  newPoint: PropTypes.shape({
+    lng: PropTypes.number,
+    lat: PropTypes.number
+  }).isRequired,
+  addNewPoint: PropTypes.func.isRequired,
   formik: PropTypes.shape({
     values: PropTypes.shape({
       address: PropTypes.string
@@ -128,4 +159,11 @@ AddAdressText.propTypes = {
   }).isRequired
 };
 
-export default connect(AddAdressText);
+export default connect(
+  state => ({
+    newPoint: state.newPoint
+  }),
+  dispatch => ({
+    addNewPoint: newPoint => dispatch(addNewPoint(newPoint))
+  })
+)(connectFormik(AddAdressText));
