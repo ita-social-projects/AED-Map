@@ -158,6 +158,7 @@ const DefItem = ({
     );
     changePermissionForEdit(permissionEdit);
     changePermissionForDelete(permissionDelete);
+    // eslint-disable-next-line
   }, [user, defItemInfo]);
 
   return (

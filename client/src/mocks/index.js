@@ -1,4 +1,4 @@
-export const mockData = {
+﻿export const mockData = {
   listDefs: [
     {
       id: '423432fsd4',
@@ -109,6 +109,8 @@ export const mockNewDefInfo = {
 };
 
 export const mockFilter = 'some address';
+
+export const mockSearch = 'Львів';
 
 export const mockError = new Error(
   'Request failed with status code 500'
