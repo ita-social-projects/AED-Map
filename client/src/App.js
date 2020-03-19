@@ -55,7 +55,11 @@ const App = ({
 }) => {
   const classes = useStyles();
   const { pathname, search } = location;
-  const [isStartModalOpen, setStartModal] = useState(true);
+  const closeModal =
+    sessionStorage.getItem('startModal') === 'close';
+  const [isStartModalOpen, setStartModal] = useState(
+    !closeModal
+  );
 
   if (pathname === '/' && search && mapData.length) {
     makeItemActive(search.split('=')[1]);

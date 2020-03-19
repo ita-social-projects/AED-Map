@@ -119,7 +119,6 @@ export const editDefPoint = (id, newDefInfo) => {
 
 export const createDefItem = newItem => {
   return async dispatch => {
-    dispatch(startLoadDef());
     try {
       const { data } = await createItem(newItem);
       dispatch(createDefPoint(data.defibrillator));
@@ -131,7 +130,6 @@ export const createDefItem = newItem => {
 
 export const deleteDefItem = id => {
   return async dispatch => {
-    dispatch(startLoadDef());
     try {
       const { data } = await deleteItem(id);
       dispatch(deleteDefPoint(data.defibrillator._id));
@@ -143,7 +141,6 @@ export const deleteDefItem = id => {
 
 export const editDefItem = (id, newDefInfo) => {
   return async dispatch => {
-    dispatch(startLoadDef());
     try {
       const { data } = await editItem(id, newDefInfo);
       const { defibrillator } = data;

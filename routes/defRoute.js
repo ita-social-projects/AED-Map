@@ -13,7 +13,7 @@ const {
 } = require('./validation/deffRouteValidator');
 const { validate } = require('../middleware/validate');
 
-const createFilter = (req) => {
+const createFilter = (query) => {
   const filter = {};
   const skipKeys = [
     'page',
@@ -22,16 +22,18 @@ const createFilter = (req) => {
     'latitude'
   ];
 
-  Object.keys(req.query).forEach((key) => {
+  Object.keys(query).forEach((key) => {
     if (!skipKeys.includes(key)) {
-      filter[key] = new RegExp(req.query[key], 'i');
+      filter[key] = new RegExp(query[key], 'i');
     }
   });
+
   return filter;
 };
+
 router.get('/', async (req, res) => {
   try {
-    const filter = createFilter(req);
+    const filter = createFilter(req.query);
     const perPage = Number(req.query.per_page) || 10;
     const page = Number(req.query.page) || 1;
     let listDefs;
@@ -58,6 +60,7 @@ router.get('/', async (req, res) => {
           .skip(perPage * (page - 1))
           .limit(perPage)) || [];
     }
+
     const mapDefs = await Defibrillator.find(filter).select(
       'address title location owner'
     );
@@ -82,6 +85,7 @@ router.post(
         ...req.body,
         owner: req.user._id
       });
+
       return res.status(201).send({
         error: false,
         defibrillator
@@ -104,6 +108,7 @@ router.put(
         req.body,
         { new: true }
       );
+
       return res.status(200).send({
         error: false,
         defibrillator
@@ -113,10 +118,12 @@ router.put(
     }
   }
 );
+
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const defibrillator = await Defibrillator.findById(id);
+
     return res.status(200).send({
       error: false,
       defibrillator
@@ -136,6 +143,7 @@ router.delete(
       const defibrillator = await Defibrillator.findByIdAndDelete(
         id
       );
+
       return res.status(200).send({
         error: false,
         defibrillator

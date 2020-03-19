@@ -26,9 +26,20 @@ const useStyles = makeStyles({
     top: 0,
     width: 320,
     height: '100vh',
-    zIndex: 20,
     backgroundColor: 'white',
-    boxShadow: '5px 0 10px -2px black'
+    boxShadow: '5px 0 10px -2px black',
+    zIndex: 20,
+    animation: '$slide 0.7s'
+  },
+  '@keyframes slide': {
+    from: {
+      left: 300,
+      opacity: 0
+    },
+    to: {
+      left: sidebarWidth,
+      opacity: 1
+    }
   }
 });
 

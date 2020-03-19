@@ -10,6 +10,7 @@ import {
 import PropTypes from 'prop-types';
 import { fetchDefs } from './actions/list';
 import InfoMessage from './components/InfoMessage';
+import HorizontalLoader from '../../../../shared/Loader/HorizontalLoader';
 import DefItem from './components/DefItem';
 import cancelToken from '../../../../shared/cancel-token';
 
@@ -59,7 +60,10 @@ const ItemList = ({
 }) => {
   const classes = useStyles();
   const noData = !isLoading && !defibrillators.length;
-  const showMessage = isLoading || noData;
+  const showMessage =
+    (isLoading && !defibrillators.length) || noData;
+  const showHorizontalLoader =
+    isLoading && !!defibrillators.length;
   let message;
 
   switch (true) {
@@ -138,6 +142,7 @@ const ItemList = ({
         }}
       </AutoSizer>
       {showMessage && <InfoMessage>{message}</InfoMessage>}
+      {showHorizontalLoader && <HorizontalLoader />}
     </div>
   );
 };
