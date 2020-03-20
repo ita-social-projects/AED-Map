@@ -1,4 +1,4 @@
-import { SET_MAP_CENTER, SET_MAP_ZOOM } from '../consts';
+import { SET_MAP_CENTER, SET_MAP_ZOOM} from '../consts';
 
 const initialState = {
   lng: 24.0311,

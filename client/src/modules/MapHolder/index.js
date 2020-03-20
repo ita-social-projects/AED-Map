@@ -8,10 +8,12 @@ import ReactMapboxGl from 'react-mapbox-gl';
 import PopupHolder from './components/PopupHolder';
 import {
   setMapCenter,
-  setMapZoom
+  setMapZoom,
+  addNewPoint
 } from './actions/mapState';
 import { hidePopup } from './actions/popupDisplay';
 import DefibrillatorPinLayer from './layers/DefibrillatorPinLayer';
+import AddedPin from './layers/AddedPin';
 import { sidebarWidth } from '../Sidebar/styleConstants';
 
 const useStyles = makeStyles(() => ({
@@ -53,7 +55,9 @@ const Map = ReactMapboxGl({
 
 const MapHolder = ({
   mapState,
+  newPoint,
   setMapCenter,
+  addNewPoint,
   hidePopup,
   setVisible,
   visible
@@ -109,6 +113,25 @@ const MapHolder = ({
     }
   };
 
+  useEffect(() => {
+    if (Object.keys(newPoint).length !== 0) {
+      const { lng, lat } = newPoint;
+      setMapCenter({ lng, lat });
+    }
+  }, [newPoint]);
+
+  const onDblClickMap = (_, event) => {
+    const currentRoute = window.location.pathname;
+    if (
+      currentRoute === '/add-form' ||
+      currentRoute === '/edit-form'
+    ) {
+      const { lng, lat } = event.lngLat;
+      addNewPoint({ lng, lat });
+      event.preventDefault();
+    }
+  };
+
   return (
     <div className={classes.mapContainer}>
       <Button
@@ -132,8 +155,12 @@ const MapHolder = ({
         onZoomStart={onZoomStarted}
         onRotateEnd={changeMapCenterCoords}
         onDragEnd={changeMapCenterCoords}
+        onDblClick={onDblClickMap}
       >
-        {map ? <DefibrillatorPinLayer map={map} /> : null}
+        {map && <DefibrillatorPinLayer map={map} />}
+        {(Object.keys(newPoint).length!==0) && (
+          <AddedPin coordinates={newPoint} />
+        )}
         <PopupHolder />
       </Map>
     </div>
@@ -154,6 +181,11 @@ MapHolder.propTypes = {
     lat: PropTypes.number,
     zoom: PropTypes.number
   }),
+  newPoint: PropTypes.shape({
+    lng: PropTypes.number,
+    lat: PropTypes.number
+  }).isRequired,
+  addNewPoint: PropTypes.func.isRequired,
   setMapCenter: PropTypes.func,
   hidePopup: PropTypes.func,
   setVisible: PropTypes.func,
@@ -163,11 +195,14 @@ MapHolder.propTypes = {
 export default connect(
   state => ({
     defsState: state.defs,
-    mapState: state.mapState
+    mapState: state.mapState,
+    newPoint: state.newPoint
   }),
   dispatch => ({
     setMapCenter: map => dispatch(setMapCenter(map)),
     setMapZoom: zoom => dispatch(setMapZoom(zoom)),
+    addNewPoint: newPoint =>
+      dispatch(addNewPoint(newPoint)),
     hidePopup: () => dispatch(hidePopup())
   })
 )(MapHolder);
