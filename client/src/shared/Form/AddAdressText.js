@@ -38,14 +38,17 @@ const AddAdressText = ({
   };
 
   useEffect(() => {
-    if (Object.keys(newPoint).length !== 0)
+    if (Object.keys(newPoint).length !== 0) {
       reverseRequest();
+    }
+    // eslint-disable-next-line
   }, [newPoint]);
 
   useEffect(() => {
     return () => {
       addNewPoint({});
     };
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -111,7 +114,6 @@ const AddAdressText = ({
       options={options}
       renderInput={params => (
         <TextField
-          // eslint-disable-next-line react/jsx-props-no-spreading
           {...params}
           name="address"
           onChange={e => {

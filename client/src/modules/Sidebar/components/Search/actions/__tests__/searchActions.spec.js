@@ -1,7 +1,7 @@
 import * as types from '../../consts';
 import * as actions from '../index';
 
-import { mockSearch } from '../../../../../../../../mocks';
+import { mockSearch } from '../../../../../../mocks';
 
 describe('search actions', () => {
   it(`should create action to ${types.SET_SEARCH}`, () => {

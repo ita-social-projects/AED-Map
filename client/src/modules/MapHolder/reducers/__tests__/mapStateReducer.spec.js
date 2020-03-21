@@ -7,6 +7,7 @@ const initialState = {
   lng: 24.02,
   lat: 24.22
 };
+
 describe('map reducer', () => {
   it('should return initial state', () => {
     expect(mapStateReducer(undefined, {})).toEqual(mockMap);
@@ -17,6 +18,7 @@ describe('map reducer', () => {
       ...initialState,
       ...mockMap
     };
+
     expect(
       mapStateReducer(initialState, {
         type: types.SET_MAP_CENTER,
@@ -31,6 +33,7 @@ describe('map reducer', () => {
       lng: mockMap.lng,
       lat: mockMap.lat
     };
+
     expect(
       mapStateReducer(sameMap, {
         type: types.SET_MAP_CENTER,
@@ -44,6 +47,7 @@ describe('map reducer', () => {
       ...mockMap,
       zoom: 18
     };
+
     expect(
       mapStateReducer(mockMap, {
         type: types.SET_MAP_ZOOM,

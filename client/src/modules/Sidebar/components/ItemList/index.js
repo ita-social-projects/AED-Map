@@ -17,13 +17,6 @@ import cancelToken from '../../../../shared/cancel-token';
 const defsCancelToken = cancelToken();
 
 const useStyles = makeStyles({
-  infoMessage: {
-    position: 'relative',
-    top: '50%',
-    transform: 'translateY(-50%)',
-    color: 'white',
-    textAlign: 'center'
-  },
   listOuterStyle: {
     width: '100%',
     height: 'calc(100vh - 100px)',
