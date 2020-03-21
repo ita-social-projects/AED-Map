@@ -58,14 +58,12 @@ const listReducer = (
     case CREATE_DEF_POINT:
       return {
         ...state,
-        loading: false,
         listData: [payload, ...state.listData],
         mapData: [payload, ...state.mapData]
       };
     case DELETE_DEF_POINT:
       return {
         ...state,
-        loading: false,
         /* eslint-disable-next-line */
         listData: state.listData.filter(
           def => def._id !== payload
@@ -88,7 +86,6 @@ const listReducer = (
 
       return {
         ...state,
-        loading: false,
         listData: newListData,
         mapData: newMapData
       };
@@ -96,20 +93,17 @@ const listReducer = (
     case SET_ACTIVE:
       return {
         ...state,
-        loading: false,
         active: payload
       };
     case SET_PAGE:
       return {
         ...state,
-        loading: false,
         page: payload || state.page + 1,
         totalCount: payload === 1 ? 0 : state.totalCount
       };
     case SET_PER_PAGE:
       return {
         ...state,
-        loading: false,
         perPage: payload
       };
     default:

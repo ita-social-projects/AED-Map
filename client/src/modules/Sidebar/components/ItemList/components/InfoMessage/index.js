@@ -7,14 +7,12 @@ const useStyles = makeStyles({
   infoMessage: {
     position: 'absolute',
     width: '100%',
-    height: '100%',
     top: '50%',
     transform: 'translateY(-50%)',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    background: '#282c34',
     color: 'white',
     textAlign: 'center',
     zIndex: 10
@@ -23,10 +21,11 @@ const useStyles = makeStyles({
 
 const InfoMessage = ({ children }) => {
   const classes = useStyles();
+  const isLoading = children === 'Завантаження...';
 
   return (
     <div className={classes.infoMessage}>
-      {children === 'Завантаження...' && <Loader />}
+      {isLoading && <Loader />}
       <p>{children}</p>
     </div>
   );

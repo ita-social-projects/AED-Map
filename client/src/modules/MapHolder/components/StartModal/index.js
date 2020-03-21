@@ -15,6 +15,7 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backdropFilter: 'blur(3px)',
     zIndex: 1500,
     animation: '$modal 1.5s'
   },
@@ -52,6 +53,7 @@ const useStyles = makeStyles(() => ({
 const StartModal = ({ open, setStartModal }) => {
   const classes = useStyles();
   const handleClose = () => {
+    sessionStorage.setItem('startModal', 'close');
     setStartModal(false);
   };
 

@@ -42,7 +42,6 @@ describe('defibrillator async CRUD actions', () => {
     });
     const store = mockStore({ defs: [] });
     const expectedActions = [
-      { type: types.START_LOAD_DATA },
       {
         type: types.CREATE_DEF_POINT,
         payload: mockNewDefInfo
@@ -62,7 +61,6 @@ describe('defibrillator async CRUD actions', () => {
     });
     const store = mockStore({ error: null });
     const expectedActions = [
-      { type: types.START_LOAD_DATA },
       {
         type: types.FAIL_LOAD_DATA,
         payload: mockError
@@ -87,7 +85,6 @@ describe('defibrillator async CRUD actions', () => {
     const store = mockStore({ defs: [] });
 
     const expectedActions = [
-      { type: types.START_LOAD_DATA },
       {
         type: types.DELETE_DEF_POINT,
         payload: id
@@ -108,7 +105,6 @@ describe('defibrillator async CRUD actions', () => {
     });
     const store = mockStore({ error: null });
     const expectedActions = [
-      { type: types.START_LOAD_DATA },
       {
         type: types.FAIL_LOAD_DATA,
         payload: mockError
@@ -133,7 +129,6 @@ describe('defibrillator async CRUD actions', () => {
     const store = mockStore({ defs: [] });
 
     const expectedActions = [
-      { type: types.START_LOAD_DATA },
       {
         type: types.EDIT_DEF_POINT,
         payload: {
@@ -156,7 +151,6 @@ describe('defibrillator async CRUD actions', () => {
     });
     const store = mockStore({ error: null });
     const expectedActions = [
-      { type: types.START_LOAD_DATA },
       {
         type: types.FAIL_LOAD_DATA,
         payload: mockError
