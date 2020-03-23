@@ -13,7 +13,6 @@ export default (
         ...payload
       };
     }
-
     case HIDE_POPUP: {
       return null;
     }

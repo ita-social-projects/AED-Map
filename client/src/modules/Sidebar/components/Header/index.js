@@ -1,18 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Paper, Tooltip } from '@material-ui/core';
+import { Tooltip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { LOGO_IMG } from '../../../../consts/header';
-import Search from './components/Search';
 import Auth from './components/Auth';
 
 const useStyles = makeStyles({
-  searchFilterContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    marginBottom: 10
-  },
   headerWrapper: {
     color: 'white',
     marginBottom: 10
@@ -75,11 +68,6 @@ const Header = () => {
           <Auth />
         </div>
       </div>
-      <Paper>
-        <div>
-          <Search />
-        </div>
-      </Paper>
     </div>
   );
 };

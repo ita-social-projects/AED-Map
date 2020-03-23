@@ -14,7 +14,10 @@ import {
 } from '../../../ItemList/actions/list';
 import FilterSchema from './validator';
 import { INITIAL_VALUES } from './consts/formConsts';
-import { sidebarWidth } from '../../../../styleConstants';
+import {
+  sidebarWidth,
+  filterWidth
+} from '../../../../styleConstants';
 
 const useStyles = makeStyles({
   container: {
@@ -24,7 +27,7 @@ const useStyles = makeStyles({
     position: 'fixed',
     left: sidebarWidth,
     top: 0,
-    width: 320,
+    width: filterWidth,
     height: '100vh',
     backgroundColor: 'white',
     boxShadow: '5px 0 10px -2px black',
@@ -56,14 +59,17 @@ const FilterFormik = ({
       hidePopup();
     }
 
-    if (Object.values(values).some(value => value)) {
-      resetPagination(1, []);
-      setFilterValue(values);
-      await fetchDefItems(values);
-    } else if (filter) {
+    if (
+      Object.values(values).every(value => !value) &&
+      filter
+    ) {
       resetFilterValue();
       resetPagination(1, []);
       await fetchDefItems();
+    } else {
+      resetPagination(1, []);
+      setFilterValue(values);
+      await fetchDefItems(values);
     }
 
     setSubmitting(false);

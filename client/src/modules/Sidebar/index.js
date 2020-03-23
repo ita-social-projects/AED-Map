@@ -12,6 +12,7 @@ import AddIcon from '@material-ui/icons/Add';
 import PrivateRoute from '../../shared/PrivateRoute';
 import permissionService from '../Auth/permissionService';
 import Header from './components/Header';
+import Search from './components/Search';
 import ItemList from './components/ItemList';
 import AddForm from './components/AddForm';
 import Alert from '../../shared/Alert';
@@ -42,7 +43,7 @@ const useStyles = makeStyles({
   }
 });
 
-const Sidebar = ({ user, setVisible, visible }) => {
+const Sidebar = ({ user, visible }) => {
   const classes = useStyles({ visible });
   const [alert, ShowAlert] = useAlert();
   const [
@@ -55,14 +56,16 @@ const Sidebar = ({ user, setVisible, visible }) => {
       CREATE_DEF_POINT,
       user
     );
+
     changePermissionForAdd(permissionAdd);
   }, [user]);
 
   return (
     <Router>
       <div className={classes.sidebarStyle}>
-        <Header setVisible={setVisible} />
+        <Header />
         <Route path="/" exact>
+          <Search />
           <ItemList />
           <Link
             to="/add-form"
@@ -106,7 +109,6 @@ Sidebar.propTypes = {
     email: PropTypes.string,
     role: PropTypes.string
   }),
-  setVisible: PropTypes.func.isRequired,
   visible: PropTypes.bool.isRequired
 };
 

@@ -1,2 +1,2 @@
-// eslint-disable-next-line import/prefer-default-export
 export const sidebarWidth = '360px';
+export const filterWidth = '320px';

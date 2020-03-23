@@ -52,7 +52,7 @@ const useStyles = makeStyles({
   },
   pointCardInfo: {
     flex: '5',
-    padding: '20px 10px',
+    padding: '15px 10px',
     outline: 'none'
   },
   pointCardButtons: {
@@ -72,7 +72,6 @@ const useStyles = makeStyles({
       '& span': {
         display: 'block',
         backgroundColor: '#fff',
-        transform: 'scale(1.2)',
         borderRadius: '50%',
         height: 30,
         width: 30,

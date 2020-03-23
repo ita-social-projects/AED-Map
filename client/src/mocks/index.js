@@ -112,6 +112,11 @@ export const mockFilter = 'some address';
 
 export const mockSearch = 'Львів';
 
+export const mockNewPoint = {
+  lng: 23.519565,
+  lat: 49.334796
+};
+
 export const mockError = new Error(
   'Request failed with status code 500'
 );

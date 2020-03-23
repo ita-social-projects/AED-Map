@@ -1,7 +1,7 @@
 import searchReducer from '../index';
 import * as types from '../../consts';
 
-import { mockSearch } from '../../../../../../../../mocks';
+import { mockSearch } from '../../../../../../mocks';
 
 const initialState = { address: '' };
 describe('search reducer', () => {

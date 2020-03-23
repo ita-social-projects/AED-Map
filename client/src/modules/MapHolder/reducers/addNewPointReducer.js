@@ -1,6 +1,7 @@
 import { ADD_NEW_POINT } from '../consts';
 
 const initialState = {};
+
 export default (
   state = initialState,
   { type, payload }
@@ -8,12 +9,13 @@ export default (
   switch (type) {
     case ADD_NEW_POINT: {
       if (
+        payload &&
         state.lng === payload.lng &&
         state.lat === payload.lat
       ) {
         return state;
       }
-      return { ...payload }; 
+      return { ...payload };
     }
     default:
       return state;

@@ -19,17 +19,18 @@ import {
 } from '../../modules/Sidebar/components/ItemList/actions/list';
 
 const useStyles = makeStyles({
-  DefaultStyle: {
+  input: {
     width: '100%',
     marginBottom: 24
   },
-  FormStyle: {
+  form: {
     backgroundColor: 'white',
     padding: '5%',
     overflowX: 'hidden',
     overflowY: 'scroll',
     borderTop: '1px solid #fff3',
     borderBottom: '1px solid #fff3',
+    borderRadius: 5,
     '&:focus': {
       outline: 'none'
     },
@@ -89,7 +90,7 @@ const MyForm = ({
   };
 
   return (
-    <div className={classes.FormStyle}>
+    <div className={classes.form}>
       <Formik
         initialValues={INITIAL_VALUES}
         validationSchema={FormValidation}
@@ -98,26 +99,24 @@ const MyForm = ({
         {({ isValid }) => {
           return (
             <Form>
-              <AddAdressText
-                className={classes.DefaultStyle}
-              />
+              <AddAdressText className={classes.input} />
               <MyTextField
                 name="title"
                 label="Введіть назву"
-                className={classes.DefaultStyle}
+                className={classes.input}
               />
               <MyTextField
                 name="accessibility"
                 label="Коли доступний пристрій?"
-                className={classes.DefaultStyle}
+                className={classes.input}
               />
               <MyTextField
                 name="storage_place"
                 label="Де розташований в будівлі?"
-                className={classes.DefaultStyle}
+                className={classes.input}
               />
               <MyTextField
-                className={classes.DefaultStyle}
+                className={classes.input}
                 name="floor"
                 label="На якому поверсі знаходиться?"
                 type="number"
@@ -127,15 +126,15 @@ const MyForm = ({
               />
               <PlatesSelect name="informational_plates" />
               <AddTelephone
-                className={classes.DefaultStyle}
+                className={classes.input}
                 name="phone"
               />
               <AddMoreInfo
-                className={classes.DefaultStyle}
+                className={classes.input}
                 name="additional_information"
               />
               <Button
-                className={classes.DefaultStyle}
+                className={classes.input}
                 variant="contained"
                 color="primary"
                 size="large"

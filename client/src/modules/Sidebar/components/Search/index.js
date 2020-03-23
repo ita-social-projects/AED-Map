@@ -4,19 +4,20 @@ import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import { DebounceInput } from 'react-debounce-input';
+import { Paper } from '@material-ui/core';
 import { INITIAL_VALUES } from './consts';
-import { MyInputBase } from '../../../../../../shared/Fields';
-import Filter from '../Filter';
+import { MyInputBase } from '../../../../shared/Fields';
+import Filter from './components/Filter';
 import {
   fetchDefs,
   setPage,
   setData
-} from '../../../ItemList/actions/list';
+} from '../ItemList/actions/list';
 import { setSearch } from './actions';
 
 const useStyles = makeStyles(() => ({
   searchWrapper: {
-    margin: '10px 0'
+    marginBottom: 20
   },
   searchInput: {
     width: '100%',
@@ -52,19 +53,21 @@ const Search = ({
 
   return (
     <div className={classes.searchWrapper}>
-      <Formik initialValues={INITIAL_VALUES}>
-        <DebounceInput
-          element={MyInputBase}
-          startAdornment={<Filter />}
-          id="search"
-          placeholder="Впишіть сюди адресу"
-          name="search"
-          className={classes.searchInput}
-          autoFocus
-          debounceTimeout={300}
-          onChange={onSearch}
-        />
-      </Formik>
+      <Paper>
+        <Formik initialValues={INITIAL_VALUES}>
+          <DebounceInput
+            element={MyInputBase}
+            startAdornment={<Filter />}
+            id="search"
+            placeholder="Впишіть сюди адресу"
+            name="search"
+            className={classes.searchInput}
+            autoFocus
+            debounceTimeout={300}
+            onChange={onSearch}
+          />
+        </Formik>
+      </Paper>
     </div>
   );
 };

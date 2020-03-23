@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import Button from '@material-ui/core/Button';
+import { Button, Tooltip } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import ReactMapboxGl from 'react-mapbox-gl';
 import PopupHolder from './components/PopupHolder';
@@ -64,6 +64,9 @@ const MapHolder = ({
 }) => {
   const classes = useStyles({ visible });
   const [map, setLocalMap] = useState(null);
+  const tooltipMessage = visible
+    ? 'Приховати меню'
+    : 'Показати меню';
   const handlePopupClose = event => {
     if (event.target.tagName === 'CANVAS') {
       hidePopup();
@@ -118,6 +121,7 @@ const MapHolder = ({
       const { lng, lat } = newPoint;
       setMapCenter({ lng, lat });
     }
+    // eslint-disable-next-line
   }, [newPoint]);
 
   const onDblClickMap = (_, event) => {
@@ -127,6 +131,7 @@ const MapHolder = ({
       currentRoute === '/edit-form'
     ) {
       const { lng, lat } = event.lngLat;
+
       addNewPoint({ lng, lat });
       event.preventDefault();
     }
@@ -140,10 +145,13 @@ const MapHolder = ({
         onClick={hideSidebar}
         size="small"
       >
-        <ChevronRightIcon
-          className={classes.showMenuIcon}
-        />
+        <Tooltip title={tooltipMessage}>
+          <ChevronRightIcon
+            className={classes.showMenuIcon}
+          />
+        </Tooltip>
       </Button>
+
       <Map
         // eslint-disable-next-line react/style-prop-object
         style="mapbox://styles/oskovbasiuk/ck5nwya36638v1ilpmwxlfv5g"
@@ -158,7 +166,7 @@ const MapHolder = ({
         onDblClick={onDblClickMap}
       >
         {map && <DefibrillatorPinLayer map={map} />}
-        {(Object.keys(newPoint).length!==0) && (
+        {Object.keys(newPoint).length !== 0 && (
           <AddedPin coordinates={newPoint} />
         )}
         <PopupHolder />
