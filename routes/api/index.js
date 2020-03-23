@@ -28,7 +28,8 @@ const getReverseGeocoding = (lng, lat) => {
   return axios.get(`${revURL}`, {
     params: {
       latlng: `${lat},${lng}`,
-      key
+      key,
+      language:'uk'
     }
   });
 };
