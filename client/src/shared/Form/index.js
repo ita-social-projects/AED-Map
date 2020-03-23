@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Formik, Form } from 'formik';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import AddAdressText from './AddAdressText';
 import PlatesSelect from './PlatesSelect';
 import AddTelephone from './AddTelephone';
@@ -12,6 +13,10 @@ import AddMoreInfo from './AddMoreInfo';
 import FormValidation from './validator';
 import useAlert from '../Alert/useAlert';
 import { MyTextField } from '../Fields';
+import {
+  setPage,
+  setData
+} from '../../modules/Sidebar/components/ItemList/actions/list';
 
 const useStyles = makeStyles({
   DefaultStyle: {
@@ -40,30 +45,37 @@ const useStyles = makeStyles({
   }
 });
 
-const MyForm = ({ INITIAL_VALUES, SubmitAction }) => {
+const MyForm = ({
+  INITIAL_VALUES,
+  submitAction,
+  resetPage,
+  resetData
+}) => {
   const classes = useStyles();
   const [, ShowAlert] = useAlert();
   const history = useHistory();
+
+  const resetPagination = (page, data) => {
+    resetPage(page);
+    resetData(data);
+  };
 
   const handleSubmit = async (
     values,
     { resetForm, setErrors }
   ) => {
-    const date = new Date();
-    const month = date.getMonth();
-    const day = date.getDate();
-    // відформатована поточна дата
-    const actualDate = `${date.getFullYear()}-${
-      month < 10 ? `0${month + 1}` : month + 1
-    }-${day < 10 ? `0${day + 1}` : day + 1}`;
+    const actualDate = new Date()
+      .toISOString()
+      .split('T')[0];
     try {
-      await SubmitAction({ ...values, actualDate });
-      resetForm();
+      await submitAction({ ...values, actualDate });
       ShowAlert({
         open: true,
         severity: 'success',
         message: 'Додавання пройшло успішно'
       });
+      resetForm();
+      resetPagination(1, []);
       history.push('/');
     } catch (error) {
       const { errors } = error.response.data;
@@ -161,7 +173,12 @@ MyForm.propTypes = {
     accessibility: PropTypes.string.isRequired,
     coordinates: PropTypes.array.isRequired
   }).isRequired,
-  SubmitAction: PropTypes.func.isRequired
+  submitAction: PropTypes.func.isRequired,
+  resetPage: PropTypes.func.isRequired,
+  resetData: PropTypes.func.isRequired
 };
 
-export default MyForm;
+export default connect(null, {
+  resetPage: page => setPage(page),
+  resetData: data => setData(data)
+})(MyForm);
