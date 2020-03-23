@@ -4,14 +4,13 @@ import { useField } from 'formik';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   TextField,
-  Checkbox,
-  FormControlLabel,
   InputLabel,
   MenuItem,
   FormControl,
   Select,
   InputBase,
-  Button
+  Button,
+  Input
 } from '@material-ui/core';
 
 const useStyles = makeStyles({
@@ -25,6 +24,9 @@ const useStyles = makeStyles({
     display: 'inline-block',
     marginTop: 10,
     marginBottom: 10
+  },
+  imageField: {
+    display: 'none'
   }
 });
 
@@ -43,23 +45,6 @@ const MyTextField = props => {
   );
 };
 
-const MyCheckbox = ({ label, ...props }) => {
-  const [field] = useField({ ...props, type: 'checkbox' });
-
-  return (
-    <FormControlLabel
-      control={(
-        <Checkbox
-          className="checkbox"
-          {...field}
-          {...props}
-        />
-      )}
-      label={label}
-    />
-  );
-};
-
 const MyInputBase = props => {
   const [field] = useField(props);
 
@@ -70,10 +55,6 @@ const MyInputBase = props => {
       {...props}
     />
   );
-};
-
-MyCheckbox.propTypes = {
-  label: PropTypes.string.isRequired
 };
 
 const MySelect = ({
@@ -169,10 +150,39 @@ MySelect.propTypes = {
   classes: PropTypes.string
 };
 
-export {
-  MyTextField,
-  MyCheckbox,
-  MySelect,
-  MyInputBase,
-  UploadButton
+const MyImageField = ({ label, id, name, setFieldValue, ...props }) => {
+  const classes = useStyles();
+
+  return (
+    <div className={classes.root}>
+      <Input
+        type="file"
+        inputProps={{
+          accept: 'image/*',
+          multiple: true
+        }}
+        name={name}
+        id={id}
+        className={classes.imageField}
+        onChange={e => {
+          setFieldValue('images', e.currentTarget.files);
+        }}
+      />
+      
+      <InputLabel htmlFor={id}>
+        <Button {...props} component='span'>
+          { label }
+        </Button>
+      </InputLabel>
+    </div>
+  );
 };
+
+MyImageField.propTypes = {
+  label: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  setFieldValue: PropTypes.func.isRequired
+};
+
+export { MyTextField, MySelect, MyInputBase, MyImageField, UploadButton };

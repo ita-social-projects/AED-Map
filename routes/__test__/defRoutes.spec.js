@@ -1,5 +1,6 @@
 const supertest = require('supertest');
-const { app, mongoose } = require('../../server');
+const mongoose = require('mongoose');
+const { app } = require('../../server');
 const Defibrillator = require('../../models/Defibrillator');
 const User = require('../../models/User');
 
@@ -34,7 +35,9 @@ beforeAll(async (done) => {
   await mongoose.connection.close();
   await mongoose.connect(url, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
   });
 
   const admin = await User.findOne({
@@ -144,9 +147,11 @@ describe('delete method', () => {
 
 afterAll(async (done) => {
   await mongoose.connection
+    .collection('users')
+    .drop();
+  await mongoose.connection
     .collection('defibrillators')
     .drop();
-  await mongoose.connection.collection('users').drop();
   await mongoose.connection.close();
   done();
 });

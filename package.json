@@ -25,9 +25,9 @@
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "/middleware",
-      "/websocket",
-      "/migrations"
+      "./middleware/*.js",
+      "./websocket/*.js",
+      "./migrations/*.js"
     ],
     "collectCoverageFrom": [
       "./routes/*.js"
@@ -66,10 +66,13 @@
     "deep-equal": "^2.0.1",
     "express": "^4.17.1",
     "express-validator": "^6.3.1",
+    "gridfs-stream": "^1.1.1",
     "jsonwebtoken": "^8.5.1",
     "long-timeout": "^0.1.1",
     "migrate-mongo": "^7.1.0",
-    "mongoose": "^5.8.6",
+    "mongoose": "^5.9.5",
+    "multer": "^1.4.2",
+    "multer-gridfs-storage": "^4.0.2",
     "nodemailer": "^6.4.2",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",

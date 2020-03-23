@@ -1,5 +1,6 @@
 const express = require('express');
 const passport = require('passport');
+const mongoose = require('mongoose');
 const {
   resServerError
 } = require('../shared/resServerError');
@@ -12,6 +13,7 @@ const {
   deffValidationRules
 } = require('./validation/deffRouteValidator');
 const { validate } = require('../middleware/validate');
+const { getGFS } = require('./../db');
 
 const createFilter = (query) => {
   const filter = {};
@@ -138,12 +140,19 @@ router.delete(
   passport.authenticate('jwt', { session: false }),
   defChangePermission,
   async (req, res) => {
+    const gfs = getGFS();
     try {
       const { id } = req.params;
       const defibrillator = await Defibrillator.findByIdAndDelete(
         id
       );
 
+      defibrillator.images.forEach(image => {
+        gfs.delete(new mongoose.Types.ObjectId(image.id), (err, data) => {
+          if (err) return res.status(500).json({ message: 'Не вдалося видалити зображення.' });
+        });
+      });
+      
       return res.status(200).send({
         error: false,
         defibrillator

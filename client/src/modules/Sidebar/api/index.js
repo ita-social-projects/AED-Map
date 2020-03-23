@@ -1,6 +1,7 @@
 import http from '../../../shared/http';
 
 const URL = '/api/defibrillators';
+const URLimage = '/api/images';
 
 export const getDefItems = (params, cancelToken) => {
   return http.get(URL, params, cancelToken);
@@ -16,4 +17,12 @@ export const editItem = params => {
 };
 export const deleteItem = id => {
   return http.delete(`${URL}/${id}`);
+};
+
+export const createImage = (params, defibrillatorId) => {
+  return http.postFormData(`${ URLimage}/${defibrillatorId}`, params);
+};
+
+export const deleteImage = (imageId, defibrillatorId) => {
+  return http.delete(`${URLimage}/${defibrillatorId}/${imageId}`);
 };

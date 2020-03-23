@@ -12,7 +12,7 @@ import AddTelephone from './AddTelephone';
 import AddMoreInfo from './AddMoreInfo';
 import FormValidation from './validator';
 import useAlert from '../Alert/useAlert';
-import { MyTextField } from '../Fields';
+import { MyTextField, MyImageField } from '../Fields';
 import {
   setPage,
   setData
@@ -96,7 +96,7 @@ const MyForm = ({
         validationSchema={FormValidation}
         onSubmit={handleSubmit}
       >
-        {({ isValid }) => {
+        {({ isValid, setFieldValue }) => {
           return (
             <Form>
               <AddAdressText className={classes.input} />
@@ -128,6 +128,15 @@ const MyForm = ({
               <AddTelephone
                 className={classes.input}
                 name="phone"
+              />
+              <MyImageField
+                variant="contained" 
+                color="primary"
+                className={classes.DefaultStyle}
+                id="images"
+                label="Завантажити зображення"
+                name="images"
+                setFieldValue={setFieldValue}
               />
               <AddMoreInfo
                 className={classes.input}
