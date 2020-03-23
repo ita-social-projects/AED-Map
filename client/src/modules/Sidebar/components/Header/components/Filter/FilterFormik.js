@@ -28,18 +28,7 @@ const useStyles = makeStyles({
     height: '100vh',
     backgroundColor: 'white',
     boxShadow: '5px 0 10px -2px black',
-    zIndex: 20,
-    animation: '$slide 0.7s'
-  },
-  '@keyframes slide': {
-    from: {
-      left: 300,
-      opacity: 0
-    },
-    to: {
-      left: sidebarWidth,
-      opacity: 1
-    }
+    zIndex: 20
   }
 });
 

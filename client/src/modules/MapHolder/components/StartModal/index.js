@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { Fade, Button } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 
 const useStyles = makeStyles(() => ({
@@ -16,8 +16,7 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     backdropFilter: 'blur(3px)',
-    zIndex: 1500,
-    animation: '$modal 1.5s'
+    zIndex: 1500
   },
   container: {
     display: 'flex',
@@ -39,18 +38,10 @@ const useStyles = makeStyles(() => ({
   },
   acceptButton: {
     marginLeft: 20
-  },
-  '@keyframes modal': {
-    from: {
-      bottom: -250
-    },
-    to: {
-      bottom: 0
-    }
   }
 }));
 
-const StartModal = ({ open, setStartModal }) => {
+const StartModal = ({ setStartModal }) => {
   const classes = useStyles();
   const handleClose = () => {
     sessionStorage.setItem('startModal', 'close');
@@ -59,31 +50,28 @@ const StartModal = ({ open, setStartModal }) => {
 
   return (
     <div className={classes.modal}>
-      <Fade in={open} timeout={2000}>
-        <div className={classes.container}>
-          <p>
-            <WarningRoundedIcon
-              className={classes.warningIcon}
-              fontSize="large"
-            />
-            Не несемо відповідальності за роботу
-            дефібриляторів.
-          </p>
-          <Button
-            className={classes.acceptButton}
-            variant="contained"
-            onClick={handleClose}
-          >
-            Зрозуміло!
-          </Button>
-        </div>
-      </Fade>
+      <div className={classes.container}>
+        <p>
+          <WarningRoundedIcon
+            className={classes.warningIcon}
+            fontSize="large"
+          />
+          Не несемо відповідальності за роботу
+          дефібриляторів.
+        </p>
+        <Button
+          className={classes.acceptButton}
+          variant="contained"
+          onClick={handleClose}
+        >
+          Зрозуміло!
+        </Button>
+      </div>
     </div>
   );
 };
 
 StartModal.propTypes = {
-  open: PropTypes.bool.isRequired,
   setStartModal: PropTypes.func.isRequired
 };
 

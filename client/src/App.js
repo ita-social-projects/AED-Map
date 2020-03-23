@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import './App.css';
+import { CSSTransition } from 'react-transition-group';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { socketAuthOpen } from './shared/websocket';
@@ -29,6 +30,35 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'flex-start',
     width: '100%'
+  },
+  startModalFadeEnter: {
+    opacity: 0,
+    transform: 'translateY(-150px)'
+  },
+  startModalFadeEnterActive: {
+    opacity: 1,
+    transform: 'translateY(0)',
+    transition:
+      'opacity 0.5s ease, transform 0.5s ease-in-out'
+  },
+  startModalFadeExit: {
+    opacity: 1
+  },
+  startModalFadeExitActive: {
+    opacity: 0,
+    transform: 'translateY(150px)',
+    transition:
+      'opacity 0.5s linear, transform 0.5s ease-in-out'
+  },
+  startModalFadeAppear: {
+    opacity: 0,
+    transform: 'translateY(150px)'
+  },
+  startModalFadeAppearActive: {
+    opacity: 1,
+    transform: 'translateY(0)',
+    transition:
+      'opacity 0.5s linear, transform 0.5s ease-in-out'
   }
 });
 
@@ -54,6 +84,14 @@ const App = ({
   makeItemActive
 }) => {
   const classes = useStyles();
+  const transitionClasses = {
+    enter: classes.startModalFadeEnter,
+    enterActive: classes.startModalFadeEnterActive,
+    exit: classes.startModalFadeExit,
+    exitActive: classes.startModalFadeExitActive,
+    appear: classes.startModalFadeAppear,
+    appearActive: classes.startModalFadeAppearActive
+  };
   const { pathname, search } = location;
   const closeModal =
     sessionStorage.getItem('startModal') === 'close';
@@ -96,12 +134,15 @@ const App = ({
           <Redirect from="*" to="/" />
         </Switch>
       </div>
-      {isStartModalOpen && (
-        <StartModal
-          open={isStartModalOpen}
-          setStartModal={setStartModal}
-        />
-      )}
+      <CSSTransition
+        in={isStartModalOpen}
+        classNames={transitionClasses}
+        appear
+        timeout={1000}
+        unmountOnExit
+      >
+        <StartModal setStartModal={setStartModal} />
+      </CSSTransition>
     </div>
   );
 };

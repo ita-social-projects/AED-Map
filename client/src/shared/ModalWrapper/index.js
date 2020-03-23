@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
   paper: {
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
-    padding: theme.spacing(8, 1.5),
+    padding: theme.spacing(4, 1.5),
     '&:focus': {
       outline: 0
     }
