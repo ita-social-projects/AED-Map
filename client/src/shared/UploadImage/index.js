@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
   Button,
@@ -10,6 +11,8 @@ import {
 
 import { makeStyles } from '@material-ui/core/styles';
 import { UploadButton } from '../Fields';
+import permissionService from '../../modules/Auth/permissionService';
+import { ADD_IMAGES } from '../../modules/MapHolder/consts';
 
 const useStyles = makeStyles({
   imgPreview: {
@@ -22,46 +25,54 @@ const useStyles = makeStyles({
   },
   gridList: {
     width: 600,
-    height: 400
+    height: 300
   }
 });
+const uniqueArray = (arr, prop) => [
+  ...new Map(arr.map(item => [item[prop], item])).values()
+];
 
 const UploadImage = ({
   handleImageSend,
   children,
-  handleClose
+  user,
+  defItemInfo
 }) => {
   const classes = useStyles();
   const [images, setImages] = useState([]);
+  const [
+    permissionForAddImages,
+    changePermissionForAddImages
+  ] = useState(false);
+  useEffect(() => {
+    const permissionToAddImages = permissionService(
+      ADD_IMAGES,
+      user,
+      defItemInfo
+    );
+    changePermissionForAddImages(permissionToAddImages);
+  }, [user, defItemInfo]);
+
   const handleUpload = event => {
-    const fileReader = new FileReader();
-
-    const file = event.target.files[0];
-    if (!file) return;
-    const name = file.name.replace(/\.\w+/, '');
-
-    fileReader.onload = ({ target: { result } }) => {
-      if (!result) return;
-      setImages(prevImages => [
-        ...prevImages.filter(image => image.name !== name),
-        {
-          name,
-          src: result,
-          _id: name
-        }
-      ]);
-    };
-    fileReader.readAsDataURL(file);
-  };
-  const removeImage = id => {
+    const files = [...event.target.files];
+    if (!files.length) return;
     setImages(prevImages =>
-      prevImages.filter(image => image._id !== id)
+      uniqueArray([...prevImages, ...files], 'name')
+    );
+  };
+  const removeImage = name => {
+    setImages(prevImages =>
+      prevImages.filter(image => image.name !== name)
     );
   };
 
   const sendImages = () => {
-    handleImageSend(images);
-    handleClose();
+    const bodyFormData = new FormData();
+    images.forEach(image =>
+      bodyFormData.append('images', image)
+    );
+    handleImageSend(bodyFormData);
+    setImages([]);
   };
 
   return (
@@ -76,20 +87,28 @@ const UploadImage = ({
               key="Subheader"
               cols={2}
               style={{ height: 'auto' }}
-            />
-            {images.map(({ name, src, _id }) => (
-              <GridListTile key={_id}>
-                <img
-                  src={src}
-                  alt={name}
-                  className={classes.imgPreview}
-                  title="Подвійний клік видаляє фото"
-                  onDoubleClick={() => removeImage(_id)}
-                />
+            >
+              <Typography variant="h5">
+                Вибрані фотографії
+              </Typography>
+            </GridListTile>
+            {images.map(image => {
+              const src = URL.createObjectURL(image);
+              const { name } = image;
+              return (
+                <GridListTile key={name}>
+                  <img
+                    src={src}
+                    alt={name}
+                    className={classes.imgPreview}
+                    title="Подвійний клік видаляє фото"
+                    onDoubleClick={() => removeImage(name)}
+                  />
 
-                <GridListTileBar title={name} />
-              </GridListTile>
-            ))}
+                  <GridListTileBar title={name} />
+                </GridListTile>
+              );
+            })}
           </GridList>
           <Button
             className={classes.addBtn}
@@ -106,31 +125,60 @@ const UploadImage = ({
       ) : (
         <>{children}</>
       )}
-      <UploadButton
-        htmlFor="add-photo"
-        handleUpload={handleUpload}
-      >
-        {images.length > 0
-          ? 'Добавити ще одне фото'
-          : 'Добавити фото'}
-      </UploadButton>
+      {permissionForAddImages && (
+        <UploadButton
+          htmlFor="add-photo"
+          handleUpload={handleUpload}
+        >
+          {images.length > 0
+            ? 'Добавити ще одне фото'
+            : 'Добавити фото'}
+        </UploadButton>
+      )}
     </>
   );
 };
 
 UploadImage.defaultProps = {
   handleImageSend: () => {},
-  handleClose: () => {},
-  children: ''
+  children: '',
+  user: null,
+  defItemInfo: {}
 };
 
 UploadImage.propTypes = {
   handleImageSend: PropTypes.func,
-  handleClose: PropTypes.func,
   children: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element
-  ])
+  ]),
+  user: PropTypes.shape({
+    _id: PropTypes.string,
+    email: PropTypes.string,
+    role: PropTypes.string
+  }),
+  defItemInfo: PropTypes.shape({
+    _id: PropTypes.string,
+    title: PropTypes.string,
+    address: PropTypes.string,
+    location: PropTypes.shape({
+      type: PropTypes.string,
+      coordinates: PropTypes.arrayOf(PropTypes.number)
+    }),
+    actual_date: PropTypes.string,
+    floor: PropTypes.number,
+    storage_place: PropTypes.string,
+    accessibility: PropTypes.string,
+    language: PropTypes.string,
+    informational_plates: PropTypes.string,
+    phone: PropTypes.arrayOf(PropTypes.string),
+    additional_information: PropTypes.string
+  })
 };
 
-export default UploadImage;
+export default connect(state => ({
+  user: state.user.user,
+  defItemInfo: state.defs.mapData.find(
+    def => def._id === state.defs.active
+  )
+}))(UploadImage);

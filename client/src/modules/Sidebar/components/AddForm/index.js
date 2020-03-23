@@ -5,7 +5,7 @@ import INITIAL_VALUES from './const';
 import { createItem, createImage } from '../../api';
 
 const AddForm = () => {
-  const hadleSubmit = async ({images, ...data}) => {
+  const hadleSubmit = async ({ images, ...data }) => {
     const body = {
       ...data,
       actual_date: data.actualDate,
@@ -17,10 +17,15 @@ const AddForm = () => {
     };
 
     const bodyFormData = new FormData();
-    Object.values(images).forEach(image => bodyFormData.append('images', image));
+    Object.values(images).forEach(image =>
+      bodyFormData.append('images', image)
+    );
 
     const respond = await createItem(body);
-    await createImage(bodyFormData, respond.data.defibrillator._id);
+    await createImage(
+      bodyFormData,
+      respond.data.defibrillator._id
+    );
   };
   return (
     <MyForm

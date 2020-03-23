@@ -8,17 +8,24 @@ const ModalPhoto = ({ images }) => {
   return (
     <ModalWrapper
       ButtonOpen={ButtonModalPhoto}
-      ModalContent={() => <ModalPhotoContent images={images} />}
+      ModalContent={({ handleClose }) => (
+        <ModalPhotoContent
+          images={images}
+          handleClose={handleClose}
+        />
+      )}
     />
   );
 };
 
 ModalPhoto.propTypes = {
-  images: PropTypes.arrayOf(PropTypes.shape({
-    _id: PropTypes.string,
-    id: PropTypes.string,
-    filename: PropTypes.string
-  })).isRequired
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string,
+      id: PropTypes.string,
+      filename: PropTypes.string
+    })
+  ).isRequired
 };
 
 export default ModalPhoto;
