@@ -1,5 +1,6 @@
 const supertest = require('supertest');
-const { app, mongoose } = require('../../server');
+const mongoose = require('mongoose');
+const { app } = require('../../server');
 const User = require('../../models/User');
 
 const BASEURL = '/api/auth';
@@ -22,7 +23,8 @@ describe('auth routes', () => {
     await mongoose.connection.close();
     await mongoose.connect(DBURL, {
       useNewUrlParser: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
+      useCreateIndex: true
     });
 
     const admin = await User.findOne({ email: mockAdminEmail });
@@ -193,9 +195,7 @@ describe('auth routes', () => {
   });
 
   afterAll(async (done) => {
-    await mongoose.connection
-      .collection('users')
-      .drop();
+    await mongoose.connection.dropDatabase();
     await mongoose.connection.close();
     done();
   });

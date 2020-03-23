@@ -7,7 +7,7 @@ import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import UploadImage from '../../../../../shared/UploadImage';
-import { photos } from '../../../../../mocks';
+// import { photos } from '../../../../../mocks';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ModalPhotoContent = ({ handleClose }) => {
+const ModalPhotoContent = ({ images, handleClose  }) => {
   const classes = useStyles();
 
   const handleImageSend = images => {
@@ -50,10 +50,10 @@ const ModalPhotoContent = ({ handleClose }) => {
               Усі фотографії
             </ListSubheader>
           </GridListTile>
-          {photos.map(photo => (
-            <GridListTile key={photo.title}>
-              <img src={photo.img} alt={photo.title} />
-              <GridListTileBar title={photo.title} />
+          {images.map(image => (
+            <GridListTile key={image.id}>
+              <img src={`http://localhost:3012/api/images/${image.filename}`} alt={image.filename} />
+              <GridListTileBar title={image.filename} />
             </GridListTile>
           ))}
         </GridList>
@@ -63,7 +63,12 @@ const ModalPhotoContent = ({ handleClose }) => {
 };
 
 ModalPhotoContent.propTypes = {
-  handleClose: PropTypes.func.isRequired
+  handleClose: PropTypes.func.isRequired,
+  images: PropTypes.arrayOf(PropTypes.shape({
+    _id: PropTypes.string,
+    id: PropTypes.string,
+    filename: PropTypes.string
+  })).isRequired
 };
 
 export default ModalPhotoContent;

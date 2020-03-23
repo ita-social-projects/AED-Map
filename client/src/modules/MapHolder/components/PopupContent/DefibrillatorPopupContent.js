@@ -9,7 +9,6 @@ import Loader from '../../../../shared/Loader';
 import ModalPhoto from './PhotoGallery';
 import cancelToken from '../../../../shared/cancel-token';
 import { titles } from './consts';
-import { photos } from '../../../../mocks';
 
 const currDefCancelToken = cancelToken();
 
@@ -97,12 +96,14 @@ const DefibrillatorPopupContent = ({ id, hidePopup }) => {
 
   return currDef ? (
     <div className={classes.popupContainer}>
-      <img
-        title={photos[0].title}
-        className={classes.imagePreview}
-        src={photos[0].img}
-        alt={photos[0].title}
-      />
+      {currDef.images[0] && (
+        <img
+          title={currDef.images[0].filename}
+          className={classes.imagePreview}
+          src={`http://localhost:3012/api/images/${currDef.images[0].filename}`}
+          alt={currDef.images[0].filename}
+        />
+      )}
       {Object.keys(titles).map(
         key =>
           currDef[key] && (
@@ -119,7 +120,7 @@ const DefibrillatorPopupContent = ({ id, hidePopup }) => {
         className={classes.closeBtn}
         onClick={hidePopup}
       />
-      <ModalPhoto />
+      <ModalPhoto images={currDef.images} />
     </div>
   ) : (
     <Loader />

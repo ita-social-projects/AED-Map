@@ -30,6 +30,15 @@ const http = {
       cancelToken: cancel ? cancel.token : null
     });
   },
+  postFormData(url, params, cancel) {
+    return axios({
+      method: 'post',
+      url,
+      data: params,
+      headers: {'Content-Type': 'multipart/form-data' },
+      cancelToken: cancel ? cancel.token : null
+    });
+  },
   delete(url, params, cancel) {
     return axios({
       method: 'delete',

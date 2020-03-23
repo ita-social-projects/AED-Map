@@ -31,6 +31,7 @@ const { ObjectId } = Schema.Types;
       "present near appliance"
   phone - Array[String]
   additional_information - String
+  images - Array[String]
   owner - ObjectId
 
   Note
@@ -101,6 +102,14 @@ const defibrillatorSchema = new Schema({
 
   additional_information: {
     type: String,
+    required: false
+  },
+
+  images: {
+    type: [{
+      id: String,
+      filename: String
+    }],
     required: false
   },
 

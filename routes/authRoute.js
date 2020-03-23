@@ -30,7 +30,7 @@ const User = require('../models/User');
 // User role
 const { USER } = require('../consts/user_role_state');
 
-// Check admin middleware
+// Check admin permission middleware
 const { adminPermission } = require('../middleware/permission');
 
 // Templates for sign up email

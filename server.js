@@ -1,5 +1,4 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const path = require('path');
 const passport = require('passport');
 const http = require('http');
@@ -7,6 +6,7 @@ const socketio = require('socket.io');
 const authRoute = require('./routes/authRoute');
 const defRoute = require('./routes/defRoute');
 const gmapRoute = require('./routes/gMapRoute');
+const imageRoute = require('./routes/imageRoute');
 
 const { authEvent } = require('./websocket/authEvent');
 
@@ -25,24 +25,11 @@ app.use(express.static('client/testing'));
 app.use('/api/auth', authRoute);
 app.use('/api/gmap', gmapRoute);
 app.use('/api/defibrillators', defRoute);
+app.use('/api/images', imageRoute);
 
 // Middlewares for passport
 app.use(passport.initialize());
 require('./middleware/passport')(passport);
-
-mongoose
-  .connect('mongodb://localhost:27017/defibrillatorDB', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true
-  })
-  .then(async () => {
-    console.log('connection to database established');
-  })
-  .catch((err) => {
-    console.log(`db error ${err.message}`);
-  });
 
 app.get('*', (req, res) => {
   res.sendFile(
@@ -50,4 +37,4 @@ app.get('*', (req, res) => {
   );
 });
 
-module.exports = { server, app, mongoose };
+module.exports = { server, app };

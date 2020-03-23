@@ -8,7 +8,8 @@ const INITIAL_VALUES = {
   additional_information: '',
   storage_place: '',
   accessibility: '',
-  coordinates: [] //  [Longitude,Latitude]
+  coordinates: [], //  [Longitude,Latitude]
+  images: []
 };
 
 export default INITIAL_VALUES;
