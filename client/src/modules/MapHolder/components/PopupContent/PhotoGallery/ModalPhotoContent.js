@@ -1,13 +1,16 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Container } from '@material-ui/core';
+import {
+  Container,
+  Typography,
+  GridList,
+  GridListTile
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
-import ListSubheader from '@material-ui/core/ListSubheader';
+import { createImage } from '../../../../Sidebar/api';
 import UploadImage from '../../../../../shared/UploadImage';
-// import { photos } from '../../../../../mocks';
+import useAlert from '../../../../../shared/Alert/useAlert';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,13 +26,26 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ModalPhotoContent = ({ images, handleClose  }) => {
+const ModalPhotoContent = ({ images, handleClose, id }) => {
   const classes = useStyles();
-
-  const handleImageSend = images => {
-    // works with images
-    // eslint-disable-next-line
-    console.log('[Go to the server]', images);
+  const [, ShowAlert] = useAlert();
+  const handleImageSend = async bodyFormData => {
+    try {
+      await createImage(bodyFormData, id);
+      handleClose();
+      ShowAlert({
+        open: true,
+        severity: 'success',
+        message: 'Фотографії успішно додані'
+      });
+    } catch (error) {
+      ShowAlert({
+        open: true,
+        severity: 'error',
+        message:
+          'Тимчасова серверна помилка. Спробуйте ще раз.'
+      });
+    }
   };
   return (
     <UploadImage
@@ -37,26 +53,34 @@ const ModalPhotoContent = ({ images, handleClose  }) => {
       handleClose={handleClose}
     >
       <Container className={classes.root} maxWidth="md">
-        <GridList
-          cellHeight={180}
-          className={classes.gridList}
-        >
-          <GridListTile
-            key="Subheader"
-            cols={2}
-            style={{ height: 'auto' }}
+        {images.length > 0 ? (
+          <GridList
+            cellHeight={180}
+            className={classes.gridList}
           >
-            <ListSubheader component="div">
-              Усі фотографії
-            </ListSubheader>
-          </GridListTile>
-          {images.map(image => (
-            <GridListTile key={image.id}>
-              <img src={`http://localhost:3012/api/images/${image.filename}`} alt={image.filename} />
-              <GridListTileBar title={image.filename} />
+            <GridListTile
+              key="Subheader"
+              cols={2}
+              style={{ height: 'auto' }}
+            >
+              <Typography variant="h5">
+                Усі фотографії
+              </Typography>
             </GridListTile>
-          ))}
-        </GridList>
+            {images.map(image => (
+              <GridListTile key={image.id}>
+                <img
+                  src={`http://localhost:3012/api/images/${image.filename}`}
+                  alt={image.filename}
+                />
+              </GridListTile>
+            ))}
+          </GridList>
+        ) : (
+          <Typography variant="h5">
+            Поки немає фотографій
+          </Typography>
+        )}
       </Container>
     </UploadImage>
   );
@@ -64,11 +88,16 @@ const ModalPhotoContent = ({ images, handleClose  }) => {
 
 ModalPhotoContent.propTypes = {
   handleClose: PropTypes.func.isRequired,
-  images: PropTypes.arrayOf(PropTypes.shape({
-    _id: PropTypes.string,
-    id: PropTypes.string,
-    filename: PropTypes.string
-  })).isRequired
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string,
+      id: PropTypes.string,
+      filename: PropTypes.string
+    })
+  ).isRequired,
+  id: PropTypes.string.isRequired
 };
 
-export default ModalPhotoContent;
+export default connect(state => ({
+  id: state.defs.active
+}))(ModalPhotoContent);

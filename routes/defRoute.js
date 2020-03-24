@@ -147,12 +147,18 @@ router.delete(
         id
       );
 
-      defibrillator.images.forEach(image => {
-        gfs.delete(new mongoose.Types.ObjectId(image.id), (err, data) => {
-          if (err) return res.status(500).json({ message: 'Не вдалося видалити зображення.' });
-        });
+      defibrillator.images.forEach((image) => {
+        gfs.delete(
+          new mongoose.Types.ObjectId(image.id),
+          (err, data) => {
+            if (err)
+              return res.status(500).json({
+                message: 'Не вдалося видалити зображення.'
+              });
+          }
+        );
       });
-      
+
       return res.status(200).send({
         error: false,
         defibrillator

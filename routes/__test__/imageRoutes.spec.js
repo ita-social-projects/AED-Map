@@ -8,7 +8,8 @@ const mockDatabaseName = 'mockImages';
 
 const mockAdminEmail = 'admin@admin.com';
 const mockAdminPassword = 'qwe123Q!';
-const mockAdminPasswordHashed = '$2a$10$9kWs/nlfM7ZIxJq0tj8yquATo47d0OqDl1pv.3tRfRU8fvcWrBK0W';
+const mockAdminPasswordHashed =
+  '$2a$10$9kWs/nlfM7ZIxJq0tj8yquATo47d0OqDl1pv.3tRfRU8fvcWrBK0W';
 
 const newDefibrillator = {
   title: 'Площа ринок',
@@ -40,7 +41,9 @@ describe('images routes', () => {
     await mongoose.connection.close();
     db.dbInit(DBURL);
 
-    const admin = await User.findOne({ email: mockAdminEmail });
+    const admin = await User.findOne({
+      email: mockAdminEmail
+    });
 
     if (!admin) {
       const newAdmin = new User({
@@ -70,11 +73,10 @@ describe('images routes', () => {
     done();
   });
 
-  it('should return status 403 when not authorized for creating', async () => {
+  it('should return status 401 when not authorized for creating', async () => {
     const res = await request
       .post(`${BASEURL}/${defibrillatorId}`)
       .set('Content-Type', 'multipart/form-data')
-      .attach('images', fs.createReadStream('./routes/__test__/mock/mock-image.jpg'))
       .expect(401);
   });
 
@@ -83,10 +85,15 @@ describe('images routes', () => {
       .post(`${BASEURL}/${defibrillatorId}`)
       .set('Authorization', tokenAdmin)
       .set('Content-Type', 'multipart/form-data')
-      .attach('images', fs.createReadStream('./routes/__test__/mock/mock-image.jpg'))
+      .attach(
+        'images',
+        fs.createReadStream(
+          './routes/__test__/mock/mock-image.jpg'
+        )
+      )
       .expect((res) => {
         if (!Array.isArray(res.body.images))
-          throw new Error('images isn\'t array');
+          throw new Error("images isn't array");
       })
       .expect(201);
 

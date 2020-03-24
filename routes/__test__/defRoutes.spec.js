@@ -37,7 +37,7 @@ beforeAll(async (done) => {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
-    useFindAndModify: false,
+    useFindAndModify: false
   });
 
   const admin = await User.findOne({
@@ -141,14 +141,13 @@ describe('delete method', () => {
     const newRecords = await Defibrillator.find();
     expect(removedDef.status).toBe(200);
     expect(response.body.error).toBe(false);
+    expect(oldRecords[0].images.length).toBe(0);
     expect(oldRecords.length - newRecords.length).toBe(1);
   });
 });
 
 afterAll(async (done) => {
-  await mongoose.connection
-    .collection('users')
-    .drop();
+  await mongoose.connection.collection('users').drop();
   await mongoose.connection
     .collection('defibrillators')
     .drop();
