@@ -9,7 +9,8 @@ const INITIAL_VALUES = {
   storage_place: '',
   accessibility: '',
   coordinates: [], //  [Longitude,Latitude]
-  images: []
+  images: [],
+  language: 'Україномовний'
 };
 
 export default INITIAL_VALUES;

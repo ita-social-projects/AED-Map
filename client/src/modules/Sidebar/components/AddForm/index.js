@@ -14,7 +14,6 @@ const AddForm = () => {
         coordinates: data.coordinates
       },
       storage_place: `Поверх ${data.floor}, ${data.storage_place}`,
-      language: 'Україномовний'
     };
 
     const bodyFormData = new FormData();

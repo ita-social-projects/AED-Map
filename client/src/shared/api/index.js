@@ -1,6 +1,7 @@
 import http from '../http';
 
-const URL = 'api/gmap';
+const host = window.location.origin;
+const URL = `${host}/api/gmap`;
 
 const getGeocodingOptions = value => {
   return http.get(`${URL}/options/${value}`);
