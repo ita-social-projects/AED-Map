@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import EditIcon from '@material-ui/icons/Edit';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import permissionService from '../../../../../Auth/permissionService';
 
 import {
@@ -113,6 +113,7 @@ const DefItem = ({
     permissionForDelete,
     changePermissionForDelete
   ] = useState(false);
+  const history = useHistory();
 
   const handleClick = () => {
     makeItemActive(defItemInfo._id);
@@ -121,6 +122,11 @@ const DefItem = ({
       lat
     });
     setMapZoomParam(BASE_ZOOM_VALUE);
+  };
+
+  const handleEditClick = event => {
+    event.preventDefault();
+    history.push(`/edit-form/${defItemInfo._id}`);
   };
 
   const handleKeyDown = event => {
@@ -181,15 +187,13 @@ const DefItem = ({
         </p>
       </div>
       <div className={classes.pointCardButtons}>
-        <Link to="/edit-form">
-          {permissionForEdit && (
-            <button type="button">
-              <span>
-                <EditIcon />
-              </span>
-            </button>
-          )}
-        </Link>
+        {permissionForEdit && (
+          <button type="button" onClick={handleEditClick}>
+            <span>
+              <EditIcon />
+            </span>
+          </button>
+        )}
         {permissionForDelete && (
           <ConfirmationModalWrapper
             ButtonOpen={DeleteBtn}

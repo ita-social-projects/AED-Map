@@ -15,9 +15,12 @@ import Header from './components/Header';
 import Search from './components/Search';
 import ItemList from './components/ItemList';
 import AddForm from './components/AddForm';
+import EditForm from './components/EditForm';
 import Alert from '../../shared/Alert';
 import useAlert from '../../shared/Alert/useAlert';
-import { CREATE_DEF_POINT } from './components/ItemList/consts';
+import {
+  CREATE_DEF_POINT
+} from './components/ItemList/consts';
 import { sidebarWidth } from './styleConstants';
 
 const useStyles = makeStyles({
@@ -56,7 +59,6 @@ const Sidebar = ({ user, visible }) => {
       CREATE_DEF_POINT,
       user
     );
-
     changePermissionForAdd(permissionAdd);
   }, [user]);
 
@@ -87,6 +89,10 @@ const Sidebar = ({ user, visible }) => {
           path="/add-form"
           component={AddForm}
           permission={permissionForAdd}
+        />
+        <Route 
+          path="/edit-form"
+          component={EditForm}
         />
         <Alert
           open={alert.open}
