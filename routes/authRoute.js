@@ -144,7 +144,7 @@ router.post(
 
           // Send email
           await transporter.sendMail(signupEmail(email));
-
+ 
         } catch (e) {
           resServerError(res, e);
         }

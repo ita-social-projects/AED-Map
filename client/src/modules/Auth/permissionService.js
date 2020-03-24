@@ -1,7 +1,8 @@
 import {
   CREATE_DEF_POINT,
   EDIT_DEF_POINT,
-  DELETE_DEF_POINT
+  DELETE_DEF_POINT,
+  BLOCK_DEF_POINT
 } from '../Sidebar/components/ItemList/consts';
 
 import { SIGNUP, ADMIN, USER } from './const';
@@ -30,6 +31,7 @@ const permissionService = (action, user, defibrillator) => {
           checkUserIsOwner(user, defibrillator))
       );
     case SIGNUP:
+    case BLOCK_DEF_POINT:
       return checkPermissionIsAdmin(user);
 
     default:

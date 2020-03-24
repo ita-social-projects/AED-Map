@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import EditIcon from '@material-ui/icons/Edit';
 import { NavLink, useHistory } from 'react-router-dom';
+import { Button } from '@material-ui/core';
 import permissionService from '../../../../../Auth/permissionService';
 
 import {
@@ -11,73 +11,51 @@ import {
   setMapZoom
 } from '../../../../../MapHolder/actions/mapState';
 import DeleteBtn from './DeleteBtn';
+import BlockBtn from './BlockBtn';
 import ConfirmationModalWrapper from '../../../../../../shared/ConfirmationModalWrapper';
-import {
+import { 
   deleteDefItem,
-  setActive
+  blockDefItem,
+  setActive 
 } from '../../actions/list';
 import {
   ENTER_BUTTON_CODE,
   BASE_ZOOM_VALUE,
   EDIT_DEF_POINT,
-  DELETE_DEF_POINT
+  DELETE_DEF_POINT,
+  BLOCK_DEF_POINT
 } from '../../consts';
 
 const useStyles = makeStyles({
   pointCard: {
     minHeight: 100,
-    display: 'flex',
     '&:not(:last-of-type)': {
       borderBottom: '1px solid #fff',
       padding: 0
     },
     textDecoration: 'none',
-    background: isActive =>
-      isActive ? '#344870' : '#282c34',
+    background: props =>
+      props.isActive ? '#344870' : '#282c34',
     overflow: 'hidden',
     '&:hover': {
       background: '#686c7458',
       cursor: 'pointer',
-      '& div:last-child': {
-        visibility: 'visible',
-        '& button': {
-          '&:hover': {
-            '& span': {
-              background: '#dadada'
-            }
-          }
-        }
-      }
     }
   },
   pointCardInfo: {
-    flex: '5',
-    padding: '15px 10px',
+    padding: 15,
     outline: 'none'
   },
   pointCardButtons: {
-    visibility: 'hidden',
-    height: '100%',
-    flex: '1',
+    padding: props =>
+      props.isAuth ? 15 : 0,
 
-    '& button': {
-      opacity: '.7',
-      cursor: 'pointer',
-      height: '50%',
-      width: '100%',
-      backgroundColor: '#3E424A',
-      justifyContent: 'center',
+    display: 'flex',
+    height: props =>
+      props.isAuth ? 60 : 0,
 
-      border: 'none',
-      '& span': {
-        display: 'block',
-        backgroundColor: '#fff',
-        borderRadius: '50%',
-        height: 30,
-        width: 30,
-        justifyContent: 'center',
-        paddingTop: 3
-      }
+    '& a': {
+      textDecoration: 'none'
     }
   },
   titleStyle: {
@@ -99,11 +77,13 @@ const DefItem = ({
   // eslint-disable-next-line react/prop-types
   styleParam,
   deleteDefibrPoint,
+  blockDefibrPoint,
   user,
   mapData
 }) => {
   const isActive = defItemInfo._id === activeItemId;
-  const classes = useStyles(isActive);
+  const isAuth = !!user;
+  const classes = useStyles({ isActive, isAuth });
   const [lng, lat] = defItemInfo.location.coordinates;
   const [
     permissionForEdit,
@@ -112,6 +92,10 @@ const DefItem = ({
   const [
     permissionForDelete,
     changePermissionForDelete
+  ] = useState(false);
+  const [
+    permissionForBlockDef,
+    changePermissionForBlockDef
   ] = useState(false);
   const history = useHistory();
 
@@ -161,8 +145,13 @@ const DefItem = ({
       user,
       defItemInfo
     );
+    const permissionBlockDef = permissionService(
+      BLOCK_DEF_POINT,
+      user
+    );
     changePermissionForEdit(permissionEdit);
     changePermissionForDelete(permissionDelete);
+    changePermissionForBlockDef(permissionBlockDef);
     // eslint-disable-next-line
   }, [user, defItemInfo]);
 
@@ -188,11 +177,9 @@ const DefItem = ({
       </div>
       <div className={classes.pointCardButtons}>
         {permissionForEdit && (
-          <button type="button" onClick={handleEditClick}>
-            <span>
-              <EditIcon />
-            </span>
-          </button>
+          <Button variant="contained" color="primary" size="small" onClick={handleEditClick}>
+            Редагувати
+          </Button>
         )}
         {permissionForDelete && (
           <ConfirmationModalWrapper
@@ -200,7 +187,18 @@ const DefItem = ({
             confirmHandle={() =>
               deleteDefibrPoint(defItemInfo._id)
             }
-            message="Видалити мітку?"
+            message="Видалити дефібрилятор?"
+            messageAlert="Дефібрилятор успішно видалено"
+          />
+        )}
+        {permissionForBlockDef && (
+          <ConfirmationModalWrapper
+            ButtonOpen={({ handleOpen }) => <BlockBtn handleOpen={handleOpen} blocked={defItemInfo.blocked} />}
+            confirmHandle={() =>
+              blockDefibrPoint(defItemInfo._id, !defItemInfo.blocked)
+            }
+            message={defItemInfo.blocked ? 'Розблокувати дефібрилятор?' : 'Заблокувати дефібрилятор?'}
+            messageAlert={defItemInfo.blocked ? 'Дефібрилятор розблоковано' : 'Дефібрилятор заблоковано'}
           />
         )}
       </div>
@@ -215,6 +213,7 @@ DefItem.defaultProps = {
   setMapCenterCoords: () => null,
   setMapZoomParam: () => null,
   deleteDefibrPoint: () => null,
+  blockDefibrPoint: () => null,
   user: null
 };
 
@@ -234,7 +233,8 @@ DefItem.propTypes = {
     language: PropTypes.string,
     informational_plates: PropTypes.string,
     phone: PropTypes.arrayOf(PropTypes.string),
-    additional_information: PropTypes.string
+    additional_information: PropTypes.string,
+    blocked: PropTypes.bool
   }),
   mapData: PropTypes.arrayOf(
     PropTypes.shape({
@@ -255,6 +255,7 @@ DefItem.propTypes = {
   setMapCenterCoords: PropTypes.func,
   setMapZoomParam: PropTypes.func,
   deleteDefibrPoint: PropTypes.func,
+  blockDefibrPoint: PropTypes.func,
   activeItemId: PropTypes.string,
   makeItemActive: PropTypes.func.isRequired
 };
@@ -271,6 +272,7 @@ export default connect(
       dispatch(setMapCenter(mapState)),
     setMapZoomParam: mapState =>
       dispatch(setMapZoom(mapState)),
-    deleteDefibrPoint: id => dispatch(deleteDefItem(id))
+    deleteDefibrPoint: id => dispatch(deleteDefItem(id)),
+    blockDefibrPoint: (id, blocked) => dispatch(blockDefItem(id, blocked))
   })
 )(DefItem);

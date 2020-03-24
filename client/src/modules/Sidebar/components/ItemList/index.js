@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   List,
@@ -8,7 +9,7 @@ import {
   CellMeasurerCache
 } from 'react-virtualized';
 import PropTypes from 'prop-types';
-import { fetchDefs } from './actions/list';
+import { fetchDefs, clearData } from './actions/list';
 import InfoMessage from './components/InfoMessage';
 import HorizontalLoader from '../../../../shared/Loader/HorizontalLoader';
 import DefItem from './components/DefItem';
@@ -25,7 +26,6 @@ const useStyles = makeStyles({
   listStyle: {
     borderTop: '1px solid #fff3',
     borderBottom: '1px solid #fff3',
-    paddingRight: 5,
     '&:focus': {
       outline: 'none'
     },
@@ -49,15 +49,19 @@ const ItemList = ({
   filter,
   totalCount,
   page,
-  search
+  search,
+  user,
+  clearDefItems
 }) => {
   const classes = useStyles();
+  const [didMount, setDidMount] = useState(false);
   const noData = !isLoading && !defibrillators.length;
   const showMessage =
     (isLoading && !defibrillators.length) || noData;
   const showHorizontalLoader =
     isLoading && !!defibrillators.length;
   let message;
+  const history = useHistory();
 
   switch (true) {
     case isLoading:
@@ -105,6 +109,7 @@ const ItemList = ({
   };
 
   useEffect(() => {
+    setDidMount(true);
     if (!defibrillators.length) {
       fetchDefItems();
     }
@@ -113,6 +118,18 @@ const ItemList = ({
     };
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    history.push('/');
+    if (didMount) {
+      clearDefItems();
+      fetchDefItems();
+    }
+    return () => {
+      defsCancelToken.cancel();
+    };
+    // eslint-disable-next-line
+  }, [user]);
 
   return (
     <div className={classes.listOuterStyle}>
@@ -143,7 +160,9 @@ const ItemList = ({
 ItemList.defaultProps = {
   searchedDefs: [],
   fetchDefItems: () => null,
-  filter: null
+  clearDefItems: () => null,
+  filter: null,
+  user: null
 };
 
 ItemList.propTypes = {
@@ -170,12 +189,18 @@ ItemList.propTypes = {
     })
   ),
   fetchDefItems: PropTypes.func,
+  clearDefItems: PropTypes.func,
   filter: PropTypes.oneOfType([PropTypes.object]),
   totalCount: PropTypes.number.isRequired,
   page: PropTypes.number.isRequired,
   search: PropTypes.shape({
     address: PropTypes.string.isRequired
-  }).isRequired
+  }).isRequired,
+  user: PropTypes.shape({
+    _id: PropTypes.string,
+    email: PropTypes.string,
+    role: PropTypes.string
+  })
 };
 
 export default connect(
@@ -186,9 +211,11 @@ export default connect(
     searchedDefs: state.defs.listData,
     totalCount: state.defs.totalCount,
     page: state.defs.page,
-    search: state.search
+    search: state.search,
+    user: state.user.user
   }),
   dispatch => ({
-    fetchDefItems: params => dispatch(fetchDefs(params))
+    fetchDefItems: params => dispatch(fetchDefs(params)),
+    clearDefItems: () => dispatch(clearData()),
   })
 )(ItemList);

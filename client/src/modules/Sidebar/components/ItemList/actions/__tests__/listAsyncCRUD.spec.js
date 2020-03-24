@@ -88,6 +88,16 @@ describe('defibrillator async CRUD actions', () => {
       {
         type: types.DELETE_DEF_POINT,
         payload: id
+      },
+      {
+        type: types.CLEAR_DATA
+      },
+      {
+        type: types.START_LOAD_DATA
+      },
+      {
+        type: types.SET_PAGE,
+        payload: undefined
       }
     ];
 

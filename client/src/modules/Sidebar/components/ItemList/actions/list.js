@@ -1,11 +1,13 @@
 import {
   START_LOAD_DATA,
   SET_DATA,
+  CLEAR_DATA,
   SUCCESS_LOAD_DATA,
   FAIL_LOAD_DATA,
   CREATE_DEF_POINT,
   DELETE_DEF_POINT,
   EDIT_DEF_POINT,
+  BLOCK_DEF_POINT,
   SET_ACTIVE,
   SET_PAGE,
   SET_PER_PAGE
@@ -14,7 +16,8 @@ import {
   getDefItems,
   createItem,
   deleteItem,
-  editItem
+  editItem,
+  blockItem
 } from '../../../api';
 import cancelToken from '../../../../../shared/cancel-token';
 
@@ -36,6 +39,12 @@ export const setData = data => {
   return {
     type: SET_DATA,
     payload: data
+  };
+};
+
+export const clearData = () => {
+  return {
+    type: CLEAR_DATA
   };
 };
 
@@ -107,12 +116,23 @@ export const deleteDefPoint = id => {
     payload: id
   };
 };
+
 export const editDefPoint = (id, newDefInfo) => {
   return {
     type: EDIT_DEF_POINT,
     payload: {
       id,
       newDefInfo
+    }
+  };
+};
+
+export const blockDefPoint = (id, blocked) => {
+  return {
+    type: BLOCK_DEF_POINT,
+    payload: {
+      id,
+      blocked
     }
   };
 };
@@ -133,6 +153,8 @@ export const deleteDefItem = id => {
     try {
       const { data } = await deleteItem(id);
       dispatch(deleteDefPoint(data.defibrillator._id));
+      dispatch(clearData());
+      dispatch(fetchDefs());
     } catch (e) {
       dispatch(failLoadDef(e));
     }
@@ -146,6 +168,20 @@ export const editDefItem = (id, newDefInfo) => {
       const { defibrillator } = data;
       dispatch(
         editDefPoint(defibrillator._id, defibrillator)
+      );
+    } catch (e) {
+      dispatch(failLoadDef(e));
+    }
+  };
+};
+
+export const blockDefItem = (id, blocked) => {
+  return async dispatch => {
+    try {
+      const { data } = await blockItem(id, { blocked });
+      const { defibrillator } = data;
+      dispatch(
+        blockDefPoint(defibrillator._id, defibrillator.blocked)
       );
     } catch (e) {
       dispatch(failLoadDef(e));

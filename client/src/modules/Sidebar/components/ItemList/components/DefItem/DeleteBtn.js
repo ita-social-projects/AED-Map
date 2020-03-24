@@ -1,14 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { makeStyles } from '@material-ui/core/styles';
+import { Button } from '@material-ui/core';
+
+const useStyles = makeStyles({
+  pointCardDeleteButton: {
+    marginLeft: 10
+  }
+});
 
 const DeleteBtn = ({ handleOpen }) => {
+  const classes = useStyles();
   return (
-    <button type="button" onClick={handleOpen}>
-      <span>
-        <DeleteIcon />
-      </span>
-    </button>
+    <Button variant="contained" color="primary" className={classes.pointCardDeleteButton} size="small" onClick={handleOpen}>
+      Видалити
+    </Button>
   );
 };
 
