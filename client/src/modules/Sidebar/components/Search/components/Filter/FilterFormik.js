@@ -60,8 +60,8 @@ const FilterFormik = ({
     }
 
     if (
-      Object.values(values).every(value => !value) &&
-      filter
+      filter &&
+      Object.values(values).every(value => !value)
     ) {
       resetFilterValue();
       resetPagination(1, []);

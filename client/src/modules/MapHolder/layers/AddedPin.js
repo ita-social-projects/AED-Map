@@ -40,7 +40,7 @@ const AddedPin = ({ coordinates }) => {
 AddedPin.propTypes = {
   coordinates: PropTypes.shape({
     lng: PropTypes.number,
-    lat: PropTypes.number,
+    lat: PropTypes.number
   }).isRequired
 };
 

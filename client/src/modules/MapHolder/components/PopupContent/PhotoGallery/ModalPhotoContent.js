@@ -8,6 +8,7 @@ import {
   GridListTile
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { hidePopup } from '../../../actions/popupDisplay';
 import { createImage } from '../../../../Sidebar/api';
 import UploadImage from '../../../../../shared/UploadImage';
 import useAlert from '../../../../../shared/Alert/useAlert';
@@ -26,13 +27,19 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ModalPhotoContent = ({ images, handleClose, id }) => {
+const ModalPhotoContent = ({
+  images,
+  handleClose,
+  hidePopup,
+  id
+}) => {
   const classes = useStyles();
   const [, ShowAlert] = useAlert();
   const handleImageSend = async bodyFormData => {
     try {
       await createImage(bodyFormData, id);
       handleClose();
+      hidePopup();
       ShowAlert({
         open: true,
         severity: 'success',
@@ -88,6 +95,7 @@ const ModalPhotoContent = ({ images, handleClose, id }) => {
 
 ModalPhotoContent.propTypes = {
   handleClose: PropTypes.func.isRequired,
+  hidePopup: PropTypes.func.isRequired,
   images: PropTypes.arrayOf(
     PropTypes.shape({
       _id: PropTypes.string,
@@ -98,6 +106,9 @@ ModalPhotoContent.propTypes = {
   id: PropTypes.string.isRequired
 };
 
-export default connect(state => ({
-  id: state.defs.active
-}))(ModalPhotoContent);
+export default connect(
+  state => ({
+    id: state.defs.active
+  }),
+  dispatch => ({ hidePopup: () => dispatch(hidePopup()) })
+)(ModalPhotoContent);

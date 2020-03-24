@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import MyForm from '../../../../shared/Form';
-import { editItem,fetchSingleDefById } from '../../api';
+import { editItem, fetchSingleDefById } from '../../api';
 import Loader from '../../../../shared/Loader';
 import cancelToken from '../../../../shared/cancel-token';
 import { setMapCenter } from '../../../MapHolder/actions/mapState';
@@ -41,7 +41,7 @@ const EditForm = ({ setMapCenter }) => {
       informational_plates:
         defibrillator.informational_plates,
       phone: defibrillator.phone,
-      language:defibrillator.language,
+      language: defibrillator.language,
       additional_information:
         defibrillator.additional_information,
       floor: defibrillator.storage_place.match(/\d/)[0],
@@ -57,12 +57,16 @@ const EditForm = ({ setMapCenter }) => {
   useEffect(() => {
     (async () => {
       setDef(null);
+
       const res = await fetchSingleDefById(id);
+
       prepareData(res);
     })();
+
     return () => {
       defCancelToken.cancel();
     };
+    // eslint-disable-next-line
   }, []);
 
   const hadleSubmit = async ({ images, ...data }) => {
