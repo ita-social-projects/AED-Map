@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { Tooltip } from '@material-ui/core';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { LOGO_IMG } from '../../../../consts/header';
 import SignIn from '../../../Auth/submodules/SignIn';
+import { setActive } from '../ItemList/actions/list';
 
 const useStyles = makeStyles({
   headerWrapper: {
@@ -49,14 +52,20 @@ const useStyles = makeStyles({
     border: 'none'
   }
 });
-const Header = () => {
-  const classes = useStyles();
 
+const Header = ({ resetItemActive }) => {
+  const classes = useStyles();
+  const handleClick = () => {
+    resetItemActive();
+  };
   return (
     <div className={classes.headerWrapper}>
       <div className={classes.headerContainer}>
         <Link to="/">
-          <Tooltip title="Головна сторінка">
+          <Tooltip
+            title="Головна сторінка"
+            onClick={handleClick}
+          >
             <img
               src={LOGO_IMG}
               className={classes.headerLogo}
@@ -71,5 +80,10 @@ const Header = () => {
     </div>
   );
 };
+Header.propTypes = {
+  resetItemActive: PropTypes.func.isRequired
+};
 
-export default Header;
+export default connect(null, dispatch => ({
+  resetItemActive: () => dispatch(setActive(null))
+}))(Header);

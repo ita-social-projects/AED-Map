@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { NavLink, useHistory } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import permissionService from '../../../../../Auth/permissionService';
-
 import {
   setMapCenter,
   setMapZoom
@@ -39,7 +38,7 @@ const useStyles = makeStyles({
     overflow: 'hidden',
     '&:hover': {
       background: '#686c7458',
-      cursor: 'pointer',
+      cursor: 'pointer'
     }
   },
   pointCardInfo: {
@@ -47,12 +46,10 @@ const useStyles = makeStyles({
     outline: 'none'
   },
   pointCardButtons: {
-    padding: props =>
-      props.hasPermission ? 15 : 0,
+    padding: props => (props.hasPermission ? 15 : 0),
 
     display: 'flex',
-    height: props =>
-      props.hasPermission ? 60 : 0,
+    height: props => (props.hasPermission ? 60 : 0),
 
     '& a': {
       textDecoration: 'none'
@@ -78,11 +75,13 @@ const DefItem = ({
   styleParam,
   deleteDefibrPoint,
   blockDefibrPoint,
-  user,
-  mapData
+  user
 }) => {
   const isActive = defItemInfo._id === activeItemId;
-  const hasPermission = user && ((user.role === 'Admin') || (user._id === defItemInfo.owner));
+  const hasPermission =
+    user &&
+    (user.role === 'Admin' ||
+      user._id === defItemInfo.owner);
   const classes = useStyles({ isActive, hasPermission });
   const [lng, lat] = defItemInfo.location.coordinates;
   const [
@@ -123,18 +122,6 @@ const DefItem = ({
   };
 
   useEffect(() => {
-    const coords = mapData.find(
-      def => def._id === activeItemId
-    );
-    if (coords) {
-      const [lng, lat] = coords.location.coordinates;
-      setMapCenterCoords({
-        lng,
-        lat
-      });
-      setMapZoomParam(BASE_ZOOM_VALUE);
-    }
-
     const permissionEdit = permissionService(
       EDIT_DEF_POINT,
       user,
@@ -153,7 +140,7 @@ const DefItem = ({
     changePermissionForDelete(permissionDelete);
     changePermissionForBlockDef(permissionBlockDef);
     // eslint-disable-next-line
-  }, [user, defItemInfo]);
+  }, [user]);
 
   return (
     <NavLink
@@ -177,7 +164,12 @@ const DefItem = ({
       </div>
       <div className={classes.pointCardButtons}>
         {permissionForEdit && (
-          <Button variant="contained" color="primary" size="small" onClick={handleEditClick}>
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            onClick={handleEditClick}
+          >
             Редагувати
           </Button>
         )}
@@ -193,12 +185,28 @@ const DefItem = ({
         )}
         {permissionForBlockDef && (
           <ConfirmationModalWrapper
-            ButtonOpen={({ handleOpen }) => <BlockBtn handleOpen={handleOpen} blocked={defItemInfo.blocked} />}
+            ButtonOpen={({ handleOpen }) => (
+              <BlockBtn
+                handleOpen={handleOpen}
+                blocked={defItemInfo.blocked}
+              />
+            )}
             confirmHandle={() =>
-              blockDefibrPoint(defItemInfo._id, !defItemInfo.blocked)
+              blockDefibrPoint(
+                defItemInfo._id,
+                !defItemInfo.blocked
+              )
             }
-            message={defItemInfo.blocked ? 'Розблокувати дефібрилятор?' : 'Заблокувати дефібрилятор?'}
-            messageAlert={defItemInfo.blocked ? 'Дефібрилятор розблоковано' : 'Дефібрилятор заблоковано'}
+            message={
+              defItemInfo.blocked
+                ? 'Розблокувати дефібрилятор?'
+                : 'Заблокувати дефібрилятор?'
+            }
+            messageAlert={
+              defItemInfo.blocked
+                ? 'Дефібрилятор розблоковано'
+                : 'Дефібрилятор заблоковано'
+            }
           />
         )}
       </div>
@@ -208,7 +216,6 @@ const DefItem = ({
 
 DefItem.defaultProps = {
   defItemInfo: {},
-  mapData: [],
   activeItemId: () => null,
   setMapCenterCoords: () => null,
   setMapZoomParam: () => null,
@@ -237,17 +244,6 @@ DefItem.propTypes = {
     blocked: PropTypes.bool,
     owner: PropTypes.string
   }),
-  mapData: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string,
-      title: PropTypes.string,
-      address: PropTypes.string,
-      location: PropTypes.shape({
-        type: PropTypes.string,
-        coordinates: PropTypes.arrayOf(PropTypes.number)
-      })
-    })
-  ),
   user: PropTypes.shape({
     _id: PropTypes.string,
     email: PropTypes.string,
@@ -274,6 +270,7 @@ export default connect(
     setMapZoomParam: mapState =>
       dispatch(setMapZoom(mapState)),
     deleteDefibrPoint: id => dispatch(deleteDefItem(id)),
-    blockDefibrPoint: (id, blocked) => dispatch(blockDefItem(id, blocked))
+    blockDefibrPoint: (id, blocked) =>
+      dispatch(blockDefItem(id, blocked))
   })
 )(DefItem);

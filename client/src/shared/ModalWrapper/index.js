@@ -23,7 +23,8 @@ const ModalWrapper = ({ ButtonOpen, ModalContent }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
-  const handleOpen = () => {
+  const handleOpen = event => {
+    event.preventDefault();
     setOpen(true);
   };
 

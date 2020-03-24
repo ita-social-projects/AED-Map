@@ -8,11 +8,11 @@ const useStyles = makeStyles({
   container: {
     textAlign: 'center'
   },
-  msg:{
+  msg: {
     fontSize: 20,
     margin: '10px 30px 30px'
   },
-  btn:{
+  btn: {
     margin: '0 20px'
   }
 });
@@ -27,8 +27,9 @@ const Content = ({
   const classes = useStyles();
   const [, ShowAlert] = useAlert();
 
-  const confirm = () => {
-    if (confirmHandle) confirmHandle();
+  const confirm = event => {
+    if (confirmHandle) event.preventDefault();
+    confirmHandle();
     handleClose();
     ShowAlert({
       open: true,
@@ -37,21 +38,38 @@ const Content = ({
     });
   };
 
-  const reject = () => {
-    if (rejectHandle) rejectHandle();
-    handleClose();
+  const reject = event => {
+    if (rejectHandle) {
+      event.preventDefault();
+      rejectHandle();
+      handleClose();
+    }
   };
 
   return (
     <div className={classes.container}>
       <p className={classes.msg}>{message}</p>
-      <Button className={classes.btn} variant="contained" color="primary" onClick={confirm}>Так</Button>
-      <Button className={classes.btn} variant="contained" color="secondary" onClick={reject}>Ні</Button>
+      <Button
+        className={classes.btn}
+        variant="contained"
+        color="primary"
+        onClick={confirm}
+      >
+        Так
+      </Button>
+      <Button
+        className={classes.btn}
+        variant="contained"
+        color="secondary"
+        onClick={reject}
+      >
+        Ні
+      </Button>
     </div>
   );
 };
 
-Content.defaultProps ={
+Content.defaultProps = {
   confirmHandle: () => null,
   rejectHandle: () => null
 };
