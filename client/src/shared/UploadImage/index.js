@@ -6,7 +6,8 @@ import {
   Typography,
   GridList,
   GridListTile,
-  GridListTileBar
+  GridListTileBar,
+  Container
 } from '@material-ui/core';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -15,6 +16,11 @@ import permissionService from '../../modules/Auth/permissionService';
 import { ADD_IMAGES } from '../../modules/MapHolder/consts';
 
 const useStyles = makeStyles({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
   imgPreview: {
     width: '100%',
     maxWidth: 300
@@ -76,7 +82,7 @@ const UploadImage = ({
   };
 
   return (
-    <>
+    <Container className={classes.root} maxWidth="md">
       {images.length > 0 ? (
         <>
           <GridList
@@ -135,7 +141,7 @@ const UploadImage = ({
             : 'Добавити фото'}
         </UploadButton>
       )}
-    </>
+    </Container>
   );
 };
 

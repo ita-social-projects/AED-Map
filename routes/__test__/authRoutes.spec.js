@@ -12,7 +12,7 @@ const mockAdminEmail = 'admin@admin.com';
 const mockAdminPassword = 'qwe123Q!';
 const mockAdminPasswordHashed = '$2a$10$9kWs/nlfM7ZIxJq0tj8yquATo47d0OqDl1pv.3tRfRU8fvcWrBK0W';
 
-let tokenForRegister, tokenForAuth, tokenAdmin;
+let tokenForRegister, tokenForReset, tokenForAuth, tokenAdmin;
 
 const DBURL = `mongodb://localhost:27017/${mockDatabaseName}`;
 
@@ -24,7 +24,8 @@ describe('auth routes', () => {
     await mongoose.connect(DBURL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      useCreateIndex: true
+      useCreateIndex: true,
+      useFindAndModify: false
     });
 
     const admin = await User.findOne({ email: mockAdminEmail });
@@ -50,7 +51,7 @@ describe('auth routes', () => {
     done();
   });
 
-  it('should return status 201 when mail sent', async () => {
+  it('should return status 200 when mail sent on sign up', async () => {
     const user = await User.findOne({ email: mockEmailForRegister });
     if (user) {
       await User.findByIdAndDelete(user._id);
@@ -71,7 +72,7 @@ describe('auth routes', () => {
         
         tokenForRegister = res.body.token;
       })
-      .expect(201);
+      .expect(200);
   });
 
   it('should return status 201 when user created', async () => {
@@ -192,6 +193,76 @@ describe('auth routes', () => {
       .expect(200);
 
     expect(res.headers.authorization).toBeTruthy();
+  });
+
+  it('should return status 200 when mail sent on resetting password', async () => {
+    const res = await request
+      .post(`${BASEURL}/reset/sendmail`)
+      .send({
+        email: mockEmailForRegister
+      })
+      .expect((res) => {
+        if(res.body.message !== 'Якщо електронна адреса коректна, на неї надіслано лист\n з посиланням для відновлення пароля.')
+          throw new Error('message isn\'t correct');
+
+        if(res.body.token === undefined)
+          throw new Error('token isn\'t exist');
+        
+        tokenForReset = res.body.token;
+      })
+      .expect(200);
+  });
+
+  // reset
+  it('should return status 201 when password resetted', async () => {
+    const res = await request
+      .post(`${BASEURL}/reset`)
+      .send({
+        token: tokenForReset,
+        password: mockPassword,
+        passwordConfirm: mockPassword
+      })
+      .expect({
+        message:
+          'Вітаємо!\n Відновлення пароля пройшло успішно.'
+      })
+      .expect(201);
+  });
+
+  it('should return status 422 when token isn\'t correct', async () => {
+    const res = await request
+      .post(`${BASEURL}/reset`)
+      .send({
+        token: '$2a$10$i.0VgohTBtx8arWSKs4/AOY2IFgYbKLjHsDKs8raOHXnLz86HLcQKd',
+        password: mockPassword,
+        passwordConfirm: mockPassword
+      })
+      .expect({
+        message: 'Посилання для відновлення пароля не є дійсним.'
+      })
+      .expect(422);
+  });
+
+  it('should return status 404 when user not exist', async () => {
+    const user = await User.findOne({ email: mockEmailForRegister });
+    if (user) {
+      await User.findByIdAndDelete(user._id);
+    }
+
+    const res = await request
+      .post(`${BASEURL}/reset`)
+      .send({
+        token: tokenForReset,
+        password: mockPassword,
+        passwordConfirm: mockPassword
+      })
+      .expect({
+        errors: {
+          email:
+            'Ця електронна адреса нікому не належить.'
+        }
+      })
+      .expect(404);
   });
 
   afterAll(async (done) => {

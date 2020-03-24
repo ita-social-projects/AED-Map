@@ -15,7 +15,7 @@ pwSchema
   .has().not().spaces();
 
 // Rules for registration router - create
-const signupSendmailValidationRules = () => {
+const emailValidationRules = () => {
   return [
     // Email - required and structure email
     body('email')
@@ -27,7 +27,7 @@ const signupSendmailValidationRules = () => {
 };
 
 // Rules for registration router
-const signupValidationRules = () => {
+const passwordValidationRules = () => {
   return [
     // Password - required, length 8 - 64 symbols and password validation
     body('password')
@@ -49,6 +49,6 @@ const signupValidationRules = () => {
 };
 
 module.exports = {
-  signupSendmailValidationRules,
-  signupValidationRules
+  emailValidationRules,
+  passwordValidationRules
 };

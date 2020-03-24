@@ -55,7 +55,7 @@ router.get(
       if (req.query.longitude) {
         listDefs =
           (await Defibrillator.find(filter)
-            .select('address title location owner')
+            .select('address title location owner blocked')
             .where('location')
             .near({
               center: {
@@ -71,13 +71,13 @@ router.get(
       } else {
         listDefs =
           (await Defibrillator.find(filter)
-            .select('address title location owner')
+            .select('address title location owner blocked')
             .skip(perPage * (page - 1))
             .limit(perPage)) || [];
       }
       
       const mapDefs = await Defibrillator.find(filter)
-        .select('address title location owner')
+        .select('address title location owner');
 
       const totalCount = Math.ceil(mapDefs.length / perPage);
 

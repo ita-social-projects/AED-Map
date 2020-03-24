@@ -16,10 +16,11 @@ import Search from './components/Search';
 import ItemList from './components/ItemList';
 import AddForm from './components/AddForm';
 import EditForm from './components/EditForm';
+import Account from './components/Account';
 import Alert from '../../shared/Alert';
 import useAlert from '../../shared/Alert/useAlert';
 import {
-  CREATE_DEF_POINT
+  CREATE_DEF_POINT, ACCOUNT
 } from './components/ItemList/consts';
 import { sidebarWidth } from './styleConstants';
 
@@ -53,13 +54,22 @@ const Sidebar = ({ user, visible }) => {
     permissionForAdd,
     changePermissionForAdd
   ] = useState(false);
+  const [
+    permissionForAccount,
+    changePermissionForAccount
+  ] = useState(false);
 
   useEffect(() => {
     const permissionAdd = permissionService(
       CREATE_DEF_POINT,
       user
     );
+    const permissionAccount = permissionService(
+      ACCOUNT,
+      user
+    );
     changePermissionForAdd(permissionAdd);
+    changePermissionForAccount(permissionAccount);
   }, [user]);
 
   return (
@@ -93,6 +103,11 @@ const Sidebar = ({ user, visible }) => {
         <Route 
           path="/edit-form"
           component={EditForm}
+        />
+        <PrivateRoute
+          path="/account"
+          component={Account}
+          permission={permissionForAccount}
         />
         <Alert
           open={alert.open}

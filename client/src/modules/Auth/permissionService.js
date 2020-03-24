@@ -2,7 +2,8 @@ import {
   CREATE_DEF_POINT,
   EDIT_DEF_POINT,
   DELETE_DEF_POINT,
-  BLOCK_DEF_POINT
+  BLOCK_DEF_POINT,
+  ACCOUNT
 } from '../Sidebar/components/ItemList/consts';
 
 import { SIGNUP, ADMIN, USER } from './const';
@@ -20,6 +21,7 @@ const checkUserIsOwner = (user, defibrillator) =>
 const permissionService = (action, user, defibrillator) => {
   switch (action) {
     case CREATE_DEF_POINT:
+    case ACCOUNT:
       return checkUserIsAuth(user);
 
     case EDIT_DEF_POINT:

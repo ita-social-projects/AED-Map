@@ -14,6 +14,14 @@ export function signUpUser(data) {
   return http.post(`${URL}/signup`, data);
 };
 
+export function resetSendmail(data) {
+  return http.post(`${URL}/reset/sendmail`, data);
+}
+
+export function resetUser(data) {
+  return http.post(`${URL}/reset`, data);
+};
+
 export const validateUser = data => {
   return http.get(`${URL}/validate`, data);
 };

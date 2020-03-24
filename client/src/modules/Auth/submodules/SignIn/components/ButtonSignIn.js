@@ -1,20 +1,36 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Button } from '@material-ui/core';
-import { socketAuthClose } from '../../../../../shared/websocket';
-import { signOut } from '../../../actions/user';
+import { Button, makeStyles, Tooltip } from '@material-ui/core';
+import PersonIcon from '@material-ui/icons/Person';
 
-const ButtonSignIn = ({ handleOpen, user, signOutSubmit }) => {
-  const handleSignOut = () => {
-    signOutSubmit();
-    socketAuthClose();
-  };
+const useStyles = makeStyles({
+  personIcon: {
+    color: '#00A654',
+    fontSize: 50,
+    marginTop: -8,
 
-  return (
-    <Button variant="contained" color="primary" onClick={user ? handleSignOut : handleOpen}>
-      {user ? 'Вихід' : 'Вхід'}
+    '&:hover': {
+      cursor: 'pointer'
+    }
+  }
+});
+
+const ButtonSignIn = ({ handleOpen, user }) => {
+  const classes = useStyles();
+
+  if (!user) return (
+    <Button variant="contained" color="primary" onClick={handleOpen}>
+      Вхід
     </Button>
+  );
+  return (
+    <Link to="/account">
+      <Tooltip title="Особистий кабінет">
+        <PersonIcon fontSize="large" className={classes.personIcon} />
+      </Tooltip>
+    </Link>
   );
 };
 
@@ -28,15 +44,11 @@ ButtonSignIn.propTypes = {
     _id: PropTypes.string,
     email: PropTypes.string,
     role: PropTypes.string
-  }),
-  signOutSubmit: PropTypes.func.isRequired
+  })
 };
 
 export default connect(
   state => ({
     user: state.user.user
-  }),
-  dispatch => ({
-    signOutSubmit: () => dispatch(signOut())
   })
 )(ButtonSignIn);

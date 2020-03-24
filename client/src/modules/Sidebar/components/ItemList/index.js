@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   List,
@@ -61,7 +60,6 @@ const ItemList = ({
   const showHorizontalLoader =
     isLoading && !!defibrillators.length;
   let message;
-  const history = useHistory();
 
   switch (true) {
     case isLoading:
@@ -120,7 +118,6 @@ const ItemList = ({
   }, []);
 
   useEffect(() => {
-    history.push('/');
     if (didMount) {
       clearDefItems();
       fetchDefItems();

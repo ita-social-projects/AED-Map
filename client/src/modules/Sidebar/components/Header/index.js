@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Tooltip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { LOGO_IMG } from '../../../../consts/header';
-import Auth from './components/Auth';
+import SignIn from '../../../Auth/submodules/SignIn';
 
 const useStyles = makeStyles({
   headerWrapper: {
@@ -65,7 +65,7 @@ const Header = () => {
           </Tooltip>
         </Link>
         <div className={classes.headerRight}>
-          <Auth />
+          <SignIn />
         </div>
       </div>
     </div>
