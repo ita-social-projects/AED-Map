@@ -11,6 +11,7 @@ module.exports = {
     try {
       const admin = await db.collection('users').findOne({ email: ADMIN_EMAIL });
       if(admin) defibrillators.forEach(defibrillator => defibrillator.owner = admin._id);
+      defibrillators.forEach(defibrillator => defibrillator.blocked = false);
 
       await db.collection('defibrillators').insertMany(defibrillators);
       

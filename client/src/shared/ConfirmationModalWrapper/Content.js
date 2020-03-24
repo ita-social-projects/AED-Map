@@ -6,8 +6,6 @@ import useAlert from '../Alert/useAlert';
 
 const useStyles = makeStyles({
   container: {
-    width: 300,
-    height: 80,
     textAlign: 'center'
   },
   msg:{
@@ -23,7 +21,8 @@ const Content = ({
   handleClose,
   confirmHandle,
   rejectHandle,
-  message
+  message,
+  messageAlert
 }) => {
   const classes = useStyles();
   const [, ShowAlert] = useAlert();
@@ -34,8 +33,7 @@ const Content = ({
     ShowAlert({
       open: true,
       severity: 'success',
-      message:
-        'Поле успішно видалено'
+      message: messageAlert
     });
   };
 
@@ -62,7 +60,8 @@ Content.propTypes = {
   handleClose: PropTypes.func.isRequired,
   confirmHandle: PropTypes.func,
   rejectHandle: PropTypes.func,
-  message: PropTypes.string.isRequired
+  message: PropTypes.string.isRequired,
+  messageAlert: PropTypes.string.isRequired
 };
 
 export default Content;

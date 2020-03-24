@@ -74,7 +74,8 @@ router.post('/:defibrillatorId',
         resServerError(res, e);
       }
     });
-  });
+  }
+);
 
 // Route for receiving image
 router.get(

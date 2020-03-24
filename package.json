@@ -8,7 +8,7 @@
     "server": "nodemon start.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "start": "node start.js",
-    "lint": "eslint server.js ./config ./consts ./middleware ./models ./routes ./shared ./emails ./websoket --ext .js",
+    "lint": "eslint server.js ./config ./consts ./middleware ./models ./routes ./shared ./emails ./websocket --ext .js",
     "test-client": "cd client/ && yarn test",
     "test-server": "cross-env NODE_ENV=node jest routes --coverage",
     "migrate-admin-down": "migrate-mongo down -f ./migrations/adminMigration/migrate-mongo-config.js",

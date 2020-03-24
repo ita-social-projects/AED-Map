@@ -1,10 +1,27 @@
 const deepEqual = require('deep-equal');
+const jwt = require('jsonwebtoken');
+
+// Secret key for jwt
+const { SECRET_JWT_KEY_AUTH } = require('../config/keys');
 
 // Model of the collection 'defibrillator'
 const Defibrillator = require('../models/Defibrillator');
 
 // Admin and user role
 const { ADMIN, USER } = require('../consts/user_role_state');
+
+// Middleware for verification permission
+const checkPermission = async (req, res, next) => {
+  // Get jwt if it exists
+  const authorization = req.headers.authorization && req.headers.authorization.slice(7);
+  
+  // Verify jwt and if it is valid - send role to the next middleware
+  jwt.verify(authorization, SECRET_JWT_KEY_AUTH, async (err, payload) => {
+    if (err) return next();
+    req.role = payload.role;
+    return next();
+  });
+};
 
 // Middleware for admin permission
 const adminPermission = async (req, res, next) => {
@@ -75,6 +92,7 @@ const imageDeletePermission = async (req, res, next) => {
 };
 
 module.exports = {
+  checkPermission,
   adminPermission,
   defChangePermission,
   imageCreatePermission,

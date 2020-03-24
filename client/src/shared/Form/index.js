@@ -132,7 +132,7 @@ const MyForm = ({
               <MyImageField
                 variant="contained" 
                 color="primary"
-                className={classes.DefaultStyle}
+                className={classes.input}
                 id="images"
                 label="Завантажити зображення"
                 name="images"

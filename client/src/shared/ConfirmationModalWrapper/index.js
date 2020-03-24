@@ -7,7 +7,8 @@ const ConfirmationModalWrapper = ({
   ButtonOpen,
   confirmHandle,
   rejectHandle,
-  message
+  message,
+  messageAlert
 }) => {
   return (
     <>
@@ -19,6 +20,7 @@ const ConfirmationModalWrapper = ({
             confirmHandle={confirmHandle}
             rejectHandle={rejectHandle}
             message={message}
+            messageAlert={messageAlert}
           />
         )}
       />
@@ -35,7 +37,8 @@ ConfirmationModalWrapper.propTypes = {
   ButtonOpen: PropTypes.func.isRequired,
   confirmHandle: PropTypes.func,
   rejectHandle: PropTypes.func,
-  message: PropTypes.string.isRequired
+  message: PropTypes.string.isRequired,
+  messageAlert: PropTypes.string.isRequired
 };
 
 export default ConfirmationModalWrapper;

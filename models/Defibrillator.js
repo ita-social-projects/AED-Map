@@ -33,6 +33,7 @@ const { ObjectId } = Schema.Types;
   additional_information - String
   images - Array[String]
   owner - ObjectId
+  blocked - Boolean
 
   Note
   There is array coordinates in property 'location.coordinates'.
@@ -117,6 +118,12 @@ const defibrillatorSchema = new Schema({
     type: ObjectId,
     ref: 'users',
     required: true
+  },
+
+  blocked: {
+    type: Boolean,
+    default: false,
+    required: false
   }
 });
 
