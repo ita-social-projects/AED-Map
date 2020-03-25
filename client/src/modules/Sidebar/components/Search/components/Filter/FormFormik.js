@@ -9,7 +9,8 @@ import {
 } from '../../../../../../shared/Fields';
 import {
   languageInterface,
-  informationalPlates
+  informationalPlates,
+  accessibility
 } from './consts/formConsts';
 
 const useStyles = makeStyles(theme => ({
@@ -54,6 +55,13 @@ const FormFormik = ({ onSubmit }) => {
         label="informational_plates"
         name="informational_plates"
         options={informationalPlates}
+        classes={classes.inputs}
+      />
+      <MySelect
+        labelTitle="Години роботи"
+        label="accessibility"
+        name="accessibility"
+        options={accessibility}
         classes={classes.inputs}
       />
       <FormButtons />

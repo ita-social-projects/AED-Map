@@ -128,7 +128,7 @@ const MapHolder = ({
     const currentRoute = window.location.pathname;
     if (
       currentRoute === '/add-form' ||
-      currentRoute.includes('/edit-form') 
+      currentRoute.includes('/edit-form')
     ) {
       const { lng, lat } = event.lngLat;
 

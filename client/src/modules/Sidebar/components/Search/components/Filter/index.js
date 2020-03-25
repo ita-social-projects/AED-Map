@@ -34,6 +34,7 @@ const Filter = () => {
     exit: classes.filterFadeTransitionExit,
     exitActive: classes.filterFadeTransitionExitActive
   };
+
   return (
     <div>
       <FilterButton isOpen={isOpen} setIsOpen={setIsOpen} />
