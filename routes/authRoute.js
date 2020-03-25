@@ -9,8 +9,8 @@ const { resServerError } = require('../shared/resServerError');
 
 // Validation rules and function for routers
 const {
-  signupSendmailValidationRules,
-  signupValidationRules
+  emailValidationRules,
+  passwordValidationRules
 } = require('./validation/authRouteValidator');
 const { validate } = require('../middleware/validate');
 
@@ -20,6 +20,8 @@ const {
   EXPIRE_TIME_JWT_AUTH,
   SECRET_JWT_KEY_SIGN_UP,
   EXPIRE_TIME_JWT_SIGN_UP,
+  SECRET_JWT_KEY_RESET,
+  EXPIRE_TIME_JWT_RESET,
   EMAIL_USER,
   EMAIL_PASSWORD
 } = require('../config/keys');
@@ -36,6 +38,8 @@ const { adminPermission } = require('../middleware/permission');
 // Templates for sign up email
 const { signupEmail } = require('../emails/signup');
 const { signupSendmailEmail } = require('../emails/signupSendmail');
+const { resetEmail } = require('../emails/reset');
+const { resetSendmailEmail } = require('../emails/resetSendmail');
 
 // Create router
 const router = express.Router();
@@ -54,7 +58,7 @@ router.post(
   '/signup/sendmail',
   passport.authenticate('jwt', { session: false }),
   adminPermission,
-  signupSendmailValidationRules(),
+  emailValidationRules(),
   validate,
   async (req, res) => {
     // Get email from request
@@ -76,8 +80,8 @@ router.post(
       const token = jwt.sign({ email }, SECRET_JWT_KEY_SIGN_UP, { expiresIn: EXPIRE_TIME_JWT_SIGN_UP });
 
       try {
-        // Response [Created]
-        res.status(201).json({
+        // Response [OK]
+        res.status(200).json({
           message: 'Вітаємо!\n На цю електронну адресу надіслано лист\n з посиланням для створення пароля.',
           token
         });
@@ -95,7 +99,7 @@ router.post(
 // Route for registration
 router.post(
   '/signup',
-  signupValidationRules(),
+  passwordValidationRules(),
   validate,
   async (req, res) => {
     // Get email and password from request
@@ -104,6 +108,7 @@ router.post(
     // Verify token by secret key and expiration time
     jwt.verify(token, SECRET_JWT_KEY_SIGN_UP, async (err, payload) => {
       if (err) {
+        // Response [Unprocessable Entity]
         return res.status(422).json({
           message: 'Посилання для створення пароля не є дійсним.\n Зверніться до адміністратора, щоб отримати нове.'
         });
@@ -204,6 +209,101 @@ router.post(
           'Неправильна електронна адреса або пароль.\n Повторіть спробу.'
       });
     }
+  }
+);
+
+// Route for resetting password - send mail
+router.post(
+  '/reset/sendmail',
+  emailValidationRules(),
+  validate,
+  async (req, res) => {
+    // Get email from request
+    const { email } = req.body;
+    // Search document in collection 'users' with email
+    const candidate = await User.findOne({ email });
+    // Jwt for email
+    let token;
+
+    // Candidate exists
+    if (candidate) {
+      // Create jwt based on email, expiration time - 1 hour
+      token = jwt.sign({ email }, SECRET_JWT_KEY_RESET, { expiresIn: EXPIRE_TIME_JWT_RESET });
+
+      try {
+        // Send email
+        await transporter.sendMail(resetSendmailEmail(email, token));
+
+      } catch (e) {
+        resServerError(res, e);
+      }
+    }
+
+    // Response [OK]
+    res.status(200).json({
+      message: 'Якщо електронна адреса коректна, на неї надіслано лист\n з посиланням для відновлення пароля.',
+      token
+    });
+  }
+);
+
+// Route for resetting password
+router.post(
+  '/reset',
+  passwordValidationRules(),
+  validate,
+  async (req, res) => {
+    // Get email and password from request
+    const { token, password } = req.body;
+
+    // Verify token by secret key and expiration time
+    jwt.verify(token, SECRET_JWT_KEY_RESET, async (err, payload) => {
+      if (err) {
+        // Response [Unprocessable Entity]
+        return res.status(422).json({
+          message: 'Посилання для відновлення пароля не є дійсним.'
+        });
+      }
+
+      // Get email from payload
+      const { email } = payload;
+      // Search document in collection 'users' with email
+      const candidate = await User.findOne({ email });
+
+      // Candidate exists
+      if (candidate) {
+        // How many rounds bcrypt should hash password (2^round - 2 involution to power rounds)
+        const salt = bcrypt.genSaltSync(10);
+
+        try {
+          // Save user in collection 'users'
+          await User.findByIdAndUpdate(
+            candidate._id,
+            { password: bcrypt.hashSync(password, salt) },
+            { new: true }
+          );
+
+          // Response [Created]
+          res.status(201).json({
+            message: 'Вітаємо!\n Відновлення пароля пройшло успішно.'
+          });
+
+          // Send email
+          await transporter.sendMail(resetEmail(email));
+
+        } catch (e) {
+          resServerError(res, e);
+        }
+        
+      } else {
+        // Response [Not found] - error message
+        res.status(404).json({
+          errors: {
+            email: 'Ця електронна адреса нікому не належить.'
+          }
+        });
+      }
+    });
   }
 );
 

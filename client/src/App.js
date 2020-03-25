@@ -4,8 +4,10 @@ import {
   Route,
   Redirect,
   withRouter
+  , useHistory
 } from 'react-router-dom';
 import PropTypes from 'prop-types';
+
 import './App.css';
 import { CSSTransition } from 'react-transition-group';
 import { makeStyles } from '@material-ui/core/styles';
@@ -21,6 +23,7 @@ import Sidebar from './modules/Sidebar';
 import MapHolder from './modules/MapHolder';
 import StartModal from './modules/MapHolder/components/StartModal';
 import SignUpPassword from './modules/Auth/submodules/SignUp/submodules/SignUpPassword';
+import ResetPassword from './modules/Auth/submodules/Reset/submodules/ResetPassword';
 import { setActive } from './modules/Sidebar/components/ItemList/actions/list';
 
 const ValidateCancelToken = cancelToken();
@@ -81,7 +84,8 @@ const App = ({
   fail,
   location,
   mapData,
-  makeItemActive
+  makeItemActive,
+  user
 }) => {
   const classes = useStyles();
   const transitionClasses = {
@@ -98,12 +102,15 @@ const App = ({
   const [isStartModalOpen, setStartModal] = useState(
     !closeModal
   );
+  const history = useHistory();
+  const [didMount, setDidMount] = useState(false);
 
   if (pathname === '/' && search && mapData.length) {
     makeItemActive(search.split('=')[1]);
   }
 
   useEffect(() => {
+    setDidMount(true);
     (async () => {
       try {
         const { data, headers } = await validateUser();
@@ -122,6 +129,11 @@ const App = ({
     // eslint-disable-next-line
   }, []);
 
+  useEffect(() => {
+    if (didMount) history.push('/');
+    // eslint-disable-next-line
+  }, [user]);
+
   return (
     <div className="App">
       <div className={classes.mainStyle}>
@@ -130,21 +142,31 @@ const App = ({
             path="/signup/:email/:token"
             component={SignUpPassword}
           />
+          <Route
+            path="/reset/:email/:token"
+            component={ResetPassword}
+          />
           <Route path="/" component={Main} />
           <Redirect from="*" to="/" />
         </Switch>
       </div>
-      <CSSTransition
-        in={isStartModalOpen}
-        classNames={transitionClasses}
-        appear
-        timeout={1000}
-        unmountOnExit
-      >
-        <StartModal setStartModal={setStartModal} />
-      </CSSTransition>
+      {(location.pathname === '/') && (
+        <CSSTransition
+          in={isStartModalOpen}
+          classNames={transitionClasses}
+          appear
+          timeout={1000}
+          unmountOnExit
+        >
+          <StartModal setStartModal={setStartModal} />
+        </CSSTransition>
+      )}
     </div>
   );
+};
+
+App.defaultProps = {
+  user: null
 };
 
 App.propTypes = {
@@ -165,12 +187,18 @@ App.propTypes = {
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
     search: PropTypes.string.isRequired
-  }).isRequired
+  }).isRequired,
+  user: PropTypes.shape({
+    _id: PropTypes.string,
+    email: PropTypes.string,
+    role: PropTypes.string
+  })
 };
 
 export default connect(
   state => ({
-    mapData: state.defs.mapData
+    mapData: state.defs.mapData,
+    user: state.user.user
   }),
   dispatch => ({
     success: (user, authorization) =>

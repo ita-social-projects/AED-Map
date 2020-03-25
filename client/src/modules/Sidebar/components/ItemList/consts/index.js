@@ -12,3 +12,4 @@ export const SET_PAGE = 'SET_PAGE';
 export const SET_PER_PAGE = 'SET_PER_PAGE';
 export const ENTER_BUTTON_CODE = 13;
 export const BASE_ZOOM_VALUE = 17;
+export const ACCOUNT = 'ACCOUNT';

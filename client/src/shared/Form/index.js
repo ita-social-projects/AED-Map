@@ -17,6 +17,7 @@ import {
   setPage,
   setData
 } from '../../modules/Sidebar/components/ItemList/actions/list';
+import ButtonBack from '../ButtonBack';
 
 const useStyles = makeStyles({
   input: {
@@ -161,6 +162,7 @@ const MyForm = ({
               >
                 Зберегти
               </Button>
+              <ButtonBack />
             </Form>
           );
         }}

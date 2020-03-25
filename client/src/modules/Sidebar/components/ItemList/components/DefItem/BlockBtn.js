@@ -7,7 +7,12 @@ import BlockIcon from '@material-ui/icons/Block';
 const useStyles = makeStyles({
   pointCardBlockButton: {
     minWidth: 'auto',
-    marginLeft: 'auto'
+    marginLeft: 'auto',
+  },
+  pointCardBlockButtonBlocked: {
+    minWidth: 'auto',
+    marginLeft: 'auto',
+    background: '#d50000'
   }
 });
 
@@ -15,7 +20,7 @@ const BlockBtn = ({ handleOpen, blocked }) => {
   const classes = useStyles();
 
   return (
-    <Button variant="contained" color={blocked ? 'secondary' : 'primary'} className={classes.pointCardBlockButton} size="small" onClick={handleOpen}>
+    <Button variant="contained" color='primary' className={blocked ? classes.pointCardBlockButtonBlocked : classes.pointCardBlockButton} size="small" onClick={handleOpen}>
       <BlockIcon fontSize="small" />
     </Button>
   );
