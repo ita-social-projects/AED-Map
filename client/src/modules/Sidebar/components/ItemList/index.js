@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -8,7 +8,7 @@ import {
   CellMeasurerCache
 } from 'react-virtualized';
 import PropTypes from 'prop-types';
-import { fetchDefs, clearData } from './actions/list';
+import { fetchDefs } from './actions/list';
 import InfoMessage from './components/InfoMessage';
 import HorizontalLoader from '../../../../shared/Loader/HorizontalLoader';
 import DefItem from './components/DefItem';
@@ -48,12 +48,9 @@ const ItemList = ({
   filter,
   totalCount,
   page,
-  search,
-  user,
-  clearDefItems
+  search
 }) => {
   const classes = useStyles();
-  const [didMount, setDidMount] = useState(false);
   const noData = !isLoading && !defibrillators.length;
   const showMessage =
     (isLoading && !defibrillators.length) || noData;
@@ -107,7 +104,6 @@ const ItemList = ({
   };
 
   useEffect(() => {
-    setDidMount(true);
     if (!defibrillators.length) {
       fetchDefItems();
     }
@@ -116,17 +112,6 @@ const ItemList = ({
     };
     // eslint-disable-next-line
   }, []);
-
-  useEffect(() => {
-    if (didMount) {
-      clearDefItems();
-      fetchDefItems();
-    }
-    return () => {
-      defsCancelToken.cancel();
-    };
-    // eslint-disable-next-line
-  }, [user]);
 
   return (
     <div className={classes.listOuterStyle}>
@@ -157,7 +142,6 @@ const ItemList = ({
 ItemList.defaultProps = {
   searchedDefs: [],
   fetchDefItems: () => null,
-  clearDefItems: () => null,
   filter: null,
   user: null
 };
@@ -186,7 +170,6 @@ ItemList.propTypes = {
     })
   ),
   fetchDefItems: PropTypes.func,
-  clearDefItems: PropTypes.func,
   filter: PropTypes.oneOfType([PropTypes.object]),
   totalCount: PropTypes.number.isRequired,
   page: PropTypes.number.isRequired,
@@ -212,7 +195,6 @@ export default connect(
     user: state.user.user
   }),
   dispatch => ({
-    fetchDefItems: params => dispatch(fetchDefs(params)),
-    clearDefItems: () => dispatch(clearData()),
+    fetchDefItems: params => dispatch(fetchDefs(params))
   })
 )(ItemList);

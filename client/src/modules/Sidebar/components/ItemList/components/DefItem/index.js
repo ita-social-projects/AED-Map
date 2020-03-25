@@ -13,10 +13,10 @@ import {
 import DeleteBtn from './DeleteBtn';
 import BlockBtn from './BlockBtn';
 import ConfirmationModalWrapper from '../../../../../../shared/ConfirmationModalWrapper';
-import { 
+import {
   deleteDefItem,
   blockDefItem,
-  setActive 
+  setActive
 } from '../../actions/list';
 import {
   ENTER_BUTTON_CODE,
@@ -48,11 +48,11 @@ const useStyles = makeStyles({
   },
   pointCardButtons: {
     padding: props =>
-      props.isAuth ? 15 : 0,
+      props.hasPermission ? 15 : 0,
 
     display: 'flex',
     height: props =>
-      props.isAuth ? 60 : 0,
+      props.hasPermission ? 60 : 0,
 
     '& a': {
       textDecoration: 'none'
@@ -82,8 +82,8 @@ const DefItem = ({
   mapData
 }) => {
   const isActive = defItemInfo._id === activeItemId;
-  const isAuth = !!user;
-  const classes = useStyles({ isActive, isAuth });
+  const hasPermission = user && ((user.role === 'Admin') || (user._id === defItemInfo.owner));
+  const classes = useStyles({ isActive, hasPermission });
   const [lng, lat] = defItemInfo.location.coordinates;
   const [
     permissionForEdit,
@@ -234,7 +234,8 @@ DefItem.propTypes = {
     informational_plates: PropTypes.string,
     phone: PropTypes.arrayOf(PropTypes.string),
     additional_information: PropTypes.string,
-    blocked: PropTypes.bool
+    blocked: PropTypes.bool,
+    owner: PropTypes.string
   }),
   mapData: PropTypes.arrayOf(
     PropTypes.shape({

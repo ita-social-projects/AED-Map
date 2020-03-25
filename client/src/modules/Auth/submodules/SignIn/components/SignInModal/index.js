@@ -12,6 +12,7 @@ import {
   successSignIn,
   failSignIn
 } from '../../../../actions/user';
+import { fetchDefs, clearData } from '../../../../../Sidebar/components/ItemList/actions/list';
 import { INITIAL_VALUES } from './const';
 import AuthSchema from './validator';
 import Header from './components/Header';
@@ -32,7 +33,9 @@ const SignInModal = ({
   handleClose,
   start,
   success,
-  fail
+  fail,
+  fetchDefItems,
+  clearDefItems
 }) => {
   const classes = useStyles();
   const [error, setError] = useState('');
@@ -48,6 +51,8 @@ const SignInModal = ({
       const { authorization } = headers;
       success(data, authorization);
       socketAuthOpen();
+      clearDefItems();
+      fetchDefItems();
       handleClose();
     } catch (e) {
       const { message } = e.response.data;
@@ -89,12 +94,16 @@ SignInModal.propTypes = {
   handleClose: PropTypes.func.isRequired,
   start: PropTypes.func.isRequired,
   success: PropTypes.func.isRequired,
-  fail: PropTypes.func.isRequired
+  fail: PropTypes.func.isRequired,
+  fetchDefItems: PropTypes.func.isRequired,
+  clearDefItems: PropTypes.func.isRequired
 };
 
 export default connect(null, dispatch => ({
   start: () => dispatch(startSignIn()),
   success: (user, authorization) =>
     dispatch(successSignIn(user, authorization)),
-  fail: () => dispatch(failSignIn())
+  fail: () => dispatch(failSignIn()),
+  fetchDefItems: () => dispatch(fetchDefs()),
+  clearDefItems: () => dispatch(clearData()),
 }))(SignInModal);
