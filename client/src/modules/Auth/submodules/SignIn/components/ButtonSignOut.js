@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Button, makeStyles } from '@material-ui/core';
 import { socketAuthClose } from '../../../../../shared/websocket';
 import { signOut } from '../../../actions/user';
+import { fetchDefs, clearData } from '../../../../Sidebar/components/ItemList/actions/list';
 import ConfirmationModalWrapper from '../../../../../shared/ConfirmationModalWrapper';
 
 const useStyles = makeStyles({
@@ -27,10 +28,12 @@ CustomButton.propTypes = {
   handleOpen: PropTypes.func.isRequired
 };
 
-const ButtonSignOut = ({ signOutSubmit }) => {
+const ButtonSignOut = ({ signOutSubmit, fetchDefItems, clearDefItems }) => {
   const handleSignOut = () => {
     signOutSubmit();
     socketAuthClose();
+    clearDefItems();
+    fetchDefItems();
   };
 
   return (
@@ -44,12 +47,16 @@ const ButtonSignOut = ({ signOutSubmit }) => {
 };
 
 ButtonSignOut.propTypes = {
-  signOutSubmit: PropTypes.func.isRequired
+  signOutSubmit: PropTypes.func.isRequired,
+  fetchDefItems: PropTypes.func.isRequired,
+  clearDefItems: PropTypes.func.isRequired
 };
 
 export default connect(
   null,
   dispatch => ({
-    signOutSubmit: () => dispatch(signOut())
+    signOutSubmit: () => dispatch(signOut()),
+    fetchDefItems: () => dispatch(fetchDefs()),
+    clearDefItems: () => dispatch(clearData()),
   })
 )(ButtonSignOut);
