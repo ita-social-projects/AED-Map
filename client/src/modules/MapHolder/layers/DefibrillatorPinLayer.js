@@ -8,7 +8,7 @@ import { withRouter } from 'react-router-dom';
 import geoJsonData from '../geoJsonData';
 import { setActive } from '../../Sidebar/components/ItemList/actions/list';
 import { showPopup } from '../actions/popupDisplay';
-import mapPin from '../../../icons/map-marker-point.svg';
+import mapPin from '../../../icons/defibrillator-logo.png';
 
 const useStyles = makeStyles(() => ({
   clusterMarker: {
@@ -59,15 +59,20 @@ const DefibrillatorPinLayer = ({
   const defibrillatorPinClick = feature => {
     const { defID } = feature.properties;
     const { coordinates } = feature.geometry;
-
-    showPopup({
-      data: {
-        id: defID
-      },
-      coordinates
-    });
-    makeItemActive(defID);
-    history.push(`/?id=${defID}`);
+    const currentRoute = window.location.pathname;
+    if (
+      currentRoute !== '/add-form' &&
+      !currentRoute.includes('/edit-form')
+    ) {
+      showPopup({
+        data: {
+          id: defID
+        },
+        coordinates
+      });
+      makeItemActive(defID);
+      history.push(`/?id=${defID}`);
+    }
   };
   const clusterRender = GEO_JSON_DATA.features.map(
     feature => {

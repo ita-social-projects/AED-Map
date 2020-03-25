@@ -9,7 +9,10 @@ const {
   defChangePermission,
   adminPermission
 } = require('../middleware/permission');
-const { ADMIN, USER } = require('../consts/user_role_state');
+const {
+  ADMIN,
+  USER
+} = require('../consts/user_role_state');
 const Defibrillator = require('../models/Defibrillator');
 const router = express.Router();
 const {
@@ -18,7 +21,7 @@ const {
 const { validate } = require('../middleware/validate');
 const { getGFS } = require('./../db');
 
-const createFilter = req => {
+const createFilter = (req) => {
   const { query } = req;
   const filter = {};
   const skipKeys = [
@@ -34,61 +37,59 @@ const createFilter = req => {
     }
   });
 
-  const authorized = (req.role === ADMIN) || (req.role === USER);
-  if(!authorized) {
+  const authorized =
+    req.role === ADMIN || req.role === USER;
+  if (!authorized) {
     filter['blocked'] = { $ne: true };
   }
 
   return filter;
 };
 
-router.get(
-  '/',
-  checkPermission,
-  async (req, res) => {
-    try {
-      const filter = createFilter(req);
-      const perPage = Number(req.query.per_page) || 10;
-      const page = Number(req.query.page) || 1;
-      let listDefs;
+router.get('/', checkPermission, async (req, res) => {
+  try {
+    const filter = createFilter(req);
+    const perPage = Number(req.query.per_page) || 10;
+    const page = Number(req.query.page) || 1;
+    let listDefs;
 
-      if (req.query.longitude) {
-        listDefs =
-          (await Defibrillator.find(filter)
-            .select('address title location owner blocked')
-            .where('location')
-            .near({
-              center: {
-                type: 'Point',
-                coordinates: [
-                  req.query.longitude,
-                  req.query.latitude
-                ]
-              }
-            })
-            .skip(perPage * (page - 1))
-            .limit(perPage)) || [];
-      } else {
-        listDefs =
-          (await Defibrillator.find(filter)
-            .select('address title location owner blocked')
-            .skip(perPage * (page - 1))
-            .limit(perPage)) || [];
-      }
-      
-      const mapDefs = await Defibrillator.find(filter)
-        .select('address title location owner');
-
-      const totalCount = Math.ceil(mapDefs.length / perPage);
-
-      return res
-        .status(200)
-        .send({ listDefs, mapDefs, totalCount });
-    } catch (e) {
-      resServerError(res, e);
+    if (req.query.longitude) {
+      listDefs =
+        (await Defibrillator.find(filter)
+          .select('address title location owner blocked')
+          .where('location')
+          .near({
+            center: {
+              type: 'Point',
+              coordinates: [
+                req.query.longitude,
+                req.query.latitude
+              ]
+            }
+          })
+          .skip(perPage * (page - 1))
+          .limit(perPage)) || [];
+    } else {
+      listDefs =
+        (await Defibrillator.find(filter)
+          .select('address title location owner blocked')
+          .skip(perPage * (page - 1))
+          .limit(perPage)) || [];
     }
+
+    const mapDefs = await Defibrillator.find(filter).select(
+      'address title location owner'
+    );
+
+    const totalCount = Math.ceil(mapDefs.length / perPage);
+
+    return res
+      .status(200)
+      .send({ listDefs, mapDefs, totalCount });
+  } catch (e) {
+    resServerError(res, e);
   }
-);
+});
 
 router.post(
   '/',

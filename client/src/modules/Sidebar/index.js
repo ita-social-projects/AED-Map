@@ -20,7 +20,8 @@ import Account from './components/Account';
 import Alert from '../../shared/Alert';
 import useAlert from '../../shared/Alert/useAlert';
 import {
-  CREATE_DEF_POINT, ACCOUNT
+  CREATE_DEF_POINT,
+  ACCOUNT
 } from './components/ItemList/consts';
 import { sidebarWidth } from './styleConstants';
 
@@ -100,10 +101,7 @@ const Sidebar = ({ user, visible }) => {
           component={AddForm}
           permission={permissionForAdd}
         />
-        <Route 
-          path="/edit-form"
-          component={EditForm}
-        />
+        <Route path="/edit-form" component={EditForm} />
         <PrivateRoute
           path="/account"
           component={Account}

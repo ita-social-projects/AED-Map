@@ -9,10 +9,15 @@ import {
 } from 'react-virtualized';
 import PropTypes from 'prop-types';
 import { fetchDefs } from './actions/list';
+import {
+  setMapCenter,
+  setMapZoom
+} from '../../../MapHolder/actions/mapState';
 import InfoMessage from './components/InfoMessage';
 import HorizontalLoader from '../../../../shared/Loader/HorizontalLoader';
 import DefItem from './components/DefItem';
 import cancelToken from '../../../../shared/cancel-token';
+import { BASE_ZOOM_VALUE } from './consts';
 
 const defsCancelToken = cancelToken();
 
@@ -43,12 +48,14 @@ const useStyles = makeStyles({
 const ItemList = ({
   isLoading,
   defibrillators,
-  searchedDefs,
+  activeDef,
   fetchDefItems,
   filter,
   totalCount,
   page,
-  search
+  search,
+  setMapCenterCoords,
+  setMapZoomParam
 }) => {
   const classes = useStyles();
   const noData = !isLoading && !defibrillators.length;
@@ -97,7 +104,7 @@ const ItemList = ({
       >
         <DefItem
           styleParam={style}
-          defItemInfo={searchedDefs[index]}
+          defItemInfo={defibrillators[index]}
         />
       </CellMeasurer>
     );
@@ -113,6 +120,18 @@ const ItemList = ({
     // eslint-disable-next-line
   }, []);
 
+  useEffect(() => {
+    if (activeDef) {
+      const [lng, lat] = activeDef.location.coordinates;
+      setMapCenterCoords({
+        lng,
+        lat
+      });
+      setMapZoomParam(BASE_ZOOM_VALUE);
+    }
+    // eslint-disable-next-line
+  }, [activeDef]);
+
   return (
     <div className={classes.listOuterStyle}>
       <AutoSizer>
@@ -125,7 +144,7 @@ const ItemList = ({
               width={width}
               height={height}
               deferredMeasurementCache={cache}
-              rowCount={searchedDefs.length}
+              rowCount={defibrillators.length}
               rowHeight={cache.rowHeight}
               rowRenderer={rowRenderer}
               overscanRowCount={10}
@@ -140,7 +159,9 @@ const ItemList = ({
 };
 
 ItemList.defaultProps = {
-  searchedDefs: [],
+  activeDef: null,
+  setMapCenterCoords: () => null,
+  setMapZoomParam: () => null,
   fetchDefItems: () => null,
   filter: null,
   user: null
@@ -150,25 +171,7 @@ ItemList.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   defibrillators: PropTypes.arrayOf(PropTypes.object)
     .isRequired,
-  searchedDefs: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      title: PropTypes.string,
-      address: PropTypes.string,
-      location: PropTypes.shape({
-        type: PropTypes.string,
-        coordinates: PropTypes.arrayOf(PropTypes.number)
-      }),
-      actual_date: PropTypes.string,
-      floor: PropTypes.number,
-      storage_place: PropTypes.string,
-      accessibility: PropTypes.string,
-      language: PropTypes.string,
-      informational_plates: PropTypes.string,
-      phone: PropTypes.arrayOf(PropTypes.string),
-      additional_information: PropTypes.string
-    })
-  ),
+  activeDef: PropTypes.oneOfType([PropTypes.object]),
   fetchDefItems: PropTypes.func,
   filter: PropTypes.oneOfType([PropTypes.object]),
   totalCount: PropTypes.number.isRequired,
@@ -180,7 +183,9 @@ ItemList.propTypes = {
     _id: PropTypes.string,
     email: PropTypes.string,
     role: PropTypes.string
-  })
+  }),
+  setMapCenterCoords: PropTypes.func,
+  setMapZoomParam: PropTypes.func
 };
 
 export default connect(
@@ -188,13 +193,19 @@ export default connect(
     isLoading: state.defs.loading,
     defibrillators: state.defs.listData,
     filter: state.filter,
-    searchedDefs: state.defs.listData,
+    activeDef: state.defs.listData.find(
+      def => def._id === state.defs.active
+    ),
     totalCount: state.defs.totalCount,
     page: state.defs.page,
     search: state.search,
     user: state.user.user
   }),
   dispatch => ({
-    fetchDefItems: params => dispatch(fetchDefs(params))
+    fetchDefItems: params => dispatch(fetchDefs(params)),
+    setMapCenterCoords: mapState =>
+      dispatch(setMapCenter(mapState)),
+    setMapZoomParam: mapState =>
+      dispatch(setMapZoom(mapState))
   })
 )(ItemList);
