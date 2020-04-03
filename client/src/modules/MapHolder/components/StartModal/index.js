@@ -43,6 +43,7 @@ const useStyles = makeStyles(() => ({
 
 const StartModal = ({ setStartModal }) => {
   const classes = useStyles();
+
   const handleClose = () => {
     sessionStorage.setItem('startModal', 'close');
     setStartModal(false);

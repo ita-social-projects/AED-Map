@@ -82,6 +82,8 @@ const getCurrentPosition = (options = {}) => {
 export const fetchDefs = params => {
   return async dispatch => {
     dispatch(startLoadDef());
+    dispatch(setPage());
+
     try {
       let userCoordinates;
       try {
@@ -91,7 +93,7 @@ export const fetchDefs = params => {
       } catch (e) {
         userCoordinates = null;
       }
-      dispatch(setPage());
+
       const { data } = await getDefItems(
         { ...params, ...userCoordinates },
         defsCancelToken.instance
@@ -181,7 +183,10 @@ export const blockDefItem = (id, blocked) => {
       const { data } = await blockItem(id, { blocked });
       const { defibrillator } = data;
       dispatch(
-        blockDefPoint(defibrillator._id, defibrillator.blocked)
+        blockDefPoint(
+          defibrillator._id,
+          defibrillator.blocked
+        )
       );
     } catch (e) {
       dispatch(failLoadDef(e));
