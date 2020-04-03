@@ -8,7 +8,7 @@ import { withRouter } from 'react-router-dom';
 import geoJsonData from '../geoJsonData';
 import { setActive } from '../../Sidebar/components/ItemList/actions/list';
 import { showPopup } from '../actions/popupDisplay';
-import mapPin from '../../../icons/defibrillator-logo.png';
+import mapPin from '../../../icons/map-pin-icon.jpg';
 
 const useStyles = makeStyles(() => ({
   clusterMarker: {
@@ -49,13 +49,14 @@ const useStyles = makeStyles(() => ({
 }));
 
 const DefibrillatorPinLayer = ({
-  filteredDefs,
+  defibrillators,
   showPopup,
   makeItemActive,
   history
 }) => {
-  const GEO_JSON_DATA = geoJsonData(filteredDefs);
+  const GEO_JSON_DATA = geoJsonData(defibrillators);
   const classes = useStyles();
+
   const defibrillatorPinClick = feature => {
     const { defID } = feature.properties;
     const { coordinates } = feature.geometry;
@@ -74,6 +75,7 @@ const DefibrillatorPinLayer = ({
       history.push(`/?id=${defID}`);
     }
   };
+
   const clusterRender = GEO_JSON_DATA.features.map(
     feature => {
       return (
@@ -97,6 +99,7 @@ const DefibrillatorPinLayer = ({
       );
     }
   );
+
   const clusterMarker = (coordinates, pointCount) => {
     return (
       <Marker
@@ -123,7 +126,7 @@ const DefibrillatorPinLayer = ({
 
 DefibrillatorPinLayer.defaultProps = {
   map: {},
-  filteredDefs: [],
+  defibrillators: [],
   showPopup: () => null
 };
 
@@ -134,7 +137,7 @@ DefibrillatorPinLayer.propTypes = {
     getSource: PropTypes.func,
     easeTo: PropTypes.func
   }),
-  filteredDefs: PropTypes.arrayOf(
+  defibrillators: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
       title: PropTypes.string,
@@ -166,7 +169,7 @@ DefibrillatorPinLayer.propTypes = {
 
 export default connect(
   state => ({
-    filteredDefs: state.defs.mapData,
+    defibrillators: state.defs.mapData,
     mapState: state.mapState
   }),
   dispatch => ({
