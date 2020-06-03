@@ -8,7 +8,7 @@ COPY package*.json ./
 
 USER node
 
-RUN yarn install --network-timeout 100000
+RUN yarn install
 
 COPY --chown=node:node . .
 
