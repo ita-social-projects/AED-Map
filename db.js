@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
-const defaultMongoURI = 'mongodb://localhost:27017/defibrillatorDB';
+const MONGODB_HOST = process.env.MONGODB_HOST || 'localhost';
+const MONGODB_PORT = process.env.MONGODB_PORT || '27017';
+const MONGODB_DATABASE = process.env.MONGODB_DATABASE || 'defibrillator';
+
+const defaultMongoURI = `mongodb://${MONGODB_HOST}:${MONGODB_PORT}/${MONGODB_DATABASE}`;
 let gfs;
 
 const dbInit = (mongoURI = defaultMongoURI) => {

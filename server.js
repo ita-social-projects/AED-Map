@@ -1,5 +1,4 @@
 const express = require('express');
-const path = require('path');
 const passport = require('passport');
 const http = require('http');
 const socketio = require('socket.io');
@@ -28,10 +27,5 @@ app.use('/api/images', imageRoute);
 // Middlewares for passport
 app.use(passport.initialize());
 require('./middleware/passport')(passport);
-
-app.use((req, res, next) => {
-  console.log('%O', req);
-  next();
-});
 
 module.exports = { server, app };
