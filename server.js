@@ -19,8 +19,6 @@ authEvent(io);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('client/build'));
-app.use(express.static('client/testing'));
 
 app.use('/api/auth', authRoute);
 app.use('/api/gmap', gmapRoute);
@@ -31,10 +29,9 @@ app.use('/api/images', imageRoute);
 app.use(passport.initialize());
 require('./middleware/passport')(passport);
 
-app.get('*', (req, res) => {
-  res.sendFile(
-    path.resolve(__dirname, 'client', 'build', 'index.html')
-  );
+app.use((req, res, next) => {
+  console.log('%O', req);
+  next();
 });
 
 module.exports = { server, app };
