@@ -24,7 +24,7 @@
     "react-places-autocomplete": "^7.2.1",
     "react-redux": "^7.1.3",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.3.0",
+    "react-scripts": "3.4.0",
     "react-transition-group": "^4.3.0",
     "react-virtualized": "^9.21.2",
     "redux": "^4.0.5",
@@ -56,11 +56,6 @@
         "lines": 80,
         "statements": 80
       }
-    }
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged && yarn test && yarn test-server"
     }
   },
   "lint-staged": {

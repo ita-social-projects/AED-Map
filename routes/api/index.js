@@ -1,7 +1,6 @@
 const URL = 'https://maps.googleapis.com/maps/api/place';
 const revURL =
   'https://maps.googleapis.com/maps/api/geocode/json';
-const key = 'AIzaSyAeiV7W79YEl7jW_BZ9SXA4YN-pdzKqMUc';
 const axios = require('axios');
 
 const getGeocodingOptions = (value) => {
@@ -9,7 +8,7 @@ const getGeocodingOptions = (value) => {
     `${URL}/autocomplete/json?input=${encodeURI(value)}`,
     {
       params: {
-        key,
+        key: process.env.GOOGLE_API_KEY,
         sessiontoken: '1234567898'
       }
     }
@@ -20,7 +19,7 @@ const getGeocodingDetails = (id) => {
     params: {
       place_id: id,
       fields: 'geometry',
-      key
+      key: process.env.GOOGLE_API_KEY
     }
   });
 };
@@ -28,8 +27,8 @@ const getReverseGeocoding = (lng, lat) => {
   return axios.get(`${revURL}`, {
     params: {
       latlng: `${lat},${lng}`,
-      key,
-      language:'uk'
+      key: process.env.GOOGLE_API_KEY,
+      language: 'uk'
     }
   });
 };

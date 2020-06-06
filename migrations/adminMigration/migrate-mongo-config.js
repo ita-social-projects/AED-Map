@@ -1,10 +1,10 @@
 const config = {
   mongodb: {
-    url: 'mongodb://localhost:27017',
-    databaseName: 'defibrillatorDB',
+    url: `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@${process.env.MONGO_DB_HOST}`,
+    databaseName: process.env.MONGO_DB_NAME,
     options: {
-      useNewUrlParser: true, 
-      useUnifiedTopology: true, 
+      useNewUrlParser: true,
+      useUnifiedTopology: true
     }
   },
 
