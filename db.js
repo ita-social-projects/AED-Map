@@ -3,8 +3,10 @@ const mongoose = require('mongoose');
 const MONGODB_HOST = process.env.MONGODB_HOST || 'localhost';
 const MONGODB_PORT = process.env.MONGODB_PORT || '27017';
 const MONGODB_DATABASE = process.env.MONGODB_DATABASE || 'defibrillator';
+const MONGODB_USERNAME = process.env.MONGODB_USERNAME || 'defibrillator_user';
+const MONGODB_PASSWORD = process.env.MONGODB_DATABASE || '';
 
-const defaultMongoURI = `mongodb://${MONGODB_HOST}:${MONGODB_PORT}/${MONGODB_DATABASE}`;
+const defaultMongoURI = `mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@${MONGODB_HOST}:${MONGODB_PORT}/${MONGODB_DATABASE}`;
 let gfs;
 
 const dbInit = (mongoURI = defaultMongoURI) => {
