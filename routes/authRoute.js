@@ -166,12 +166,10 @@ router.post(
     const { email, password } = req.body;
     console.log(email)
     console.log(password)
+    console.log(User.find()); // Prints documents one at a time
 
     // Search document in collection 'users' with email
     const candidate = await User.findOne({ 'email': email });
-    for await (const doc of User.find()) {
-      console.log(doc); // Prints documents one at a time
-    }
 
     console.log(candidate)
 
