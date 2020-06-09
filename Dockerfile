@@ -16,4 +16,4 @@ COPY . .
 RUN yarn run migrate
 
 EXPOSE 8080
-CMD [ "node", "start.js" ]
+CMD [ "yarn", "migrte-and-start" ]
