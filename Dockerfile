@@ -14,4 +14,4 @@ RUN yarn install
 COPY . .
 
 EXPOSE 8080
-CMD [ "yarn", "migrte-and-start" ]
+CMD [ "yarn", "migrate-and-start" ]
