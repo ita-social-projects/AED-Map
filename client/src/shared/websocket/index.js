@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import store from '../../store';
 import { signOut } from '../../modules/Auth/actions/user';
 
-const socket = io('http://localhost:3012', { 
+const socket = io('http://server:8080', { 
   autoConnect: false 
 });
 

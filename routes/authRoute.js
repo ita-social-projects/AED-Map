@@ -168,7 +168,7 @@ router.post(
     console.log(password)
 
     // Search document in collection 'users' with email
-    const candidate = await User.findOne({ email });
+    const candidate = await User.findOne({ 'email': email });
     console.log(candidate)
 
     // Candidate exists
