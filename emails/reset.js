@@ -1,5 +1,3 @@
-const { BASE_URL } = require('../config/keys');
-
 const resetEmail = (email) => ({
   from: process.env.EMAIL_FROM,
   to: email,
@@ -8,7 +6,7 @@ const resetEmail = (email) => ({
       <h1>Вітаємо, вас!</h1>
       <p>Відновлення пароля пройшло успішно.</p>
       <hr />
-      <a href="${BASE_URL}">Головна сторінка</a>
+      <a href="${process.env.BASE_URL}">Головна сторінка</a>
     `
 });
 

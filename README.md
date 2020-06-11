@@ -89,6 +89,7 @@ EXPIRE_TIME_JWT_RESET - expiration time 1 hour
 ### Email configuration
 
 ```
+BASE_URL - URL for redirection to main page of app from email
 EMAIL_USER - Mail account username
 EMAIL_PASSWORD - Mail account password
 EMAIL_FROM - Mail account for users notification(successfull registration, password reseting ...)
