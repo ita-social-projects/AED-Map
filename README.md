@@ -104,6 +104,9 @@ ADMIN_PASSWORD
 
 ### Google maps api
 
+Generate your own Google API key in developer console 
+https://developers.google.com/maps/documentation/geocoding/get-api-key
+
 ```
 GOOGLE_API_KEY
 ```
