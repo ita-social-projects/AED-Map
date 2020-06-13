@@ -8,6 +8,11 @@ env:
     IMAGE: rborovets/defibrillator-back
             
 phases:
+  install:
+    commands:
+      - curl -sSL https://raw.githubusercontent.com/harbur/captain/v1.1.3/install.sh | bash
+      - export PATH=$HOME/.captain/bin:$PATH
+
   pre_build:
     commands:
       - echo Logging in to Dockerhub...
@@ -25,4 +30,4 @@ phases:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
-      - docker push $IMAGE
+      - captain push
