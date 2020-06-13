@@ -12,17 +12,17 @@ phases:
       - echo Logging in to Dockerhub...
       - docker login -u $DOKCERHUB_USERNAME -p $DOKCERHUB_PASSWORD
 
-    build:
-      commands:
-        - echo Build started on `date` && echo Building the Docker image...
-        - docker build . -t rborovets/defibrillator-back
-        - echo Running tests
-        - docker run rborovets/defibrillator-back echo 'Running tests'
-        - echo Running linters here
-        - docker run rborovets/defibrillator-back echo 'Running linters'
-  
-    post_build:
-      commands:
-        - echo Build completed on `date`
-        - echo Pushing the Docker image...
-        - docker push rborovets/defibrillator-back
+  build:
+    commands:
+      - echo Build started on `date` && echo Building the Docker image...
+      - docker build . -t rborovets/defibrillator-back
+      - echo Running tests
+      - docker run rborovets/defibrillator-back echo 'Running tests'
+      - echo Running linters here
+      - docker run rborovets/defibrillator-back echo 'Running linters'
+
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push rborovets/defibrillator-back
