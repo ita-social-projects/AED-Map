@@ -11,7 +11,7 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Dockerhub...
-      - sudo docker login -u $DOKCERHUB_USERNAME -p $DOKCERHUB_PASSWORD
+      - docker login -u $DOKCERHUB_USERNAME -p $DOKCERHUB_PASSWORD
 
   build:
     commands:
