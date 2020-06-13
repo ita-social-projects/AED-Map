@@ -17,7 +17,7 @@ phases:
     commands:
       - echo Build started on `date` && echo Building the Docker image...
 
-      - echo $IMAGE && docker build . -t $IMAGE
+      - echo $IMAGE && sudo docker build . -t $IMAGE
       - sudo docker run $IMAGE echo 'Running tests'
       - sudo docker run $IMAGE echo 'Running linters'
 
