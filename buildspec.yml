@@ -21,8 +21,7 @@ phases:
   build:
     commands:
       - echo Build started on `date` && echo Building the Docker image...
-
-      - echo $IMAGE && docker build . -t $IMAGE
+      - docker build . -t $IMAGE
       - docker run $IMAGE echo 'Running tests'
       - docker run $IMAGE echo 'Running linters'
 
@@ -30,4 +29,4 @@ phases:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
-      - captain push
+      - captain push -с
