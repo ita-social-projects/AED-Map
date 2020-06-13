@@ -17,12 +17,12 @@ phases:
     commands:
       - echo Build started on `date` && echo Building the Docker image...
 
-      - echo $IMAGE && sudo docker build . -t $IMAGE
-      - sudo docker run $IMAGE echo 'Running tests'
-      - sudo docker run $IMAGE echo 'Running linters'
+      - echo $IMAGE && docker build . -t $IMAGE
+      - docker run $IMAGE echo 'Running tests'
+      - docker run $IMAGE echo 'Running linters'
 
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
-      - sudo docker push $IMAGE
+      - docker push $IMAGE
