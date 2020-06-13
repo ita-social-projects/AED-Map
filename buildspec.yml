@@ -4,6 +4,8 @@ env:
   secrets-manager:
     DOKCERHUB_USERNAME: dockerhub:username
     DOKCERHUB_PASSWORD: dockerhub:password
+  variables:
+    IMAGE: rborovets/defibrillator-back
             
 phases:
   pre_build:
@@ -15,14 +17,14 @@ phases:
   build:
     commands:
       - echo Build started on `date` && echo Building the Docker image...
-      - docker build . -t rborovets/defibrillator-back
+      - docker build . -t $IMAGE
       - echo Running tests
-      - docker run rborovets/defibrillator-back echo 'Running tests'
+      - docker run $IMAGE echo 'Running tests'
       - echo Running linters here
-      - docker run rborovets/defibrillator-back echo 'Running linters'
+      - docker run $IMAGE echo 'Running linters'
 
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
-      - docker push rborovets/defibrillator-back
+      - docker push $IMAGE
