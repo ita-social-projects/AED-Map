@@ -17,10 +17,9 @@ phases:
   build:
     commands:
       - echo Build started on `date` && echo Building the Docker image...
-      - docker build . -t $IMAGE
-      - echo Running tests
+      
+      - echo $IMAGE && docker build . -t $IMAGE
       - docker run $IMAGE echo 'Running tests'
-      - echo Running linters here
       - docker run $IMAGE echo 'Running linters'
 
   post_build:
