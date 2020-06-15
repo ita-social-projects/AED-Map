@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: lb-back
+spec:
+  selector:
+    app: defibrillator-back
+  ports:
+  - protocol: "TCP"
+    port: 8080
+    targetPort: 8080
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: defibrillator-back
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: defibrillator-back
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: defibrillator-back
+    spec:
+      containers:
+      - name: defibrillator-back
+        image: rborovets/defibrillator-back
+        ports:
+          - name: http
+            containerPort: 8080
+        env:
+          - name: MONGODB_URI
+            value: "mongodb+srv://defibrillator_user:root@cluster0-hchav.mongodb.net/defibrillators_db?authSource=admin&retryWrites=true&ssl=true"
+          - name: MONGODB_DB
+            value: "defibrillators_db"
