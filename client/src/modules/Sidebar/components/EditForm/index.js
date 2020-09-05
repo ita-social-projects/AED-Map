@@ -36,8 +36,7 @@ const EditForm = ({ setMapCenter }) => {
 
     setDef({
       title: defibrillator.title,
-      address:
-        correctAddress.data.results[0].formatted_address,
+      address: correctAddress.data.results[0] && correctAddress.data.results[0].formatted_address,
       informational_plates:
         defibrillator.informational_plates,
       phone: defibrillator.phone,

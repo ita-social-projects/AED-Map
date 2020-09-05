@@ -26,7 +26,7 @@ const router = express.Router();
 // Create GridFs storage for multer middleware
 const getStorage = url => {
   const storage = new GridFsStorage({
-    url: `mongodb://localhost:27017/${url}`,
+    url: `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@${process.env.MONGO_DB_HOST}/${url}`,
     options: { useUnifiedTopology: true },
     file: (req, file) => {
       return new Promise((resolve, reject) => {
