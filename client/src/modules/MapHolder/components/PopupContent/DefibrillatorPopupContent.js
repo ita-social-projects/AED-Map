@@ -11,6 +11,7 @@ import cancelToken from '../../../../shared/cancel-token';
 import { titles } from './consts';
 
 const currDefCancelToken = cancelToken();
+const BASE_URL = process.env.BASE_URL;
 
 const useStyle = makeStyles({
   popupContainer: {
@@ -100,7 +101,7 @@ const DefibrillatorPopupContent = ({ id, hidePopup }) => {
         <img
           title={currDef.images[0].filename}
           className={classes.imagePreview}
-          src={`http://localhost:3012/api/images/${currDef.images[0].filename}`}
+          src={`${BASE_URL}/api/images/${currDef.images[0].filename}`}
           alt={currDef.images[0].filename}
         />
       )}

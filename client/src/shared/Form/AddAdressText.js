@@ -52,7 +52,7 @@ const AddAdressText = ({
   }, []);
 
   useEffect(() => {
-    if (value.length > 2) {
+    if (value && value.length > 2) {
       (async () => {
         const countries = await getGeocodingOptions(value);
         setOptions(countries.data.predictions);
@@ -102,7 +102,7 @@ const AddAdressText = ({
       id="searcher"
       open={open}
       onOpen={() => {
-        if (value.length > 0) setOpen(true);
+        if (value && value.length > 0) setOpen(true);
       }}
       onClose={() => {
         setOpen(false);
