@@ -1,4 +1,4 @@
-# Defibrillator
+# AED Map
 
 ## 1. Prerequisites
 
