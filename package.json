@@ -56,7 +56,7 @@
   "author": "LV-469",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "deep-equal": "^2.0.1",
