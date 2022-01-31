@@ -13,8 +13,6 @@ import { createImage } from '../../../../Sidebar/api';
 import UploadImage from '../../../../../shared/UploadImage';
 import useAlert from '../../../../../shared/Alert/useAlert';
 
-const BASE_URL = process.env.BASE_URL;
-
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
@@ -79,7 +77,7 @@ const ModalPhotoContent = ({
             {images.map(image => (
               <GridListTile key={image.id}>
                 <img
-                  src={`${BASE_URL}/api/images/${image.filename}`}
+                  src={`http://localhost:3000/api/images/${image.filename}`}
                   alt={image.filename}
                 />
               </GridListTile>

@@ -9,15 +9,15 @@ const path = require('path');
 // GridFS
 const { getGFS } = require('./../db');
 
-// Handler for server error 
+// Handler for server error
 const { resServerError } = require('../shared/resServerError');
 
 // Model of the collection 'defibrillators'
 const Defibrillator = require('../models/Defibrillator');
 
 // Check permissions middleware
-const { imageCreatePermission, 
-  imageDeletePermission 
+const { imageCreatePermission,
+  imageDeletePermission
 } = require('../middleware/permission');
 
 // Create router
@@ -26,7 +26,7 @@ const router = express.Router();
 // Create GridFs storage for multer middleware
 const getStorage = url => {
   const storage = new GridFsStorage({
-    url: `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@${process.env.MONGO_DB_HOST}/${url}`,
+    url: `mongodb://localhost:27017/${url}`,
     options: { useUnifiedTopology: true },
     file: (req, file) => {
       return new Promise((resolve, reject) => {
@@ -50,7 +50,7 @@ const getStorage = url => {
 };
 
 // Route for creating image
-router.post('/:defibrillatorId', 
+router.post('/:defibrillatorId',
   passport.authenticate('jwt', { session: false }),
   imageCreatePermission,
   (req, res) => {
@@ -69,7 +69,7 @@ router.post('/:defibrillatorId',
         res
           .status(201)
           .json({ images: req.files.map(file => ({ id: file.id, filename: file.filename })) });
-    
+
       } catch (e) {
         resServerError(res, e);
       }

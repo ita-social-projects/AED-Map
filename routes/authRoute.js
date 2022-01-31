@@ -16,6 +16,17 @@ const {
 } = require('./validation/authRouteValidator');
 const { validate } = require('../middleware/validate');
 
+const {
+  SECRET_JWT_KEY_AUTH,
+  EXPIRE_TIME_JWT_AUTH,
+  SECRET_JWT_KEY_SIGN_UP,
+  EXPIRE_TIME_JWT_SIGN_UP,
+  SECRET_JWT_KEY_RESET,
+  EXPIRE_TIME_JWT_RESET,
+  EMAIL_USER,
+  EMAIL_PASSWORD
+} = require('../config/keys');
+
 // Model of the collection 'users'
 const User = require('../models/User');
 
@@ -44,8 +55,8 @@ const router = express.Router();
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD
+    user: EMAIL_USER,
+    pass: EMAIL_PASSWORD
   }
 });
 
@@ -73,15 +84,7 @@ router.post(
       });
     } else {
       // Create jwt based on email, expiration time - 1 hour
-      const token = jwt.sign(
-        { email },
-        process.env.SECRET_JWT_KEY_SIGN_UP,
-        {
-          expiresIn: parseInt(
-            process.env.EXPIRE_TIME_JWT_SIGN_UP
-          )
-        }
-      );
+      const token = jwt.sign({ email }, SECRET_JWT_KEY_SIGN_UP, { expiresIn: EXPIRE_TIME_JWT_SIGN_UP });
 
       try {
         // Response [OK]
@@ -114,7 +117,7 @@ router.post(
     // Verify token by secret key and expiration time
     jwt.verify(
       token,
-      process.env.SECRET_JWT_KEY_SIGN_UP,
+      SECRET_JWT_KEY_SIGN_UP,
       async (err, payload) => {
         if (err) {
           // Response [Unprocessable Entity]
@@ -193,12 +196,8 @@ router.post('/signin', async (req, res) => {
       // Create jwt based on email and id, expiration time - 1 hour
       const token = jwt.sign(
         { _id, email, role },
-        process.env.SECRET_JWT_KEY_AUTH,
-        {
-          expiresIn: parseInt(
-            process.env.EXPIRE_TIME_JWT_AUTH
-          )
-        }
+        SECRET_JWT_KEY_AUTH,
+        { expiresIn: EXPIRE_TIME_JWT_AUTH }
       );
 
       // Response [OK] - jwt and user information
@@ -240,11 +239,9 @@ router.post(
       // Create jwt based on email, expiration time - 1 hour
       token = jwt.sign(
         { email },
-        process.env.SECRET_JWT_KEY_RESET,
+        SECRET_JWT_KEY_RESET,
         {
-          expiresIn: parseInt(
-            process.env.EXPIRE_TIME_JWT_RESET
-          )
+          EXPIRE_TIME_JWT_RESET
         }
       );
 
@@ -279,7 +276,7 @@ router.post(
     // Verify token by secret key and expiration time
     jwt.verify(
       token,
-      process.env.SECRET_JWT_KEY_RESET,
+      SECRET_JWT_KEY_RESET,
       async (err, payload) => {
         if (err) {
           // Response [Unprocessable Entity]
