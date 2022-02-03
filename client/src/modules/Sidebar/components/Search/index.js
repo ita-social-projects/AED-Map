@@ -43,7 +43,8 @@ const Search = ({
 
     if (value.length >= 2) {
       resetPagination(1, []);
-      fetchDefItems(search);
+      // fetchDefItems(search);
+      fetchDefItems({ address: value });
     } else if (value.length < 2) {
       setSearch({ address: value });
       resetPagination(1, []);
