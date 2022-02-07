@@ -68,7 +68,7 @@ const SignInModal = ({
   }, []);
 
   return (
-    <Container component="main" maxWidth="xs" >
+    <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
         <Header />
 
