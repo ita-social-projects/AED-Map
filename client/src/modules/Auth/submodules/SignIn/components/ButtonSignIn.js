@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Button, makeStyles, Tooltip } from '@material-ui/core';
+import { makeStyles, Tooltip } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
 
 const useStyles = makeStyles({
@@ -22,11 +22,11 @@ const ButtonSignIn = ({ user }) => {
 
   return (
     <>
-    {user && <Link to="/account">
-      <Tooltip title="Особистий кабінет">
-        <PersonIcon fontSize="large" className={classes.personIcon} />
-      </Tooltip>
-    </Link>}
+      {user && <Link to="/account">
+        <Tooltip title="Особистий кабінет">
+          <PersonIcon fontSize="large" className={classes.personIcon} />
+        </Tooltip>
+      </Link>}
     </>
   );
 };

@@ -1,5 +1,4 @@
-import React, { useState,useEffect} from 'react'; //
-import { useHistory,useLocation } from 'react-router-dom';  //
+import React, { useState } from 'react'; 
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Modal, Backdrop, Fade } from '@material-ui/core';

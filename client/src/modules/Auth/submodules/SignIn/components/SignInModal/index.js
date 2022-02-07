@@ -30,7 +30,6 @@ const useStyles = makeStyles(() => ({
 }));
 
 const SignInModal = ({
-  handleClose,
   start,
   success,
   fail,
@@ -53,7 +52,6 @@ const SignInModal = ({
       socketAuthOpen();
       clearDefItems();
       fetchDefItems();
-      handleClose();
     } catch (e) {
       const { message } = e.response.data;
       fail();
@@ -70,7 +68,7 @@ const SignInModal = ({
   }, []);
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" >
       <div className={classes.paper}>
         <Header />
 
@@ -91,7 +89,6 @@ const SignInModal = ({
 };
 
 SignInModal.propTypes = {
-  handleClose: PropTypes.func.isRequired,
   start: PropTypes.func.isRequired,
   success: PropTypes.func.isRequired,
   fail: PropTypes.func.isRequired,
