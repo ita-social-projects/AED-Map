@@ -1,8 +1,4 @@
 const bcrypt = require('bcryptjs');
-const {
-  ADMIN_EMAIL,
-  ADMIN_PASSWORD
-} = require('../../../config/keys');
 
 // Admin role
 const {
@@ -17,8 +13,11 @@ module.exports = {
 
       // Create admin with email and hashed password
       const admin = {
-        email: ADMIN_EMAIL,
-        password: bcrypt.hashSync(ADMIN_PASSWORD, salt),
+        email: process.env.ADMIN_EMAIL,
+        password: bcrypt.hashSync(
+          process.env.ADMIN_PASSWORD,
+          salt
+        ),
         role: ADMIN
       };
 

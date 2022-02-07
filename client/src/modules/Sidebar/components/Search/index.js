@@ -26,7 +26,6 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Search = ({
-  search,
   setSearch,
   fetchDefItems,
   resetData,
@@ -43,7 +42,6 @@ const Search = ({
 
     if (value.length >= 2) {
       resetPagination(1, []);
-      // fetchDefItems(search);
       fetchDefItems({ address: value });
     } else if (value.length < 2) {
       setSearch({ address: value });
