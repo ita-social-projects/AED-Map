@@ -17,20 +17,17 @@ const useStyles = makeStyles({
   }
 });
 
-const ButtonSignIn = ({ handleOpen, user }) => {
+const ButtonSignIn = ({ user }) => {
   const classes = useStyles();
 
-  if (!user) return (
-    <Button variant="contained" color="primary" onClick={handleOpen}>
-      Вхід
-    </Button>
-  );
   return (
-    <Link to="/account">
+    <>
+    {user && <Link to="/account">
       <Tooltip title="Особистий кабінет">
         <PersonIcon fontSize="large" className={classes.personIcon} />
       </Tooltip>
-    </Link>
+    </Link>}
+    </>
   );
 };
 
