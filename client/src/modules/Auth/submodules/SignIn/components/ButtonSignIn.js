@@ -22,11 +22,13 @@ const ButtonSignIn = ({ user }) => {
 
   return (
     <>
-      {user && <Link to="/account">
-        <Tooltip title="Особистий кабінет">
-          <PersonIcon fontSize="large" className={classes.personIcon} />
-        </Tooltip>
-      </Link>}
+      {user && (
+        <Link to="/account">
+          <Tooltip title="Особистий кабінет">
+            <PersonIcon fontSize="large" className={classes.personIcon} />
+          </Tooltip>
+        </Link>
+      )}
     </>
   );
 };
@@ -36,7 +38,6 @@ ButtonSignIn.defaultProps = {
 };
 
 ButtonSignIn.propTypes = {
-  handleOpen: PropTypes.func.isRequired,
   user: PropTypes.shape({
     _id: PropTypes.string,
     email: PropTypes.string,
