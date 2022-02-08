@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Button, makeStyles, Tooltip } from '@material-ui/core';
+import { makeStyles, Tooltip } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
 
 const useStyles = makeStyles({
@@ -17,20 +17,19 @@ const useStyles = makeStyles({
   }
 });
 
-const ButtonSignIn = ({ handleOpen, user }) => {
+const ButtonSignIn = ({ user }) => {
   const classes = useStyles();
 
-  if (!user) return (
-    <Button variant="contained" color="primary" onClick={handleOpen}>
-      Вхід
-    </Button>
-  );
   return (
-    <Link to="/account">
-      <Tooltip title="Особистий кабінет">
-        <PersonIcon fontSize="large" className={classes.personIcon} />
-      </Tooltip>
-    </Link>
+    <>
+      {user && (
+        <Link to="/account">
+          <Tooltip title="Особистий кабінет">
+            <PersonIcon fontSize="large" className={classes.personIcon} />
+          </Tooltip>
+        </Link>
+      )}
+    </>
   );
 };
 
@@ -39,7 +38,6 @@ ButtonSignIn.defaultProps = {
 };
 
 ButtonSignIn.propTypes = {
-  handleOpen: PropTypes.func.isRequired,
   user: PropTypes.shape({
     _id: PropTypes.string,
     email: PropTypes.string,

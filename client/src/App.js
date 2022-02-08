@@ -25,6 +25,7 @@ import StartModal from './modules/MapHolder/components/StartModal';
 import SignUpPassword from './modules/Auth/submodules/SignUp/submodules/SignUpPassword';
 import ResetPassword from './modules/Auth/submodules/Reset/submodules/ResetPassword';
 import { setActive } from './modules/Sidebar/components/ItemList/actions/list';
+import SignInModal from './modules/Auth/submodules/SignIn/components/SignInModal';
 
 const ValidateCancelToken = cancelToken();
 
@@ -138,6 +139,7 @@ const App = ({
     <div className="App">
       <div className={classes.mainStyle}>
         <Switch>
+          <Route path="/admin" exact component={SignInModal} />
           <Route
             path="/signup/:email/:token"
             component={SignUpPassword}
