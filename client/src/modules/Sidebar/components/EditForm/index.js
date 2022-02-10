@@ -4,11 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import MyForm from '../../../../shared/Form';
-import {
-  editItem,
-  fetchSingleDefById,
-  createImage
-} from '../../api';
+import { editItem, fetchSingleDefById, createImage } from '../../api';
 import Loader from '../../../../shared/Loader';
 import cancelToken from '../../../../shared/cancel-token';
 import { setMapCenter } from '../../../MapHolder/actions/mapState';
@@ -40,9 +36,7 @@ const EditForm = ({ setMapCenter }) => {
 
     setDef({
       title: defibrillator.title,
-      address:
-        correctAddress.data.results[0] &&
-        correctAddress.data.results[0].formatted_address,
+      address: correctAddress.data.results[0] && correctAddress.data.results[0].formatted_address,
       informational_plates:
         defibrillator.informational_plates,
       phone: defibrillator.phone,
