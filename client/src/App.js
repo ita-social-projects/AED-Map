@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  Suspense,
+  useEffect,
+  useState
+} from 'react';
 import {
   Switch,
   Route,
   Redirect,
-  withRouter
-  , useHistory
+  withRouter,
+  useHistory
 } from 'react-router-dom';
 import PropTypes from 'prop-types';
-
 import './App.css';
 import { CSSTransition } from 'react-transition-group';
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,15 +22,36 @@ import {
   successSignIn,
   failSignIn
 } from './modules/Auth/actions/user';
-import Sidebar from './modules/Sidebar';
-import MapHolder from './modules/MapHolder';
-import StartModal from './modules/MapHolder/components/StartModal';
 import SignUpPassword from './modules/Auth/submodules/SignUp/submodules/SignUpPassword';
 import ResetPassword from './modules/Auth/submodules/Reset/submodules/ResetPassword';
 import { setActive } from './modules/Sidebar/components/ItemList/actions/list';
 import SignInModal from './modules/Auth/submodules/SignIn/components/SignInModal';
+import media from './consts/media';
+
+const Sidebar = React.lazy(() =>
+  import('./modules/Sidebar')
+);
+const SidebarMobile = React.lazy(() =>
+  import('./modules/Sidebar/SidebarMobile')
+);
+const MapHolder = React.lazy(() =>
+  import('./modules/MapHolder')
+);
+const MapHolderMobile = React.lazy(() =>
+  import('./modules/MapHolder/MapHolderMobile')
+);
+const StartModal = React.lazy(() =>
+  import('./modules/MapHolder/components/StartModal')
+);
+const StartModalMobile = React.lazy(() =>
+  import(
+    './modules/MapHolder/components/StartModal/StartModalMobile'
+  )
+);
 
 const ValidateCancelToken = cancelToken();
+
+const windowOuterWidth = window.outerWidth;
 
 const useStyles = makeStyles({
   mainStyle: {
@@ -71,11 +95,41 @@ const Main = () => {
 
   return (
     <>
-      <Sidebar setVisible={setVisible} visible={visible} />
-      <MapHolder
-        setVisible={setVisible}
-        visible={visible}
-      />
+      {windowOuterWidth < media.ipad ? (
+        <>
+          <Suspense
+            fallback={
+              <div>Завантаження меню і мапи...</div>
+            }
+          >
+            <SidebarMobile
+              setVisible={setVisible}
+              visible={visible}
+            />
+            <MapHolderMobile
+              setVisible={setVisible}
+              visible={visible}
+            />
+          </Suspense>
+        </>
+      ) : (
+        <>
+          <Suspense
+            fallback={
+              <div>Завантаження меню і мапи...</div>
+            }
+          >
+            <Sidebar
+              setVisible={setVisible}
+              visible={visible}
+            />
+            <MapHolder
+              setVisible={setVisible}
+              visible={visible}
+            />
+          </Suspense>
+        </>
+      )}
     </>
   );
 };
@@ -139,7 +193,11 @@ const App = ({
     <div className="App">
       <div className={classes.mainStyle}>
         <Switch>
-          <Route path="/admin" exact component={SignInModal} />
+          <Route
+            path="/admin"
+            exact
+            component={SignInModal}
+          />
           <Route
             path="/signup/:email/:token"
             component={SignUpPassword}
@@ -152,7 +210,7 @@ const App = ({
           <Redirect from="*" to="/" />
         </Switch>
       </div>
-      {(location.pathname === '/') && (
+      {location.pathname === '/' && (
         <CSSTransition
           in={isStartModalOpen}
           classNames={transitionClasses}
@@ -160,7 +218,21 @@ const App = ({
           timeout={1000}
           unmountOnExit
         >
-          <StartModal setStartModal={setStartModal} />
+          {windowOuterWidth < media.ipad ? (
+            <Suspense
+              fallback={
+                <div>Завантаження модального вікна...</div>
+              }
+            >
+              <StartModalMobile
+                setStartModal={setStartModal}
+              />
+            </Suspense>
+          ) : (
+            <Suspense fallback={<div>Завантаження...</div>}>
+              <StartModal setStartModal={setStartModal} />
+            </Suspense>
+          )}
         </CSSTransition>
       )}
     </div>
