@@ -15,6 +15,7 @@ import { hidePopup } from './actions/popupDisplay';
 import DefibrillatorPinLayer from './layers/DefibrillatorPinLayer';
 import AddedPin from './layers/AddedPin';
 import { sidebarWidth } from '../Sidebar/styleConstants';
+import { setGeolocation, startWatchingPosition } from './actions/userLocation';
 
 const useStyles = makeStyles(() => ({
   mapContainer: ({ visible }) => ({
@@ -55,8 +56,11 @@ const Map = ReactMapboxGl({
 
 const MapHolder = ({
   mapState,
+  userPosition,
   newPoint,
   setMapCenter,
+  startWatchingPosition,
+  setGeolocation,
   addNewPoint,
   hidePopup,
   setVisible,
@@ -118,6 +122,7 @@ const MapHolder = ({
 
   //------------------обробник кнопки---------------------------
   const getCurrentLocation = event => {
+    setGeolocation();
     navigator.geolocation.getCurrentPosition(function(position) {
       setMapCenter({
         lng: position.coords.longitude,
@@ -126,7 +131,6 @@ const MapHolder = ({
     });
   }
   //------------------обробник кнопки-----------------------------
-
 
   useEffect(() => {
     if (Object.keys(newPoint).length !== 0) {
@@ -138,9 +142,12 @@ const MapHolder = ({
 
   // Sets map center to current Position of the user
   useEffect(() => {
+    startWatchingPosition();
+
+    // TODO: Think on improving this one
     navigator.geolocation.getCurrentPosition( (pos) => {
-      const { longitude: lng, latitude: lat } = pos.coords
-      setMapCenter({ lng, lat });
+      const { longitude, latitude } = pos.coords
+      setMapCenter({ lng: longitude, lat: latitude });
     });
   }, [])
 
@@ -190,6 +197,7 @@ const MapHolder = ({
         {Object.keys(newPoint).length !== 0 && (
           <AddedPin coordinates={newPoint} />
         )}
+        {userPosition.geolocationProvided && <AddedPin coordinates={userPosition.coords}/>}
         <PopupHolder />
       </Map>
     </div>
@@ -201,6 +209,8 @@ MapHolder.defaultProps = {
   setVisible: {},
   visible: null,
   setMapCenter: () => {},
+  setGeolocation: () => {},
+  startWatchingPosition: () => {},
   hidePopup: () => {}
 };
 
@@ -217,6 +227,7 @@ MapHolder.propTypes = {
   addNewPoint: PropTypes.func.isRequired,
   setMapCenter: PropTypes.func,
   setMapZoom: PropTypes.func,
+  startWatchingPosition: PropTypes.func,
   hidePopup: PropTypes.func,
   setVisible: PropTypes.func,
   visible: PropTypes.bool
@@ -226,9 +237,12 @@ export default connect(
   state => ({
     defsState: state.defs,
     mapState: state.mapState,
-    newPoint: state.newPoint
+    newPoint: state.newPoint,
+    userPosition: state.userPosition
   }),
   dispatch => ({
+    setGeolocation: () => dispatch(setGeolocation()),
+    startWatchingPosition: () => dispatch(startWatchingPosition()),
     setMapCenter: map => dispatch(setMapCenter(map)),
     setMapZoom: zoom => dispatch(setMapZoom(zoom)),
     addNewPoint: newPoint =>
