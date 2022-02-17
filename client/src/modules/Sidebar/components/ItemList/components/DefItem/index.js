@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import { NavLink, useHistory } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import permissionService from '../../../../../Auth/permissionService';
+import {fetchSingleDefById} from '../../../../../Sidebar/api/index';
+import {setFullTime,setFromTime,setUntilTime} from '../../../EditForm/actions/setFullTime';
 import {
   setMapCenter,
   setMapZoom
@@ -75,7 +77,10 @@ const DefItem = ({
   styleParam,
   deleteDefibrPoint,
   blockDefibrPoint,
-  user
+  user,
+  setTime,
+  setFromTime,
+  setUntilTime                   
 }) => {
   const isActive = defItemInfo._id === activeItemId;
   const hasPermission =
@@ -108,9 +113,23 @@ const DefItem = ({
   };
 
   const handleEditClick = event => {
-    event.preventDefault();
+    event.preventDefault(); 
+    setDefCheckbox(defItemInfo._id); 
     history.push(`/edit-form/${defItemInfo._id}`);
   };
+
+  const setDefCheckbox = (id) => { 
+      return fetchSingleDefById(id)
+      .then(res => {
+        const data = res.data.defibrillator;
+        console.log(data)
+        setTime(data.fullTimeAvailable);
+        const timeFrom = data.availableFrom ? data.availableFrom : '00:00'
+        setFromTime(timeFrom);
+        const timeUntil = data.availableUntil ? data.availableUntil : '00:00'
+        return setUntilTime(timeUntil);
+      })
+  }
 
   const handleKeyDown = event => {
     if (event.keyCode === ENTER_BUTTON_CODE) {
@@ -236,7 +255,7 @@ DefItem.propTypes = {
     actual_date: PropTypes.string,
     floor: PropTypes.number,
     storage_place: PropTypes.string,
-    accessibility: PropTypes.string,
+    availableFrom: PropTypes.string,
     language: PropTypes.string,
     informational_plates: PropTypes.string,
     phone: PropTypes.arrayOf(PropTypes.string),
@@ -271,6 +290,9 @@ export default connect(
       dispatch(setMapZoom(mapState)),
     deleteDefibrPoint: id => dispatch(deleteDefItem(id)),
     blockDefibrPoint: (id, blocked) =>
-      dispatch(blockDefItem(id, blocked))
+      dispatch(blockDefItem(id, blocked)),
+    setTime: value => dispatch(setFullTime(value)),
+    setFromTime: time => dispatch(setFromTime(time)),
+    setUntilTime: time => dispatch(setUntilTime(time)),
   })
 )(DefItem);

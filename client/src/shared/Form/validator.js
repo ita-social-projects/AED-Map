@@ -12,7 +12,7 @@ const FormValidation = Yup.object().shape({
         'Формат номеру неправильний'
       )
   ),
-  accessibility: Yup.string().required('Поле обов\'язкове'),
+  availableFrom: Yup.string().required('Поле обов\'язкове'),
   storage_place: Yup.string().required('Поле обов\'язкове'),
   floor: Yup.number()
     .required('Поле обов\'язкове')

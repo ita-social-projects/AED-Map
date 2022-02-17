@@ -48,7 +48,8 @@ const EditForm = ({ setMapCenter }) => {
         /, (.*)/
       )[1],
       coordinates: defibrillator.location.coordinates,
-      accessibility: defibrillator.accessibility
+      availableFrom: defibrillator.availableFrom,
+      availableUntil: defibrillator.availableUntil, 
     });
     setMapCenter({ lng, lat, zoom: 17 });
   };
@@ -108,6 +109,7 @@ const EditForm = ({ setMapCenter }) => {
 EditForm.propTypes = {
   setMapCenter: PropTypes.func.isRequired
 };
+
 export default connect(null, dispatch => ({
   setMapCenter: newPoint => dispatch(setMapCenter(newPoint))
 }))(EditForm);

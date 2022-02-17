@@ -7,7 +7,9 @@ const INITIAL_VALUES = {
   phone: [],
   additional_information: '',
   storage_place: '',
-  accessibility: '',
+  availableFrom: '',
+  availableUntil: '',
+  fullTimeAvailable: false,
   coordinates: [], //  [Longitude,Latitude]
   images: [],
   language: 'Україномовний'
