@@ -11,6 +11,7 @@ import {
   useHistory
 } from 'react-router-dom';
 import PropTypes from 'prop-types';
+
 import './App.css';
 import { CSSTransition } from 'react-transition-group';
 import { makeStyles } from '@material-ui/core/styles';
