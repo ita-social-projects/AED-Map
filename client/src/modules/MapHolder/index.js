@@ -92,12 +92,12 @@ const MapHolder = ({
   const { lng, lat, zoom } = mapState;
 
   const changeMapCenterCoords = event => {
-    setMapCenter(event.getCenter());
+    setMapCenter({...event.getCenter(), zoom: event.getZoom()});
   };
 
   const onZoomEnded = event => {
     setMapCenter({
-      ...event.getCenter(),
+      ...mapState,
       zoom: event.getZoom()
     });
   };
@@ -116,6 +116,18 @@ const MapHolder = ({
     }
   };
 
+  //------------------обробник кнопки---------------------------
+  const getCurrentLocation = event => {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      setMapCenter({
+        lng: position.coords.longitude,
+        lat: position.coords.latitude,
+    });
+    });
+  }
+  //------------------обробник кнопки-----------------------------
+
+
   useEffect(() => {
     if (Object.keys(newPoint).length !== 0) {
       const { lng, lat } = newPoint;
@@ -123,6 +135,14 @@ const MapHolder = ({
     }
     // eslint-disable-next-line
   }, [newPoint]);
+
+  // Sets map center to current Position of the user
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition( (pos) => {
+      const { longitude: lng, latitude: lat } = pos.coords
+      setMapCenter({ lng, lat });
+    });
+  }, [])
 
   const onDblClickMap = (_, event) => {
     const currentRoute = window.location.pathname;
@@ -139,6 +159,7 @@ const MapHolder = ({
 
   return (
     <div className={classes.mapContainer}>
+      <button onClick={getCurrentLocation}>Моє місцезнаходження</button>
       <Button
         className={classes.showIcon}
         color="primary"
@@ -195,6 +216,7 @@ MapHolder.propTypes = {
   }).isRequired,
   addNewPoint: PropTypes.func.isRequired,
   setMapCenter: PropTypes.func,
+  setMapZoom: PropTypes.func,
   hidePopup: PropTypes.func,
   setVisible: PropTypes.func,
   visible: PropTypes.bool

@@ -121,14 +121,21 @@ const ItemList = ({
   }, []);
 
   useEffect(() => {
-    if (activeDef) {
-      const [lng, lat] = activeDef.location.coordinates;
-      setMapCenterCoords({
-        lng,
-        lat
-      });
-      setMapZoomParam(BASE_ZOOM_VALUE);
+    
+    const setCenterToActiveDef = () => {
+      if (activeDef) {
+        const [lng, lat] = activeDef.location.coordinates;
+        setMapCenterCoords({
+          lng,
+          lat
+        });
+        setMapZoomParam(BASE_ZOOM_VALUE);
+      }
     }
+
+    // If user declined geolocation (Or any other error happend) center is set to last active defibrilator
+    navigator.geolocation.getCurrentPosition(_ => {}, setCenterToActiveDef);
+
     // eslint-disable-next-line
   }, [activeDef]);
 
