@@ -17,7 +17,7 @@ export const setUserPosition = (payload) => {
 /*
  * Sets user location based on getCurrentPosition function, 
  */
-export const setGeolocation = () => {
+export const setGeolocation = (f) => {
   return (dispatch) => {
     const error = (e) => {
       console.log(e)
@@ -27,8 +27,9 @@ export const setGeolocation = () => {
       const { latitude, longitude} = coords;
       dispatch({type: SET_USER_POSITION, payload: {lat: latitude, lng: longitude}});
       dispatch({type: SET_GEOLOCATION_STATUS, payload: true});
+      f({latitude, longitude})
     }
-    navigator.geolocation.getCurrentPosition(success, error);
+    navigator.geolocation.getCurrentPosition(success, error, {maximumAge:60000, timeout:5000, enableHighAccuracy:true});
   }
 }
 
@@ -49,7 +50,7 @@ export const startWatchingPosition = () => {
       dispatch({type: SET_USER_POSITION, payload: {lat: latitude, lng: longitude}});
       dispatch({type: SET_GEOLOCATION_STATUS, payload: true});
     }
-    const id = navigator.geolocation.watchPosition(success, error, {timeout:60000})
+    const id = navigator.geolocation.watchPosition(success, error, {maximumAge:60000, timeout:5000, enableHighAccuracy:true})
     dispatch({type: START_WATCHING_POSITION, payload: id});
   }
 }

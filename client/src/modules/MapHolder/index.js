@@ -123,13 +123,13 @@ const MapHolder = ({
 
   //------------------обробник кнопки---------------------------
   const getCurrentLocation = event => {
-    setGeolocation();
-    navigator.geolocation.getCurrentPosition(function(position) {
+    setGeolocation(({ latitude, longitude}) => {
       setMapCenter({
-        lng: position.coords.longitude,
-        lat: position.coords.latitude,
+        lng: longitude,
+        lat: latitude,
+      });
     });
-    });
+    
   }
   //------------------обробник кнопки-----------------------------
 
@@ -143,13 +143,10 @@ const MapHolder = ({
 
   // Sets map center to current Position of the user
   useEffect(() => {
-    startWatchingPosition();
-
-    // TODO: Think on improving this one
-    navigator.geolocation.getCurrentPosition( (pos) => {
-      const { longitude, latitude } = pos.coords
+    setGeolocation(({longitude, latitude}) => {
       setMapCenter({ lng: longitude, lat: latitude });
-    });
+      startWatchingPosition();
+    })
   }, [])
 
   const onDblClickMap = (_, event) => {
@@ -242,7 +239,7 @@ export default connect(
     userPosition: state.userPosition
   }),
   dispatch => ({
-    setGeolocation: () => dispatch(setGeolocation()),
+    setGeolocation: (f) => dispatch(setGeolocation(f)),
     startWatchingPosition: () => dispatch(startWatchingPosition()),
     setMapCenter: map => dispatch(setMapCenter(map)),
     setMapZoom: zoom => dispatch(setMapZoom(zoom)),
