@@ -15,9 +15,9 @@ import {
 
 const useStyles = makeStyles({
   pointCard: {
-    color: 'rgb(0,0,0)',
+    color: 'rgba(36, 36, 36, 1)',
     textDecoration: 'none',
-    background: 'rgba(245,255,250,0.5)',
+    background: 'rgba(197, 197, 197, 0.71)',
     height: '50px',
     overflow: 'hidden',
     '&:hover': {
@@ -27,8 +27,10 @@ const useStyles = makeStyles({
   },
   pointCardInfo: {
     height: '50px',
-    padding: 5,
-    outline: 'none'
+    paddingLeft: 16,
+    paddingTop: 8,
+    outline: 'none',
+    borderBottom: '1px solid rgba(178, 178, 178, 1)'
   },
   titleStyle: {
     fontSize: 13,

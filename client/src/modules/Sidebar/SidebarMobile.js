@@ -15,16 +15,17 @@ const useStyles = makeStyles({
     position: 'fixed',
     left: '0',
     width: '100%',
-    padding: 20,
-    height: '70px',
-    backgroundColor: '#282c34',
+    padding: 24,
+    height: '100px',
+    backgroundColor: 'rgba(36, 36, 36, 1)',
     zIndex: '10'
   },
   sidebarHeader: {
-    height: '30px',
-    width: '30px',
+    height: '24px',
+    width: '24px',
     position: 'absolute',
-    left: '10px'
+    left: '16px',
+    top: '36px'
   }
 });
 

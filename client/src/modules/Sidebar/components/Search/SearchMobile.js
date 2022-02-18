@@ -16,7 +16,7 @@ import { setSearch } from './actions';
 
 const useStyles = makeStyles(() => ({
   searchWrapper: {
-    marginBottom: 18,
+    marginBottom: 28,
     marginLeft: 30,
     marginRight: 10,
     width: '90%'
@@ -24,7 +24,8 @@ const useStyles = makeStyles(() => ({
   searchInput: {
     width: '100%',
     paddingRight: '0.5rem',
-    paddingLeft: '16px'
+    paddingLeft: '16px',
+    height: 48
   }
 }));
 
@@ -60,7 +61,7 @@ const SearchMobile = ({
           <DebounceInput
             element={MyInputBase}
             id="search"
-            placeholder="Впишіть сюди адресу"
+            placeholder="Введіть адресу"
             name="search"
             className={classes.searchInput}
             autoFocus
