@@ -118,18 +118,21 @@ const DefItem = ({
     history.push(`/edit-form/${defItemInfo._id}`);
   };
 
-  const setDefCheckbox = (id) => { 
-      return fetchSingleDefById(id)
-      .then(res => {
-        const data = res.data.defibrillator;
-        console.log(data)
-        setTime(data.fullTimeAvailable);
-        const timeFrom = data.availableFrom ? data.availableFrom : '00:00'
-        setFromTime(timeFrom);
-        const timeUntil = data.availableUntil ? data.availableUntil : '00:00'
-        return setUntilTime(timeUntil);
-      })
-  }
+  const setDefCheckbox = async (id) => {
+    const res = await fetchSingleDefById(id);
+    const data = res.data.defibrillator;
+    setTime(data.fullTimeAvailable);
+    const timeFrom =
+      data.availableFrom === undefined || data.availableFrom === null
+        ? 0
+        : data.availableFrom;
+    setFromTime(timeFrom);
+    const timeUntil =
+      data.availableUntil === undefined || data.availableUntil === null
+        ? 0
+        : data.availableUntil;
+    setUntilTime(timeUntil);
+  };
 
   const handleKeyDown = event => {
     if (event.keyCode === ENTER_BUTTON_CODE) {

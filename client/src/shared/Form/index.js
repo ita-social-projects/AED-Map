@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 import { useHistory } from 'react-router-dom';
@@ -70,7 +70,6 @@ const MyForm = ({
     values,
     { resetForm, setErrors }
   ) => {
-    console.log(values)
     const actualDate = new Date()
       .toISOString()
       .split('T')[0];
@@ -78,8 +77,8 @@ const MyForm = ({
       await submitAction({ 
         ...values,
         fullTimeAvailable: fullTimeStatus, 
-        availableFrom: timeFrom,
-        availableUntil: timeUntil,  
+        availableFrom: fullTimeStatus ? null : timeFrom,
+        availableUntil: fullTimeStatus ? null : timeUntil,  
         actualDate });
       ShowAlert({
         open: true,
@@ -120,7 +119,7 @@ const MyForm = ({
               <MyTimeField
                 label={'Коли доступний пристрій?'}
               />
-              
+
               <MyTextField
                 name="storage_place"
                 label="Де розташований в будівлі?"
@@ -190,7 +189,6 @@ MyForm.propTypes = {
     phone: PropTypes.array.isRequired,
     additional_information: PropTypes.string.isRequired,
     storage_place: PropTypes.string.isRequired,
-    availableFrom: PropTypes.string.isRequired,
     coordinates: PropTypes.array.isRequired
   }).isRequired,
   submitAction: PropTypes.func.isRequired,
@@ -201,8 +199,8 @@ MyForm.propTypes = {
 export default connect(
   state => ({   
     fullTimeStatus: state.setFullTime.fullTime,
-    timeFrom: state.setFromTime.timeFrom,
-    timeUntil: state.setUntilTime.timeUntil,
+    timeFrom: state.setFullTime.timeFrom,
+    timeUntil: state.setFullTime.timeUntil,
 }) , {
   resetPage: page => setPage(page),
   resetData: data => setData(data)

@@ -1,12 +1,53 @@
-import { connect } from "react-redux";
-import React from "react";
+import { connect } from 'react-redux';
+import React from 'react';
 import {
    setFullTime,
    setFromTime,
    setUntilTime,
-} from "../../modules/Sidebar/components/EditForm/actions/setFullTime";
-import { MyTextField } from "./index";
-import { Checkbox, FormControlLabel, InputLabel } from "@material-ui/core";
+} from '../../modules/Sidebar/components/EditForm/actions/setFullTime';
+import {
+   Checkbox,
+   FormControlLabel,
+   InputLabel,
+   FormControl,
+   NativeSelect,
+   Box,
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+   timeSelectors: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      margin: '.2rem .5rem',
+   },
+   label: {
+      fontSize: '.8rem',
+   },
+   checkbox: {
+      margin: '0 0  .5rem .5rem',
+   },
+});
+
+function hours(start, end) {
+   return Array(end - start + 1)
+      .fill()
+      .map((_, idx) => start + idx);
+}
+
+const TimeOptions = ({ disabledValue }) => {
+   return (
+      <>
+         <option disabled>{disabledValue}</option>
+         {hours(0, 23).map((hour) => (
+            <option value={hour} key={hour}>
+               {hour < 10 ? '0' + hour : hour}
+               :00
+            </option>
+         ))}
+      </>
+   );
+};
 
 const MyTimeField = ({
    label,
@@ -17,53 +58,69 @@ const MyTimeField = ({
    timeFrom,
    timeUntil,
 }) => {
-   console.log(timeFrom, timeUntil);
    const checkedHandler = (e) => {
       setTime(e.target.checked);
    };
 
    const changeTime = (e) => {
-      e.target.name === "availableFrom"
+      e.target.name === 'availableFrom'
          ? setFromTime(e.target.value)
          : setUntilTime(e.target.value);
    };
 
+   const classes = useStyles();
+
    return (
-      <>
-         <InputLabel id={label}>{label}</InputLabel>
-         <MyTextField
-            name="availableFrom"
-            value={timeFrom}
-            onChange={changeTime}
-            type="time"
-            disabled={fullTimeStatus}
-         />
-         <MyTextField
-            name="availableUntil"
-            value={timeUntil}
-            onChange={changeTime}
-            type="time"
-            disabled={fullTimeStatus}
-         />
+      <Box>
+         <InputLabel className={classes.label}>{label}</InputLabel>
+         <div className={classes.timeSelectors}>
+            <FormControl>
+               <NativeSelect
+                  defaultValue={timeFrom}
+                  disabled={fullTimeStatus}
+                  onChange={changeTime}
+                  inputProps={{
+                     name: 'availableFrom',
+                  }}
+               >
+                  <TimeOptions disabledValue={'з'} />
+               </NativeSelect>
+            </FormControl>
+
+            <FormControl>
+               <NativeSelect
+                  defaultValue={timeUntil}
+                  disabled={fullTimeStatus}
+                  onChange={changeTime}
+                  inputProps={{
+                     name: 'availableUntil',
+                  }}
+               >
+                  <TimeOptions disabledValue={'до'} />
+               </NativeSelect>
+            </FormControl>
+         </div>
+
          <FormControlLabel
             control={
                <Checkbox
                   name="fullTimeAvailable"
+                  className={classes.checkbox}
                   checked={fullTimeStatus}
                   onChange={checkedHandler}
                />
             }
             label="Цілодобово"
          />
-      </>
+      </Box>
    );
 };
 
 export default connect(
    (state) => ({
       fullTimeStatus: state.setFullTime.fullTime,
-      timeFrom: state.setFromTime.timeFrom,
-      timeUntil: state.setUntilTime.timeUntil,
+      timeFrom: state.setFullTime.timeFrom,
+      timeUntil: state.setFullTime.timeUntil,
    }),
    (dispatch) => ({
       setTime: (value) => dispatch(setFullTime(value)),

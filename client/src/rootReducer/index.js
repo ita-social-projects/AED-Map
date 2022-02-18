@@ -8,8 +8,6 @@ import addNewPointReducer from '../modules/MapHolder/reducers/addNewPointReducer
 import popupDisplayReducer from '../modules/MapHolder/reducers/popupDisplayReducer';
 import searchReducer from '../modules/Sidebar/components/Search/reducers';
 import setFullTimeReducer from '../modules/Sidebar/components/EditForm/reducers/index';
-import setFromTimeReducer from '../modules/Sidebar/components/EditForm/reducers/timeFrom';
-import setUntilTimeReducer from '../modules/Sidebar/components/EditForm/reducers/timeUntil';
 
 export default combineReducers({
   user: userReducer,
@@ -19,7 +17,5 @@ export default combineReducers({
   defs: listReducer,
   popupData: popupDisplayReducer,
   search: searchReducer,
-  setFullTime: setFullTimeReducer,
-  setFromTime: setFromTimeReducer,
-  setUntilTime: setUntilTimeReducer
+  setFullTime: setFullTimeReducer
 });

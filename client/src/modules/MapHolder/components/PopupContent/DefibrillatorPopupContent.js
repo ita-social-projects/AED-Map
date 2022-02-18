@@ -76,6 +76,13 @@ const DefibrillatorPopupContent = ({ id, hidePopup }) => {
       return def[key].join(', ');
     }
 
+    if (key === 'availableFrom') {
+      const availableTime = def.fullTimeAvailable === true 
+            ? 'Цілодобово доступний' 
+            : `${def.availableFrom}:00 - ${def.availableUntil}:00`;
+      return availableTime;     
+    }
+
     return def[key];
   };
 
@@ -107,17 +114,13 @@ const DefibrillatorPopupContent = ({ id, hidePopup }) => {
 
       {Object.keys(titles).map(
         key => {
-          const availableTime = currDef.fullTimeAvailable === true 
-            ? 'Цілодобово доступний' 
-            : `${currDef.availableFrom} - ${currDef.availableUntil}`;
-
-          return currDef[key] &&  (
+          return currDef[key] !== undefined &&  (
             <p key={key}>
               <span className={classes.title}>
                 {titles[key]}
               </span>
               <br />
-              {key === 'availableFrom' ? availableTime : formatData(key, currDef)}
+              {formatData(key, currDef)}
             </p>
           ) 
         }
