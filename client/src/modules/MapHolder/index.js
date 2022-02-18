@@ -16,6 +16,7 @@ import DefibrillatorPinLayer from './layers/DefibrillatorPinLayer';
 import AddedPin from './layers/AddedPin';
 import { sidebarWidth } from '../Sidebar/styleConstants';
 import { setGeolocation, startWatchingPosition } from './actions/userLocation';
+import GeoLocationButton from './components/GeoLocationButton'
 
 const useStyles = makeStyles(() => ({
   mapContainer: ({ visible }) => ({
@@ -166,7 +167,7 @@ const MapHolder = ({
 
   return (
     <div className={classes.mapContainer}>
-      <button onClick={getCurrentLocation}>Моє місцезнаходження</button>
+      <GeoLocationButton currentLocation={getCurrentLocation}/>
       <Button
         className={classes.showIcon}
         color="primary"
