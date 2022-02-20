@@ -13,7 +13,7 @@ import AddMoreInfo from './AddMoreInfo';
 import FormValidation from './validator';
 import useAlert from '../Alert/useAlert';
 import { MyTextField, MyImageField } from '../Fields';
-import  MyTimeField  from '../Fields/timeField';
+import MyTimeField from '../Fields/timeField';
 import {
   setPage,
   setData
@@ -74,12 +74,20 @@ const MyForm = ({
       .toISOString()
       .split('T')[0];
     try {
-      await submitAction({ 
+      await submitAction({
         ...values,
-        fullTimeAvailable: fullTimeStatus, 
-        availableFrom: fullTimeStatus ? null : timeFrom,
-        availableUntil: fullTimeStatus ? null : timeUntil,  
-        actualDate });
+        fullTimeAvailable:
+          fullTimeStatus || timeFrom === timeUntil,
+        availableFrom:
+          fullTimeStatus || timeFrom === timeUntil
+            ? null
+            : timeFrom,
+        availableUntil:
+          fullTimeStatus || timeFrom === timeUntil
+            ? null
+            : timeUntil,
+        actualDate
+      });
       ShowAlert({
         open: true,
         severity: 'success',
@@ -140,7 +148,7 @@ const MyForm = ({
                 name="phone"
               />
               <MyImageField
-                variant="contained" 
+                variant="contained"
                 color="primary"
                 className={classes.input}
                 id="images"
@@ -197,11 +205,13 @@ MyForm.propTypes = {
 };
 
 export default connect(
-  state => ({   
+  state => ({
     fullTimeStatus: state.setFullTime.fullTime,
     timeFrom: state.setFullTime.timeFrom,
-    timeUntil: state.setFullTime.timeUntil,
-}) , {
-  resetPage: page => setPage(page),
-  resetData: data => setData(data)
-})(MyForm);
+    timeUntil: state.setFullTime.timeUntil
+  }),
+  {
+    resetPage: page => setPage(page),
+    resetData: data => setData(data)
+  }
+)(MyForm);
