@@ -54,6 +54,7 @@ const ItemList = ({
   totalCount,
   page,
   search,
+  geolocationProvided,
   setMapCenterCoords,
   setMapZoomParam
 }) => {
@@ -120,9 +121,9 @@ const ItemList = ({
     // eslint-disable-next-line
   }, []);
 
+  // If user declined geolocation (Or any other error happend) center is set to last active defibrilator
   useEffect(() => {
-    
-    const setCenterToActiveDef = () => {
+    if (activeDef && !geolocationProvided) {
       if (activeDef) {
         const [lng, lat] = activeDef.location.coordinates;
         setMapCenterCoords({
@@ -132,9 +133,6 @@ const ItemList = ({
         setMapZoomParam(BASE_ZOOM_VALUE);
       }
     }
-
-    // If user declined geolocation (Or any other error happend) center is set to last active defibrilator
-    navigator.geolocation.getCurrentPosition(_ => {}, setCenterToActiveDef);
 
     // eslint-disable-next-line
   }, [activeDef]);
@@ -206,7 +204,8 @@ export default connect(
     totalCount: state.defs.totalCount,
     page: state.defs.page,
     search: state.search,
-    user: state.user.user
+    user: state.user.user,
+    geolocationProvided: state.userPosition.geolocationProvided
   }),
   dispatch => ({
     fetchDefItems: params => dispatch(fetchDefs(params)),
