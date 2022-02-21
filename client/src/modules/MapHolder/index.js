@@ -17,6 +17,7 @@ import AddedPin from './layers/AddedPin';
 import { sidebarWidth } from '../Sidebar/styleConstants';
 import { setGeolocation, startWatchingPosition } from './actions/userLocation';
 import GeoLocationButton from './components/GeoLocationButton'
+import UserPin from './components/UserPin';
 
 const useStyles = makeStyles(() => ({
   mapContainer: ({ visible }) => ({
@@ -192,10 +193,15 @@ const MapHolder = ({
         onDblClick={onDblClickMap}
       >
         {map && <DefibrillatorPinLayer map={map} />}
+        {
+          userPosition.geolocationProvided && 
+          <UserPin classes={classes} coordinates={userPosition.coords}/>
+        }
+        
         {Object.keys(newPoint).length !== 0 && (
           <AddedPin coordinates={newPoint} />
         )}
-        {userPosition.geolocationProvided && <AddedPin coordinates={userPosition.coords}/>}
+
         <PopupHolder />
       </Map>
     </div>
