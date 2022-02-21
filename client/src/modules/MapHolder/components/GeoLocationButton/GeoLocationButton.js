@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const getLocationButton = {
     width: '35px',
@@ -25,6 +26,10 @@ function GeoLocationButton({ currentLocation }) {
         </div>
 
     )
+}
+
+GeoLocationButton.propTypes = {
+    currentLocation: PropTypes.func
 }
 
 export default GeoLocationButton;
