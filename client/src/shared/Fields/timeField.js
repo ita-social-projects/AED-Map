@@ -8,24 +8,27 @@ import {
 import {
    Checkbox,
    FormControlLabel,
-   InputLabel,
    FormControl,
-   NativeSelect,
+   Select,
+   MenuItem,
    Box,
+   FormHelperText,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+
+const MuiMenuItem = React.forwardRef((props, ref) => {
+   return <MenuItem ref={ref} {...props} />;
+});
 
 const useStyles = makeStyles({
    timeSelectors: {
       display: 'flex',
       justifyContent: 'space-between',
       margin: '.2rem .5rem',
-   },
-   label: {
-      fontSize: '.8rem',
+      maxHeight: '100px',
    },
    checkbox: {
-      margin: '0 0  .5rem .5rem',
+      margin: '0 0 .5rem 0',
    },
 });
 
@@ -34,20 +37,6 @@ function hours(start, end) {
       .fill()
       .map((_, idx) => start + idx);
 }
-
-const TimeOptions = ({ disabledValue }) => {
-   return (
-      <>
-         <option disabled>{disabledValue}</option>
-         {hours(0, 23).map((hour) => (
-            <option value={hour} key={hour}>
-               {hour < 10 ? '0' + hour : hour}
-               :00
-            </option>
-         ))}
-      </>
-   );
-};
 
 const MyTimeField = ({
    label,
@@ -72,32 +61,46 @@ const MyTimeField = ({
 
    return (
       <Box>
-         <InputLabel className={classes.label}>{label}</InputLabel>
+         <FormHelperText>{label}</FormHelperText>
          <div className={classes.timeSelectors}>
             <FormControl>
-               <NativeSelect
-                  defaultValue={timeFrom}
+               <Select
+                  id={'from'}
                   disabled={fullTimeStatus}
+                  value={timeFrom}
                   onChange={changeTime}
                   inputProps={{
                      name: 'availableFrom',
                   }}
                >
-                  <TimeOptions disabledValue={'з'} />
-               </NativeSelect>
+                  <MuiMenuItem disabled>з</MuiMenuItem>
+                  {hours(0, 23).map((hour) => (
+                     <MuiMenuItem value={hour} key={hour}>
+                        {`${hour}`.padStart(2, '0')}
+                        :00
+                     </MuiMenuItem>
+                  ))}
+               </Select>
             </FormControl>
 
             <FormControl>
-               <NativeSelect
-                  defaultValue={timeUntil}
+               <Select
+                  id="until"
                   disabled={fullTimeStatus}
+                  value={timeUntil}
                   onChange={changeTime}
                   inputProps={{
                      name: 'availableUntil',
                   }}
                >
-                  <TimeOptions disabledValue={'до'} />
-               </NativeSelect>
+                  <MuiMenuItem disabled>до</MuiMenuItem>
+                  {hours(0, 23).map((hour) => (
+                     <MuiMenuItem value={hour} key={hour}>
+                        {`${hour}`.padStart(2, '0')}
+                        :00
+                     </MuiMenuItem>
+                  ))}
+               </Select>
             </FormControl>
          </div>
 
