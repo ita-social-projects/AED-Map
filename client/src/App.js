@@ -52,8 +52,6 @@ const StartModalMobile = React.lazy(() =>
 
 const ValidateCancelToken = cancelToken();
 
-const windowOuterWidth = window.outerWidth;
-
 const useStyles = makeStyles({
   mainStyle: {
     display: 'flex',
@@ -93,10 +91,16 @@ const useStyles = makeStyles({
 
 const Main = () => {
   const [visible, setVisible] = useState(true);
+  const [screenWidth, setScreenWidth] = useState();
+
+  useEffect(() => {
+    setScreenWidth(window.innerWidth);
+  });
 
   return (
     <>
-      {windowOuterWidth < media.ipad ? (
+      {screenWidth < media.ipad &&
+      window.orientation !== 90 ? (
         <>
           <Suspense
             fallback={
@@ -160,6 +164,7 @@ const App = ({
   );
   const history = useHistory();
   const [didMount, setDidMount] = useState(false);
+  const [screenWidth, setScreenWidth] = useState();
 
   if (pathname === '/' && search && mapData.length) {
     makeItemActive(search.split('=')[1]);
@@ -190,6 +195,10 @@ const App = ({
     // eslint-disable-next-line
   }, [user]);
 
+  useEffect(() => {
+    setScreenWidth(window.innerWidth);
+  });
+
   return (
     <div className="App">
       <div className={classes.mainStyle}>
@@ -219,7 +228,8 @@ const App = ({
           timeout={1000}
           unmountOnExit
         >
-          {windowOuterWidth < media.ipad ? (
+          {screenWidth < media.ipad &&
+          window.orientation !== 90 ? (
             <Suspense
               fallback={
                 <div>Завантаження модального вікна...</div>

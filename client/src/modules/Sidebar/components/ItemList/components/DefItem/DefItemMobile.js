@@ -12,6 +12,7 @@ import {
   ENTER_BUTTON_CODE,
   BASE_ZOOM_VALUE
 } from '../../consts';
+import { setSearch } from '../../../Search/actions';
 
 const useStyles = makeStyles({
   pointCard: {
@@ -56,6 +57,7 @@ const DefItemMobile = ({
   defItemInfo,
   setMapCenterCoords,
   setMapZoomParam,
+  setSearch,
   // eslint-disable-next-line react/prop-types
   styleParam
 }) => {
@@ -63,6 +65,7 @@ const DefItemMobile = ({
   const [lng, lat] = defItemInfo.location.coordinates;
 
   const handleClick = () => {
+    setSearch('');
     makeItemActive(defItemInfo._id);
     setMapCenterCoords({
       lng,
@@ -135,6 +138,8 @@ export default connect(
     setMapCenterCoords: mapState =>
       dispatch(setMapCenter(mapState)),
     setMapZoomParam: mapState =>
-      dispatch(setMapZoom(mapState))
+      dispatch(setMapZoom(mapState)),
+    setSearch: value =>
+      dispatch(setSearch({ adress: value }))
   })
 )(DefItemMobile);

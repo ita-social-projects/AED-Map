@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   BrowserRouter as Router,
@@ -9,6 +10,7 @@ import ItemListMobile from './components/ItemList/ItemListMobile';
 import Alert from '../../shared/Alert';
 import useAlert from '../../shared/Alert/useAlert';
 import { LOGO_IMG } from '../../consts/header';
+// import { setSearch } from './components/Search/actions';
 
 const useStyles = makeStyles({
   sidebarStyle: {
@@ -29,7 +31,8 @@ const useStyles = makeStyles({
   }
 });
 
-const SidebarMobile = () => {
+const SidebarMobile = search => {
+  const isSearchNotEmpty = search.search.address;
   const classes = useStyles();
   const [alert, ShowAlert] = useAlert();
 
@@ -44,7 +47,7 @@ const SidebarMobile = () => {
           />
           <Route path="/" exact>
             <SearchMobile />
-            <ItemListMobile />
+            {isSearchNotEmpty && <ItemListMobile />}
           </Route>
           <Alert
             open={alert.open}
@@ -58,4 +61,6 @@ const SidebarMobile = () => {
   );
 };
 
-export default SidebarMobile;
+export default connect(state => ({ search: state.search }))(
+  SidebarMobile
+);

@@ -29,7 +29,8 @@ const Search = ({
   setSearch,
   fetchDefItems,
   resetData,
-  resetPage
+  resetPage,
+  search
 }) => {
   const classes = useStyles();
   const onSearch = ({ target: { value } }) => {
@@ -64,6 +65,7 @@ const Search = ({
             autoFocus
             debounceTimeout={300}
             onChange={onSearch}
+            value={search.address}
           />
         </Formik>
       </Paper>

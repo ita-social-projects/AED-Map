@@ -33,7 +33,8 @@ const SearchMobile = ({
   setSearch,
   fetchDefItems,
   resetData,
-  resetPage
+  resetPage,
+  search
 }) => {
   const classes = useStyles();
   const onSearch = ({ target: { value } }) => {
@@ -67,6 +68,7 @@ const SearchMobile = ({
             autoFocus
             debounceTimeout={300}
             onChange={onSearch}
+            value={search.address}
           />
         </Formik>
       </Paper>
@@ -75,9 +77,6 @@ const SearchMobile = ({
 };
 
 SearchMobile.propTypes = {
-  search: PropTypes.shape({
-    address: PropTypes.string.isRequired
-  }).isRequired,
   setSearch: PropTypes.func.isRequired,
   fetchDefItems: PropTypes.func.isRequired,
   resetData: PropTypes.func.isRequired,
