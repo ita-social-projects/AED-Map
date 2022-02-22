@@ -96,7 +96,7 @@ const MyForm = ({
         severity: 'error',
         message: 'Серверна помилка'
       });
-    }
+    } 
   };
 
   return (
@@ -160,13 +160,14 @@ const MyForm = ({
                 type="submit"
                 endIcon={<SaveIcon />}
                 onClick={() => {
-                  if (isValid === false)
+                  if (isValid === false) {
                     ShowAlert({
                       open: true,
                       severity: 'error',
                       message:
                         'Дані полів введені некоректно'
                     });
+                  } 
                 }}
               >
                 Зберегти
