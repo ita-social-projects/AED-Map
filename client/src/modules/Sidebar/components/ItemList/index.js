@@ -104,7 +104,7 @@ const ItemList = ({
         rowIndex={index}
       >
         <DefItem
-          styleParam={style}
+          style={style}
           defItemInfo={defibrillators[index]}
         />
       </CellMeasurer>
