@@ -123,14 +123,13 @@ const MapHolder = ({
   };
 
   //------------------обробник кнопки---------------------------
-  const getCurrentLocation = event => {
+  const getCurrentLocation = _ => {
     setGeolocation(({ latitude, longitude}) => {
       setMapCenter({
         lng: longitude,
         lat: latitude,
       });
-    });
-    
+    }); 
   }
   //------------------обробник кнопки-----------------------------
 
@@ -148,7 +147,7 @@ const MapHolder = ({
       setMapCenter({ lng: longitude, lat: latitude });
       startWatchingPosition();
     })
-  }, [])
+  }, [setGeolocation, setMapCenter, startWatchingPosition])
 
   const onDblClickMap = (_, event) => {
     const currentRoute = window.location.pathname;

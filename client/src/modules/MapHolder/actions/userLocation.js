@@ -1,6 +1,7 @@
 import { SET_USER_POSITION,
   SET_GEOLOCATION_STATUS,
   START_WATCHING_POSITION,
+  STOP_WATCHING_POSITION
 } from "../consts"
 
 
@@ -19,8 +20,7 @@ export const setUserPosition = (payload) => {
  */
 export const setGeolocation = (f) => {
   return (dispatch) => {
-    const error = (e) => {
-      console.log(e)
+    const error = () => {
       dispatch({type: SET_GEOLOCATION_STATUS, payload: false});
     }
     const success = ({ coords }) => {
@@ -70,6 +70,6 @@ export const setGeolocationStatus = (payload) => {
  */
 export const stopWatching = () => {
   return {
-    type: SET_USER_POSITION
+    type: STOP_WATCHING_POSITION
   }
 }
