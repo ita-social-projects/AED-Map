@@ -76,16 +76,9 @@ const MyForm = ({
     try {
       await submitAction({
         ...values,
-        fullTimeAvailable:
-          fullTimeStatus || timeFrom === timeUntil,
-        availableFrom:
-          fullTimeStatus || timeFrom === timeUntil
-            ? null
-            : timeFrom,
-        availableUntil:
-          fullTimeStatus || timeFrom === timeUntil
-            ? null
-            : timeUntil,
+        fullTimeAvailable: fullTimeStatus,
+        availableFrom: fullTimeStatus ? null : timeFrom,
+        availableUntil: fullTimeStatus ? null : timeUntil,
         actualDate
       });
       ShowAlert({

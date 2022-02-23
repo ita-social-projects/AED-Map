@@ -56,7 +56,7 @@ const useStyle = makeStyles({
   }
 });
 
-const DefibrillatorPopupContent = ({ id, hidePopup }) => {   
+const DefibrillatorPopupContent = ({ id, hidePopup }) => {
   const classes = useStyle();
   const [currDef, setCurrDef] = useState(null);
 
@@ -77,10 +77,16 @@ const DefibrillatorPopupContent = ({ id, hidePopup }) => {
     }
 
     if (key === 'availableFrom') {
-      const availableTime = def.fullTimeAvailable === true 
-            ? 'Цілодобово доступний' 
-            : `${def.availableFrom}:00 - ${def.availableUntil}:00`;
-      return availableTime;     
+      const availableTime =
+        def.fullTimeAvailable === true
+          ? 'Цілодобово доступний'
+          : `${def.availableFrom
+              .toString()
+              .padStart(2, '0')}:00 - 
+             ${def.availableUntil
+               .toString()
+               .padStart(2, '0')}:00`;
+      return availableTime;
     }
 
     return def[key];
@@ -112,9 +118,9 @@ const DefibrillatorPopupContent = ({ id, hidePopup }) => {
         />
       )}
 
-      {Object.keys(titles).map(
-        key => {
-          return currDef[key] !== undefined &&  (
+      {Object.keys(titles).map(key => {
+        return (
+          currDef[key] !== undefined && (
             <p key={key}>
               <span className={classes.title}>
                 {titles[key]}
@@ -122,9 +128,9 @@ const DefibrillatorPopupContent = ({ id, hidePopup }) => {
               <br />
               {formatData(key, currDef)}
             </p>
-          ) 
-        }
-      )}
+          )
+        );
+      })}
       <Cancel
         className={classes.closeBtn}
         onClick={hidePopup}

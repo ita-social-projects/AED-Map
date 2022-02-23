@@ -5,8 +5,12 @@ import PropTypes from 'prop-types';
 import { NavLink, useHistory } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import permissionService from '../../../../../Auth/permissionService';
-import {fetchSingleDefById} from '../../../../../Sidebar/api/index';
-import {setFullTime,setFromTime,setUntilTime} from '../../../EditForm/actions/setFullTime';
+import { fetchSingleDefById } from '../../../../../Sidebar/api/index';
+import {
+  setFullTime,
+  setFromTime,
+  setUntilTime
+} from '../../../EditForm/actions/setFullTime';
 import {
   setMapCenter,
   setMapZoom
@@ -80,7 +84,7 @@ const DefItem = ({
   user,
   setTime,
   setFromTime,
-  setUntilTime                   
+  setUntilTime
 }) => {
   const isActive = defItemInfo._id === activeItemId;
   const hasPermission =
@@ -113,22 +117,24 @@ const DefItem = ({
   };
 
   const handleEditClick = event => {
-    event.preventDefault(); 
-    setDefCheckbox(defItemInfo._id); 
+    event.preventDefault();
+    setDefCheckbox(defItemInfo._id);
     history.push(`/edit-form/${defItemInfo._id}`);
   };
 
-  const setDefCheckbox = async (id) => {
+  const setDefCheckbox = async id => {
     const res = await fetchSingleDefById(id);
     const data = res.data.defibrillator;
     setTime(data.fullTimeAvailable);
     const timeFrom =
-      data.availableFrom === undefined || data.availableFrom === null
+      data.availableFrom === undefined ||
+      data.availableFrom === null
         ? 0
         : data.availableFrom;
     setFromTime(timeFrom);
     const timeUntil =
-      data.availableUntil === undefined || data.availableUntil === null
+      data.availableUntil === undefined ||
+      data.availableUntil === null
         ? 23
         : data.availableUntil;
     setUntilTime(timeUntil);
@@ -296,6 +302,6 @@ export default connect(
       dispatch(blockDefItem(id, blocked)),
     setTime: value => dispatch(setFullTime(value)),
     setFromTime: time => dispatch(setFromTime(time)),
-    setUntilTime: time => dispatch(setUntilTime(time)),
+    setUntilTime: time => dispatch(setUntilTime(time))
   })
 )(DefItem);
