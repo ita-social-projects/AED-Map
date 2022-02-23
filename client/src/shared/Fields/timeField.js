@@ -75,9 +75,12 @@ const MyTimeField = ({
           >
             <MuiMenuItem disabled>з</MuiMenuItem>
             {hours(0, 23).map(hour => (
-              <MuiMenuItem value={hour} key={hour}>
-                {`${hour}`.padStart(2, '0')}
-                :00
+              <MuiMenuItem
+                value={hour}
+                key={hour}
+                disabled={timeUntil <= hour}
+              >
+                {`${hour}`.padStart(2, '0')}:00
               </MuiMenuItem>
             ))}
           </Select>
@@ -95,7 +98,11 @@ const MyTimeField = ({
           >
             <MuiMenuItem disabled>до</MuiMenuItem>
             {hours(0, 23).map(hour => (
-              <MuiMenuItem value={hour} key={hour}>
+              <MuiMenuItem
+                value={hour}
+                key={hour}
+                disabled={timeFrom >= hour}
+              >
                 {`${hour}`.padStart(2, '0')}
                 :00
               </MuiMenuItem>
