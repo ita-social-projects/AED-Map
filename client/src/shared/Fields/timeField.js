@@ -53,8 +53,8 @@ const MyTimeField = ({
 
   const changeTime = e => {
     e.target.name === 'availableFrom'
-      ? setFromTime(e.target.value)
-      : setUntilTime(e.target.value);
+      ? setFromTime(Number(e.target.value))
+      : setUntilTime(Number(e.target.value));
   };
 
   const classes = useStyles();

@@ -55,7 +55,7 @@ const EditForm = ({ setMapCenter }) => {
       )[1],
       coordinates: defibrillator.location.coordinates,
       availableFrom: defibrillator.availableFrom,
-      images: defibrillator.image
+      images: defibrillator.images
     });
     setMapCenter({ lng, lat, zoom: 17 });
   };
