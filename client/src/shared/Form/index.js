@@ -166,6 +166,7 @@ const MyForm = ({
                 color="primary"
                 size="large"
                 type="submit"
+                disabled={!isValid}
                 endIcon={<SaveIcon />}
                 onClick={() => {
                   if (isValid === false) {
@@ -198,7 +199,8 @@ MyForm.propTypes = {
     phone: PropTypes.array.isRequired,
     additional_information: PropTypes.string.isRequired,
     storage_place: PropTypes.string.isRequired,
-    coordinates: PropTypes.array.isRequired
+    coordinates: PropTypes.array.isRequired,
+    images: PropTypes.array.isRequired
   }).isRequired,
   submitAction: PropTypes.func.isRequired,
   resetPage: PropTypes.func.isRequired,

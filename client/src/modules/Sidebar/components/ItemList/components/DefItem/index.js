@@ -129,7 +129,7 @@ const DefItem = ({
     setFromTime(timeFrom);
     const timeUntil =
       data.availableUntil === undefined || data.availableUntil === null
-        ? 0
+        ? 23
         : data.availableUntil;
     setUntilTime(timeUntil);
   };
