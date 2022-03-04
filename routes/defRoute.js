@@ -100,12 +100,12 @@ router.post(
     try {
       const defibrillator = await Defibrillator.create({
         ...req.body,
-        owner: req.user._id
+        owner: req.user._id,
       });
 
       return res.status(201).send({
         error: false,
-        defibrillator
+        defibrillator,
       });
     } catch (e) {
       resServerError(res, e);
@@ -125,10 +125,9 @@ router.put(
         req.body,
         { new: true }
       );
-
       return res.status(200).send({
         error: false,
-        defibrillator
+        defibrillator,
       });
     } catch (e) {
       resServerError(res, e);

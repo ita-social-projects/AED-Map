@@ -7,6 +7,7 @@ import mapStateReducer from '../modules/MapHolder/reducers/mapStateReducer';
 import addNewPointReducer from '../modules/MapHolder/reducers/addNewPointReducer';
 import popupDisplayReducer from '../modules/MapHolder/reducers/popupDisplayReducer';
 import searchReducer from '../modules/Sidebar/components/Search/reducers';
+import setFullTimeReducer from '../modules/Sidebar/components/EditForm/reducers/index';
 
 export default combineReducers({
   user: userReducer,
@@ -15,5 +16,6 @@ export default combineReducers({
   newPoint: addNewPointReducer,
   defs: listReducer,
   popupData: popupDisplayReducer,
-  search: searchReducer
+  search: searchReducer,
+  setFullTime: setFullTimeReducer
 });

@@ -75,8 +75,16 @@ const defibrillatorSchema = new Schema({
     required: true
   },
 
-  accessibility: {
-    type: String,
+  availableFrom: {
+    type: Number,
+    required: true
+  },
+  availableUntil: {        
+    type: Number,
+    required: true
+  },
+  fullTimeAvailable: {    
+    type: Boolean,
     required: true
   },
 

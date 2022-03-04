@@ -149,7 +149,7 @@ DefibrillatorPinLayer.propTypes = {
       actual_date: PropTypes.string,
       floor: PropTypes.number,
       storage_place: PropTypes.string,
-      accessibility: PropTypes.string,
+      availableFrom: PropTypes.string,
       language: PropTypes.string,
       informational_plates: PropTypes.string,
       phone: PropTypes.arrayOf(PropTypes.string),
