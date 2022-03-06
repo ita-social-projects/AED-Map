@@ -13,7 +13,7 @@ import {
   setMapCenter,
   setMapZoom
 } from '../../../MapHolder/actions/mapState';
-import InfoMessage from './components/InfoMessage';
+import InfoMessageMobile from './components/InfoMessage/infoMessageMobile';
 import HorizontalLoader from '../../../../shared/Loader/HorizontalLoader';
 import DefItemMobile from './components/DefItem/DefItemMobile';
 import cancelToken from '../../../../shared/cancel-token';
@@ -152,7 +152,9 @@ const ItemListMobile = ({
           );
         }}
       </AutoSizer>
-      {showMessage && <InfoMessage>{message}</InfoMessage>}
+      {showMessage && (
+        <InfoMessageMobile>{message}</InfoMessageMobile>
+      )}
       {showHorizontalLoader && <HorizontalLoader />}
     </div>
   );

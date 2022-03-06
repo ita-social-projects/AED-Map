@@ -95,7 +95,7 @@ const Main = () => {
 
   useEffect(() => {
     setScreenWidth(window.innerWidth);
-  });
+  }, [screenWidth]);
 
   return (
     <>
@@ -145,7 +145,8 @@ const App = ({
   location,
   mapData,
   makeItemActive,
-  user
+  user,
+  searchInput
 }) => {
   const classes = useStyles();
   const transitionClasses = {
@@ -197,7 +198,7 @@ const App = ({
 
   useEffect(() => {
     setScreenWidth(window.innerWidth);
-  });
+  }, [searchInput]);
 
   return (
     <div className="App">
@@ -283,7 +284,8 @@ App.propTypes = {
 export default connect(
   state => ({
     mapData: state.defs.mapData,
-    user: state.user.user
+    user: state.user.user,
+    searchInput: state.search.address
   }),
   dispatch => ({
     success: (user, authorization) =>
