@@ -10,7 +10,7 @@ import {
 import {
   languageInterface,
   informationalPlates,
-  accessibility
+  availableFrom
 } from './consts/formConsts';
 
 const useStyles = makeStyles(theme => ({
@@ -59,9 +59,9 @@ const FormFormik = ({ onSubmit }) => {
       />
       <MySelect
         labelTitle="Години роботи"
-        label="accessibility"
-        name="accessibility"
-        options={accessibility}
+        label="availableFrom"
+        name="availableFrom"
+        options={availableFrom}
         classes={classes.inputs}
       />
       <FormButtons />

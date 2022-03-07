@@ -76,6 +76,19 @@ const DefibrillatorPopupContent = ({ id, hidePopup }) => {
       return def[key].join(', ');
     }
 
+    if (key === 'availableFrom') {
+      const availableTime =
+        def.fullTimeAvailable === true
+          ? 'Цілодобово доступний'
+          : `${def.availableFrom
+              .toString()
+              .padStart(2, '0')}:00 - 
+             ${def.availableUntil
+               .toString()
+               .padStart(2, '0')}:00`;
+      return availableTime;
+    }
+
     return def[key];
   };
 
@@ -104,9 +117,10 @@ const DefibrillatorPopupContent = ({ id, hidePopup }) => {
           alt={currDef.images[0].filename}
         />
       )}
-      {Object.keys(titles).map(
-        key =>
-          currDef[key] && (
+
+      {Object.keys(titles).map(key => {
+        return (
+          currDef[key] !== undefined && (
             <p key={key}>
               <span className={classes.title}>
                 {titles[key]}
@@ -115,7 +129,8 @@ const DefibrillatorPopupContent = ({ id, hidePopup }) => {
               {formatData(key, currDef)}
             </p>
           )
-      )}
+        );
+      })}
       <Cancel
         className={classes.closeBtn}
         onClick={hidePopup}

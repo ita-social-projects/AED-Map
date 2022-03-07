@@ -4,7 +4,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import MyForm from '../../../../shared/Form';
-import { editItem, fetchSingleDefById, createImage } from '../../api';
+import {
+  editItem,
+  fetchSingleDefById,
+  createImage
+} from '../../api';
 import Loader from '../../../../shared/Loader';
 import cancelToken from '../../../../shared/cancel-token';
 import { setMapCenter } from '../../../MapHolder/actions/mapState';
@@ -36,7 +40,9 @@ const EditForm = ({ setMapCenter }) => {
 
     setDef({
       title: defibrillator.title,
-      address: correctAddress.data.results[0] && correctAddress.data.results[0].formatted_address,
+      address:
+        correctAddress.data.results[0] &&
+        correctAddress.data.results[0].formatted_address,
       informational_plates:
         defibrillator.informational_plates,
       phone: defibrillator.phone,
@@ -48,7 +54,8 @@ const EditForm = ({ setMapCenter }) => {
         /, (.*)/
       )[1],
       coordinates: defibrillator.location.coordinates,
-      accessibility: defibrillator.accessibility
+      availableFrom: defibrillator.availableFrom,
+      images: defibrillator.images
     });
     setMapCenter({ lng, lat, zoom: 17 });
   };
@@ -108,6 +115,7 @@ const EditForm = ({ setMapCenter }) => {
 EditForm.propTypes = {
   setMapCenter: PropTypes.func.isRequired
 };
+
 export default connect(null, dispatch => ({
   setMapCenter: newPoint => dispatch(setMapCenter(newPoint))
 }))(EditForm);

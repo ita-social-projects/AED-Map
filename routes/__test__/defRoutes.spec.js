@@ -23,7 +23,7 @@ const newDefibrillator = {
   },
   actual_date: '2019-02-12',
   storage_place: 'Поверх 1, каб. Муніципальної Варти',
-  accessibility: 'Цілодобово. Без вихідних',
+  availableFrom: 'Цілодобово. Без вихідних',
   language: 'Російськомовний',
   informational_plates: 'Відсутні',
   phone: ['380322975994'],

@@ -7,7 +7,6 @@ import { DebounceInput } from 'react-debounce-input';
 import { Paper } from '@material-ui/core';
 import { INITIAL_VALUES } from './consts';
 import { MyInputBase } from '../../../../shared/Fields';
-import Filter from './components/Filter';
 import {
   fetchDefs,
   setPage,
@@ -17,15 +16,20 @@ import { setSearch } from './actions';
 
 const useStyles = makeStyles(() => ({
   searchWrapper: {
-    marginBottom: 20
+    marginBottom: 28,
+    marginLeft: 30,
+    marginRight: 10,
+    width: '90%'
   },
   searchInput: {
     width: '100%',
-    paddingRight: '0.5rem'
+    paddingRight: '0.5rem',
+    paddingLeft: '16px',
+    height: 48
   }
 }));
 
-const Search = ({
+const SearchMobile = ({
   setSearch,
   fetchDefItems,
   resetData,
@@ -57,9 +61,8 @@ const Search = ({
         <Formik initialValues={INITIAL_VALUES}>
           <DebounceInput
             element={MyInputBase}
-            startAdornment={<Filter />}
             id="search"
-            placeholder="Впишіть сюди адресу"
+            placeholder="Введіть адресу"
             name="search"
             className={classes.searchInput}
             autoFocus
@@ -73,10 +76,7 @@ const Search = ({
   );
 };
 
-Search.propTypes = {
-  search: PropTypes.shape({
-    address: PropTypes.string.isRequired
-  }).isRequired,
+SearchMobile.propTypes = {
   setSearch: PropTypes.func.isRequired,
   fetchDefItems: PropTypes.func.isRequired,
   resetData: PropTypes.func.isRequired,
@@ -91,4 +91,4 @@ export default connect(
     resetPage: page => setPage(page),
     resetData: data => setData(data)
   }
-)(Search);
+)(SearchMobile);
