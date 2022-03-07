@@ -78,7 +78,7 @@ const DefItem = ({
   setMapCenterCoords,
   setMapZoomParam,
   // eslint-disable-next-line react/prop-types
-  styleParam,
+  style,
   deleteDefibrPoint,
   blockDefibrPoint,
   user,
@@ -174,7 +174,7 @@ const DefItem = ({
     <NavLink
       to={`?id=${defItemInfo._id}`}
       className={classes.pointCard}
-      style={styleParam}
+      style={style}
     >
       <div
         className={classes.pointCardInfo}

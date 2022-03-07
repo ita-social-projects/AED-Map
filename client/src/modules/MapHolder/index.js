@@ -15,6 +15,9 @@ import { hidePopup } from './actions/popupDisplay';
 import DefibrillatorPinLayer from './layers/DefibrillatorPinLayer';
 import AddedPin from './layers/AddedPin';
 import { sidebarWidth } from '../Sidebar/styleConstants';
+import { setGeolocation, startWatchingPosition } from './actions/userLocation';
+import GeoLocationButton from './components/GeoLocationButton'
+import UserPin from './components/UserPin';
 
 const useStyles = makeStyles(() => ({
   mapContainer: ({ visible }) => ({
@@ -55,8 +58,11 @@ const Map = ReactMapboxGl({
 
 const MapHolder = ({
   mapState,
+  userPosition,
   newPoint,
   setMapCenter,
+  startWatchingPosition,
+  setGeolocation,
   addNewPoint,
   hidePopup,
   setVisible,
@@ -92,12 +98,12 @@ const MapHolder = ({
   const { lng, lat, zoom } = mapState;
 
   const changeMapCenterCoords = event => {
-    setMapCenter(event.getCenter());
+    setMapCenter({...event.getCenter(), zoom: event.getZoom()});
   };
 
   const onZoomEnded = event => {
     setMapCenter({
-      ...event.getCenter(),
+      ...mapState,
       zoom: event.getZoom()
     });
   };
@@ -116,6 +122,17 @@ const MapHolder = ({
     }
   };
 
+  //------------------обробник кнопки---------------------------
+  const getCurrentLocation = _ => {
+    setGeolocation(({ latitude, longitude}) => {
+      setMapCenter({
+        lng: longitude,
+        lat: latitude,
+      });
+    }); 
+  }
+  //------------------обробник кнопки-----------------------------
+
   useEffect(() => {
     if (Object.keys(newPoint).length !== 0) {
       const { lng, lat } = newPoint;
@@ -123,6 +140,14 @@ const MapHolder = ({
     }
     // eslint-disable-next-line
   }, [newPoint]);
+
+  // Sets map center to current Position of the user
+  useEffect(() => {
+    setGeolocation(({longitude, latitude}) => {
+      setMapCenter({ lng: longitude, lat: latitude });
+      startWatchingPosition();
+    })
+  }, [setGeolocation, setMapCenter, startWatchingPosition])
 
   const onDblClickMap = (_, event) => {
     const currentRoute = window.location.pathname;
@@ -139,6 +164,7 @@ const MapHolder = ({
 
   return (
     <div className={classes.mapContainer}>
+      <GeoLocationButton currentLocation={getCurrentLocation}/>
       <Button
         className={classes.showIcon}
         color="primary"
@@ -166,9 +192,15 @@ const MapHolder = ({
         onDblClick={onDblClickMap}
       >
         {map && <DefibrillatorPinLayer map={map} />}
+        {
+          userPosition.geolocationProvided && 
+          <UserPin classes={classes} coordinates={userPosition.coords}/>
+        }
+        
         {Object.keys(newPoint).length !== 0 && (
           <AddedPin coordinates={newPoint} />
         )}
+
         <PopupHolder />
       </Map>
     </div>
@@ -180,6 +212,8 @@ MapHolder.defaultProps = {
   setVisible: {},
   visible: null,
   setMapCenter: () => {},
+  setGeolocation: () => {},
+  startWatchingPosition: () => {},
   hidePopup: () => {}
 };
 
@@ -195,6 +229,8 @@ MapHolder.propTypes = {
   }).isRequired,
   addNewPoint: PropTypes.func.isRequired,
   setMapCenter: PropTypes.func,
+  setMapZoom: PropTypes.func,
+  startWatchingPosition: PropTypes.func,
   hidePopup: PropTypes.func,
   setVisible: PropTypes.func,
   visible: PropTypes.bool
@@ -204,9 +240,12 @@ export default connect(
   state => ({
     defsState: state.defs,
     mapState: state.mapState,
-    newPoint: state.newPoint
+    newPoint: state.newPoint,
+    userPosition: state.userPosition
   }),
   dispatch => ({
+    setGeolocation: (f) => dispatch(setGeolocation(f)),
+    startWatchingPosition: () => dispatch(startWatchingPosition()),
     setMapCenter: map => dispatch(setMapCenter(map)),
     setMapZoom: zoom => dispatch(setMapZoom(zoom)),
     addNewPoint: newPoint =>

@@ -54,6 +54,7 @@ const ItemList = ({
   totalCount,
   page,
   search,
+  geolocationProvided,
   setMapCenterCoords,
   setMapZoomParam
 }) => {
@@ -103,7 +104,7 @@ const ItemList = ({
         rowIndex={index}
       >
         <DefItem
-          styleParam={style}
+          style={style}
           defItemInfo={defibrillators[index]}
         />
       </CellMeasurer>
@@ -120,15 +121,19 @@ const ItemList = ({
     // eslint-disable-next-line
   }, []);
 
+  // If user declined geolocation (Or any other error happend) center is set to last active defibrilator
   useEffect(() => {
-    if (activeDef) {
-      const [lng, lat] = activeDef.location.coordinates;
-      setMapCenterCoords({
-        lng,
-        lat
-      });
-      setMapZoomParam(BASE_ZOOM_VALUE);
+    if (activeDef && !geolocationProvided) {
+      if (activeDef) {
+        const [lng, lat] = activeDef.location.coordinates;
+        setMapCenterCoords({
+          lng,
+          lat
+        });
+        setMapZoomParam(BASE_ZOOM_VALUE);
+      }
     }
+
     // eslint-disable-next-line
   }, [activeDef]);
 
@@ -199,7 +204,8 @@ export default connect(
     totalCount: state.defs.totalCount,
     page: state.defs.page,
     search: state.search,
-    user: state.user.user
+    user: state.user.user,
+    geolocationProvided: state.userPosition.geolocationProvided
   }),
   dispatch => ({
     fetchDefItems: params => dispatch(fetchDefs(params)),
