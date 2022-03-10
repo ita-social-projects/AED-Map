@@ -1,6 +1,7 @@
 import React from 'react';
 import {getAvailableDefItems} from '../../../Sidebar/api/index.js';
 import {connect} from 'react-redux';
+import useAlert from '../../../../shared/Alert/useAlert';
 
 const getNearestDeviceButton = {
   fontFamily: 'TimeNewRoman',
@@ -20,15 +21,26 @@ const getNearestDeviceButton = {
 }
 
 function QuickSearchButton ({coords,getRouteToNearestItem}) {
+  const [ShowAlert] = useAlert();
 
   const getNearestDefibrillators = async () => {
     const nearestItem = await getAvailableDefItems({
         longitude: coords.lng, 
         latitude: coords.lat, 
     });
-    const [lng,lat] = nearestItem.data.listDefs.location.coordinates;
-    const args = [coords.lng,coords.lat,lng,lat];
-    await getRouteToNearestItem(args)
+    console.log(nearestItem.data.listDefs)
+    if (nearestItem.data.listDefs) {
+      const [lng,lat] = nearestItem.data.listDefs.location.coordinates;
+      const args = [coords.lng,coords.lat,lng,lat];
+      await getRouteToNearestItem(args)
+    } else {
+      ShowAlert({
+        open: true,
+        severity: 'error',
+        message:
+          'Пристроїв поблизу не знайдено'
+      });
+    }
   };
 
   return(
