@@ -7,7 +7,7 @@ const getLocationButton = {
     cursor: 'pointer',
     position: 'fixed',
     bottom: '7%',
-    right: '8%',
+    right: '1%',
     zIndex: '30',
     backgroundColor: 'white',
     borderRadius: '25%',

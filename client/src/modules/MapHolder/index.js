@@ -16,10 +16,8 @@ import DefibrillatorPinLayer from './layers/DefibrillatorPinLayer';
 import AddedPin from './layers/AddedPin';
 import { sidebarWidth } from '../Sidebar/styleConstants';
 import { setGeolocation, startWatchingPosition } from './actions/userLocation';
-import GeoLocationButton from './components/GeoLocationButton';
-import QuickSearchButton from './components/QuickSearchButton';
+import GeoLocationButton from './components/GeoLocationButton'
 import UserPin from './components/UserPin';
-import axios from 'axios';
 
 const useStyles = makeStyles(() => ({
   mapContainer: ({ visible }) => ({
@@ -57,8 +55,6 @@ const Map = ReactMapboxGl({
   accessToken:
     'pk.eyJ1Ijoib3Nrb3ZiYXNpdWsiLCJhIjoiY2s1NWVwcnhhMDhrazNmcGNvZjJ1MnA4OSJ9.56GsGp2cl6zpYh-Ns8ThxA'
 });
-
-
 
 const MapHolder = ({
   mapState,
@@ -166,27 +162,8 @@ const MapHolder = ({
     }
   };
 
-
-  // get route
-  const getRouteToNearestItem = async (args) => {
-    const [,,endLng,endLat] = [...args];
-    const data = await getRoute(args)
-    setMapCenter({lng: endLng,lat: endLat,});
-  }
-
-  const getRoute = async (args) => {
-    const [startLng,startLat,endLng,endLat] = [...args];
-    const accessToken = 'pk.eyJ1Ijoib3Nrb3ZiYXNpdWsiLCJhIjoiY2s1NWVwcnhhMDhrazNmcGNvZjJ1MnA4OSJ9.56GsGp2cl6zpYh-Ns8ThxA';
-    const url = 'https://api.mapbox.com/directions/v5';
-    const profile = 'driving';
-    const fetch = await axios.get(`${url}/mapbox/${profile}/${startLng},${startLat};${endLng},${endLat}?alternatives=true&geometries=geojson&language=en&overview=full&steps=true&access_token=${accessToken}`)
-    const data = await fetch.data.routes[0];
-    return data;
-  }
-
   return (
     <div className={classes.mapContainer}>
-      <QuickSearchButton getRouteToNearestItem={getRouteToNearestItem}/>
       <GeoLocationButton currentLocation={getCurrentLocation}/>
       <Button
         className={classes.showIcon}
@@ -219,11 +196,11 @@ const MapHolder = ({
           userPosition.geolocationProvided && 
           <UserPin classes={classes} coordinates={userPosition.coords}/>
         }
-
+        
         {Object.keys(newPoint).length !== 0 && (
           <AddedPin coordinates={newPoint} />
         )}
-        
+
         <PopupHolder />
       </Map>
     </div>

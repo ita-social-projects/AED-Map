@@ -6,9 +6,6 @@ const URLimage = '/api/images';
 export const getDefItems = (params, cancelToken) => {
   return http.get(URL, params, cancelToken);
 };
-export const getAvailableDefItems = (params) => {
-  return http.get(`${URL}/nearestDevice/`, params);
-};
 export const fetchSingleDefById = id => {
   return http.get(`${URL}/${id}`);
 };
