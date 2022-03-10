@@ -21,7 +21,7 @@ const getNearestDeviceButton = {
 }
 
 function QuickSearchButton ({coords,getRouteToNearestItem}) {
-  const [ShowAlert] = useAlert();
+  const [,ShowAlert] = useAlert();
 
   const getNearestDefibrillators = async () => {
     const nearestItem = await getAvailableDefItems({
@@ -38,15 +38,13 @@ function QuickSearchButton ({coords,getRouteToNearestItem}) {
         open: true,
         severity: 'error',
         message:
-          'Пристроїв поблизу не знайдено'
+          'Пристроїв поблизу не виявлено'
       });
     }
   };
 
   return(
-    <>
-        <button style={getNearestDeviceButton} type='button' onClick={getNearestDefibrillators}>Знайти пристрій</button>
-    </>
+    <button style={getNearestDeviceButton} type='button' onClick={getNearestDefibrillators}>Знайти пристрій</button>
   )
 }
 
