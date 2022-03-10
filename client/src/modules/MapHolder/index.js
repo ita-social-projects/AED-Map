@@ -166,12 +166,24 @@ const MapHolder = ({
     }
   };
 
-
   // get route
+  const [geojson,setGeojson] = useState([])
+
   const getRouteToNearestItem = async (args) => {
     const [,,endLng,endLat] = [...args];
     const data = await getRoute(args)
+    console.log('coord', data)
+    const route = data.geometry.coordinates;
+    const geojson = {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "type": "LineString",
+        "coordinates": route
+      }
+    };
     setMapCenter({lng: endLng,lat: endLat,});
+    setGeojson(geojson);
   }
 
   const getRoute = async (args) => {
@@ -223,7 +235,7 @@ const MapHolder = ({
         {Object.keys(newPoint).length !== 0 && (
           <AddedPin coordinates={newPoint} />
         )}
-        
+
         <PopupHolder />
       </Map>
     </div>
