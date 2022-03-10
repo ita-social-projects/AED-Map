@@ -91,6 +91,31 @@ router.get('/', checkPermission, async (req, res) => {
   }
 });
 
+router.get('/nearestDevice', async (req, res) => {
+  try {
+    const requestHour = new Date().getHours();
+    let listDefs = (await Defibrillator.findOne({
+      location: {
+        $near: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [req.query.longitude, req.query.latitude],
+          },
+          $maxDistance: 15000,
+        },
+      },
+      availableFrom: { $lt: requestHour },
+      availableUntil: { $gt: requestHour },
+    }));
+
+    return res
+      .status(200)
+      .send({ listDefs });
+  } catch (e) {
+    resServerError(res, e);
+  }
+});
+
 router.post(
   '/',
   passport.authenticate('jwt', { session: false }),
