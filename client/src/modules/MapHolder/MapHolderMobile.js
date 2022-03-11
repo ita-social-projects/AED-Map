@@ -199,7 +199,8 @@ MapHolderMobile.propTypes = {
   setMapCenter: PropTypes.func,
   hidePopup: PropTypes.func,
   setVisible: PropTypes.func,
-  visible: PropTypes.bool
+  visible: PropTypes.bool,
+  fetchDefItems: PropTypes.func
 };
 
 export default connect(

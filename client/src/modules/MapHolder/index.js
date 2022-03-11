@@ -167,34 +167,25 @@ const MapHolder = ({
   };
 
   // get route
-  const [geojson,setGeojson] = useState([])
-
   const getRouteToNearestItem = async (args) => {
-    const [,,endLng,endLat] = [...args];
-    const data = await getRoute(args)
-    console.log('coord', data)
-    const route = data.geometry.coordinates;
-    const geojson = {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "LineString",
-        "coordinates": route
-      }
-    };
-    setMapCenter({lng: endLng,lat: endLat,});
-    setGeojson(geojson);
-  }
-
+    const [, , endLng, endLat] = [...args];
+    const data = await getRoute(args);
+    setMapCenter({ lng: endLng, lat: endLat });
+  };
+  
   const getRoute = async (args) => {
-    const [startLng,startLat,endLng,endLat] = [...args];
-    const accessToken = 'pk.eyJ1Ijoib3Nrb3ZiYXNpdWsiLCJhIjoiY2s1NWVwcnhhMDhrazNmcGNvZjJ1MnA4OSJ9.56GsGp2cl6zpYh-Ns8ThxA';
+    const [startLng, startLat, endLng, endLat] = [...args];
+    const accessToken =
+      'pk.eyJ1Ijoib3Nrb3ZiYXNpdWsiLCJhIjoiY2s1NWVwcnhhMDhrazNmcGNvZjJ1MnA4OSJ9.56GsGp2cl6zpYh-Ns8ThxA';
     const url = 'https://api.mapbox.com/directions/v5';
     const profile = 'driving';
-    const fetch = await axios.get(`${url}/mapbox/${profile}/${startLng},${startLat};${endLng},${endLat}?alternatives=true&geometries=geojson&language=en&overview=full&steps=true&access_token=${accessToken}`)
+    const fetch = await axios.get(
+      `${url}/mapbox/${profile}/${startLng},${startLat};${endLng},${endLat}?alternatives=true&geometries=geojson&language=en&overview=full&steps=true&access_token=${accessToken}`
+    );
     const data = await fetch.data.routes[0];
     return data;
-  }
+  };
+  
 
   return (
     <div className={classes.mapContainer}>

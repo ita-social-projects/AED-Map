@@ -1,6 +1,7 @@
 import React from 'react';
-import {getAvailableDefItems} from '../../../Sidebar/api/index.js';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import {getAvailableDefItems} from '../../../Sidebar/api/index.js';
 import useAlert from '../../../../shared/Alert/useAlert';
 
 const getNearestDeviceButton = {
@@ -18,37 +19,46 @@ const getNearestDeviceButton = {
   borderRadius: '50%',
   boxShadow: '0px 0px 25px black',
   border: '2px solid rgba(0, 0, 0, 0.6)',
-}
+};
 
-function QuickSearchButton ({coords,getRouteToNearestItem}) {
-  const [,ShowAlert] = useAlert();
+function QuickSearchButton({ coords, getRouteToNearestItem }) {
+  const [, ShowAlert] = useAlert();
 
   const getNearestDefibrillators = async () => {
     const nearestItem = await getAvailableDefItems({
-        longitude: coords.lng, 
-        latitude: coords.lat, 
+      longitude: coords.lng,
+      latitude: coords.lat,
     });
-    console.log(nearestItem.data.listDefs)
+
     if (nearestItem.data.listDefs) {
-      const [lng,lat] = nearestItem.data.listDefs.location.coordinates;
-      const args = [coords.lng,coords.lat,lng,lat];
-      await getRouteToNearestItem(args)
+      const [lng, lat] = nearestItem.data.listDefs.location.coordinates;
+      const args = [coords.lng, coords.lat, lng, lat];
+      await getRouteToNearestItem(args);
     } else {
       ShowAlert({
         open: true,
         severity: 'error',
-        message:
-          'Пристроїв поблизу не виявлено'
+        message: 'Пристроїв поблизу не виявлено',
       });
     }
   };
 
-  return(
-    <button style={getNearestDeviceButton} type='button' onClick={getNearestDefibrillators}>Знайти пристрій</button>
-  )
+  return (
+    <button
+      style={getNearestDeviceButton}
+      type="button"
+      onClick={getNearestDefibrillators}
+    >
+      Знайти пристрій
+    </button>
+  );
 }
 
-export default connect(state => ({
+QuickSearchButton.propTypes = {
+  coords: PropTypes.object.isRequired,
+  getRouteToNearestItem: PropTypes.func.isRequired
+};
+
+export default connect((state) => ({
   coords: state.userPosition.coords,
-})
-)(QuickSearchButton);
+}))(QuickSearchButton);
