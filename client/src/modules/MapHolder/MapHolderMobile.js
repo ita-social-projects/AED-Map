@@ -14,6 +14,7 @@ import {
 import { hidePopup } from './actions/popupDisplay';
 import DefibrillatorPinLayer from './layers/DefibrillatorPinLayer';
 import AddedPin from './layers/AddedPin';
+import {fetchDefs} from '../Sidebar/components/ItemList/actions/list.js'
 
 const useStyles = makeStyles(() => ({
   mapContainer: () => ({
@@ -50,6 +51,7 @@ const Map = ReactMapboxGl({
 });
 
 const MapHolderMobile = ({
+  fetchDefItems,
   mapState,
   newPoint,
   setMapCenter,
@@ -77,6 +79,10 @@ const MapHolderMobile = ({
       );
     };
     // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    fetchDefItems();
   }, []);
 
   const loadMap = mapRaw => {
@@ -203,6 +209,7 @@ export default connect(
     newPoint: state.newPoint
   }),
   dispatch => ({
+    fetchDefItems: params => dispatch(fetchDefs(params)), 
     setMapCenter: map => dispatch(setMapCenter(map)),
     setMapZoom: zoom => dispatch(setMapZoom(zoom)),
     addNewPoint: newPoint =>
