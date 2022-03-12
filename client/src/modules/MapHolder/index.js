@@ -14,12 +14,16 @@ import {
 import { hidePopup } from './actions/popupDisplay';
 import DefibrillatorPinLayer from './layers/DefibrillatorPinLayer';
 import AddedPin from './layers/AddedPin';
+import PointLayer from './layers/PointLayer';
+import RouteLayer from './layers/RouteLayer';
 import { sidebarWidth } from '../Sidebar/styleConstants';
-import { setGeolocation, startWatchingPosition } from './actions/userLocation';
+import {
+  setGeolocation,
+  startWatchingPosition
+} from './actions/userLocation';
 import GeoLocationButton from './components/GeoLocationButton';
 import QuickSearchButton from './components/QuickSearchButton';
 import UserPin from './components/UserPin';
-import axios from 'axios';
 
 const useStyles = makeStyles(() => ({
   mapContainer: ({ visible }) => ({
@@ -58,8 +62,6 @@ const Map = ReactMapboxGl({
     'pk.eyJ1Ijoib3Nrb3ZiYXNpdWsiLCJhIjoiY2s1NWVwcnhhMDhrazNmcGNvZjJ1MnA4OSJ9.56GsGp2cl6zpYh-Ns8ThxA'
 });
 
-
-
 const MapHolder = ({
   mapState,
   userPosition,
@@ -74,14 +76,17 @@ const MapHolder = ({
 }) => {
   const classes = useStyles({ visible });
   const [map, setLocalMap] = useState(null);
+  const { lng, lat, zoom } = mapState;
   const tooltipMessage = visible
     ? 'Приховати меню'
     : 'Показати меню';
+
   const handlePopupClose = event => {
     if (event.target.tagName === 'CANVAS') {
       hidePopup();
     }
   };
+
   useEffect(() => {
     document.addEventListener('click', handlePopupClose);
     return () => {
@@ -93,50 +98,46 @@ const MapHolder = ({
     // eslint-disable-next-line
   }, []);
 
-  const loadMap = mapRaw => {
+  const loadMap = async mapRaw => {
     if (mapRaw) {
       setLocalMap(mapRaw);
     }
   };
 
-  const { lng, lat, zoom } = mapState;
-
   const changeMapCenterCoords = event => {
-    setMapCenter({...event.getCenter(), zoom: event.getZoom()});
+    setMapCenter({
+      ...event.getCenter(),
+      zoom: event.getZoom()
+    });
   };
-
   const onZoomEnded = event => {
     setMapCenter({
       ...mapState,
       zoom: event.getZoom()
     });
   };
-
   const onZoomStarted = () => {
     hidePopup();
   };
-
   const hideSidebar = () => {
     if (map) {
       setVisible(prev => !prev);
-
       setTimeout(() => {
         map.resize();
       }, 100);
     }
   };
-
   //------------------обробник кнопки---------------------------
   const getCurrentLocation = _ => {
-    setGeolocation(({ latitude, longitude}) => {
+    setGeolocation(({ latitude, longitude }) => {
       setMapCenter({
         lng: longitude,
-        lat: latitude,
+        lat: latitude
       });
-    }); 
-  }
+    });
+    console.log(userPosition);
+  };
   //------------------обробник кнопки-----------------------------
-
   useEffect(() => {
     if (Object.keys(newPoint).length !== 0) {
       const { lng, lat } = newPoint;
@@ -145,14 +146,13 @@ const MapHolder = ({
     // eslint-disable-next-line
   }, [newPoint]);
 
-  // Sets map center to current Position of the user
+  //Sets map center to current Position of the user
   useEffect(() => {
-    setGeolocation(({longitude, latitude}) => {
+    setGeolocation(({ longitude, latitude }) => {
       setMapCenter({ lng: longitude, lat: latitude });
       startWatchingPosition();
-    })
-  }, [setGeolocation, setMapCenter, startWatchingPosition])
-
+    });
+  }, [setGeolocation, setMapCenter, startWatchingPosition]);
   const onDblClickMap = (_, event) => {
     const currentRoute = window.location.pathname;
     if (
@@ -160,37 +160,42 @@ const MapHolder = ({
       currentRoute.includes('/edit-form')
     ) {
       const { lng, lat } = event.lngLat;
-
       addNewPoint({ lng, lat });
       event.preventDefault();
     }
   };
 
-  // get route
-  const getRouteToNearestItem = async (args) => {
-    const [, , endLng, endLat] = [...args];
-    const data = await getRoute(args);
-    setMapCenter({ lng: endLng, lat: endLat });
+  const getRouteToNearestItem = async args => {
+    const [, , endLng, endLat] = args;
+    await setMapCenter({ lng: endLng, lat: endLat });
+    getRoute([endLng, endLat]);
   };
-  
-  const getRoute = async (args) => {
-    const [startLng, startLat, endLng, endLat] = [...args];
+
+  const [coordinates, setCoordinates] = useState([]);
+
+  const getRoute = async ([endLng, endLat]) => {
     const accessToken =
       'pk.eyJ1Ijoib3Nrb3ZiYXNpdWsiLCJhIjoiY2s1NWVwcnhhMDhrazNmcGNvZjJ1MnA4OSJ9.56GsGp2cl6zpYh-Ns8ThxA';
-    const url = 'https://api.mapbox.com/directions/v5';
-    const profile = 'driving';
-    const fetch = await axios.get(
-      `${url}/mapbox/${profile}/${startLng},${startLat};${endLng},${endLat}?alternatives=true&geometries=geojson&language=en&overview=full&steps=true&access_token=${accessToken}`
+    const query = await fetch(
+      `https://api.mapbox.com/directions/v5/mapbox/driving/${lng},${lat};${endLng},${endLat}?steps=true&geometries=geojson&access_token=${accessToken}`,
+      { method: 'GET' }
     );
-    const data = await fetch.data.routes[0];
-    return data;
+
+    const json = await query.json();
+    const data = json.routes[0];
+    const route = data.geometry.coordinates;
+
+    setCoordinates(route);
   };
-  
 
   return (
     <div className={classes.mapContainer}>
-      <QuickSearchButton getRouteToNearestItem={getRouteToNearestItem}/>
-      <GeoLocationButton currentLocation={getCurrentLocation}/>
+      <QuickSearchButton
+        getRouteToNearestItem={getRouteToNearestItem}
+      />
+      <GeoLocationButton
+        currentLocation={getCurrentLocation}
+      />
       <Button
         className={classes.showIcon}
         color="primary"
@@ -218,16 +223,25 @@ const MapHolder = ({
         onDblClick={onDblClickMap}
       >
         {map && <DefibrillatorPinLayer map={map} />}
-        {
-          userPosition.geolocationProvided && 
-          <UserPin classes={classes} coordinates={userPosition.coords}/>
-        }
+        {userPosition.geolocationProvided && (
+          <UserPin
+            classes={classes}
+            coordinates={userPosition.coords}
+          />
+        )}
 
         {Object.keys(newPoint).length !== 0 && (
           <AddedPin coordinates={newPoint} />
         )}
 
         <PopupHolder />
+
+        {coordinates && (
+          <>
+            <RouteLayer coordinates={coordinates} />
+            <PointLayer coordinates={coordinates} />
+          </>
+        )}
       </Map>
     </div>
   );
@@ -270,8 +284,9 @@ export default connect(
     userPosition: state.userPosition
   }),
   dispatch => ({
-    setGeolocation: (f) => dispatch(setGeolocation(f)),
-    startWatchingPosition: () => dispatch(startWatchingPosition()),
+    setGeolocation: f => dispatch(setGeolocation(f)),
+    startWatchingPosition: () =>
+      dispatch(startWatchingPosition()),
     setMapCenter: map => dispatch(setMapCenter(map)),
     setMapZoom: zoom => dispatch(setMapZoom(zoom)),
     addNewPoint: newPoint =>
