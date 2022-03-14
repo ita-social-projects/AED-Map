@@ -32,8 +32,7 @@ function QuickSearchButton({ coords, getRouteToNearestItem }) {
 
     if (nearestItem.data.listDefs) {
       const [lng, lat] = nearestItem.data.listDefs.location.coordinates;
-      const args = [coords.lng, coords.lat, lng, lat];
-      await getRouteToNearestItem(args);
+      await getRouteToNearestItem(lng, lat);
     } else {
       ShowAlert({
         open: true,

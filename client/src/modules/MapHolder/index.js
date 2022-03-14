@@ -165,8 +165,7 @@ const MapHolder = ({
     }
   };
 
-  const getRouteToNearestItem = async args => {
-    const [, , endLng, endLat] = args;
+  const getRouteToNearestItem = async (endLng, endLat) => {
     await setMapCenter({ lng: endLng, lat: endLat });
     getRoute([endLng, endLat]);
   };
