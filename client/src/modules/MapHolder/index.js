@@ -178,7 +178,7 @@ const MapHolder = ({
     const accessToken =
       'pk.eyJ1Ijoib3Nrb3ZiYXNpdWsiLCJhIjoiY2s1NWVwcnhhMDhrazNmcGNvZjJ1MnA4OSJ9.56GsGp2cl6zpYh-Ns8ThxA';
     const query = await fetch(
-      `https://api.mapbox.com/directions/v5/mapbox/driving/${userPosition.coords.lng},${userPosition.coords.lat};${endLng},${endLat}?overview=full&steps=true&geometries=geojson&access_token=${accessToken}`,
+      `https://api.mapbox.com/directions/v5/mapbox/driving/${userPosition.coords.lng},${userPosition.coords.lat};${endLng},${endLat}?steps=true&geometries=geojson&access_token=${accessToken}`,
       { method: 'GET' }
     );
 
