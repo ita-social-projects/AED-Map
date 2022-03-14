@@ -60,4 +60,4 @@ QuickSearchButton.propTypes = {
 
 export default connect((state) => ({
   coords: state.userPosition.coords,
-}))(QuickSearchButton);
+}),null)(QuickSearchButton);

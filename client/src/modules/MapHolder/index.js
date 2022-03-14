@@ -23,6 +23,7 @@ import {
 } from './actions/userLocation';
 import GeoLocationButton from './components/GeoLocationButton';
 import QuickSearchButton from './components/QuickSearchButton';
+import RouteDetails from './components/RouteDetails';
 import UserPin from './components/UserPin';
 
 const useStyles = makeStyles(() => ({
@@ -135,7 +136,6 @@ const MapHolder = ({
         lat: latitude
       });
     });
-    console.log(userPosition);
   };
   //------------------обробник кнопки-----------------------------
   useEffect(() => {
@@ -171,12 +171,14 @@ const MapHolder = ({
   };
 
   const [coordinates, setCoordinates] = useState([]);
+  const [details, setDetails] = useState({distance: null,duration: null});
+  const [showDetails, setShowDetails] = useState(false);
 
   const getRoute = async ([endLng, endLat]) => {
     const accessToken =
       'pk.eyJ1Ijoib3Nrb3ZiYXNpdWsiLCJhIjoiY2s1NWVwcnhhMDhrazNmcGNvZjJ1MnA4OSJ9.56GsGp2cl6zpYh-Ns8ThxA';
     const query = await fetch(
-      `https://api.mapbox.com/directions/v5/mapbox/driving/${lng},${lat};${endLng},${endLat}?steps=true&geometries=geojson&access_token=${accessToken}`,
+      `https://api.mapbox.com/directions/v5/mapbox/driving/${userPosition.coords.lng},${userPosition.coords.lat};${endLng},${endLat}?overview=full&steps=true&geometries=geojson&access_token=${accessToken}`,
       { method: 'GET' }
     );
 
@@ -185,6 +187,17 @@ const MapHolder = ({
     const route = data.geometry.coordinates;
 
     setCoordinates(route);
+    setShowDetails(true);
+    setDetails({
+      distance: data.distance,
+      duration: data.duration
+    });
+  };
+
+  const closeRoute = () => {
+    setCoordinates([]);
+    setShowDetails(false);
+    getCurrentLocation();
   };
 
   return (
@@ -207,6 +220,10 @@ const MapHolder = ({
           />
         </Tooltip>
       </Button>
+
+      {showDetails && (
+        <RouteDetails onClose={closeRoute} details={details}/>
+      )}
 
       <Map
         // eslint-disable-next-line react/style-prop-object
