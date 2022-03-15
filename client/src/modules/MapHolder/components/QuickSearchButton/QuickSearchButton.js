@@ -21,7 +21,7 @@ const getNearestDeviceButton = {
   border: '2px solid rgba(0, 0, 0, 0.6)',
 };
 
-function QuickSearchButton({ coords, getRouteToNearestItem: getRouteToPosition }) {
+function QuickSearchButton({ coords, getRouteToPosition }) {
   const [, ShowAlert] = useAlert();
 
   const getNearestDefibrillators = async () => {
