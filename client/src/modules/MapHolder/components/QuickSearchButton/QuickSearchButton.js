@@ -5,15 +5,15 @@ import {getAvailableDefItems} from '../../../Sidebar/api/index.js';
 import useAlert from '../../../../shared/Alert/useAlert';
 
 const getNearestDeviceButton = {
-  fontFamily: 'TimeNewRoman',
-  fontSize: '1rem',
+  fontSize: '0.8rem',
+  fontWeight: '900',
   color: 'white',
   width: '80px',
   height: '80px',
   cursor: 'pointer',
   position: 'fixed',
   bottom: '5%',
-  right: '1%',
+  right: '8px',
   zIndex: '30',
   backgroundColor: 'red',
   borderRadius: '50%',
