@@ -25,6 +25,7 @@ import GeoLocationButton from './components/GeoLocationButton';
 import QuickSearchButton from './components/QuickSearchButton';
 import RouteDetails from './components/RouteDetails';
 import UserPin from './components/UserPin';
+import { getDirections } from './api';
 
 const useStyles = makeStyles(() => ({
   mapContainer: ({ visible }) => ({
@@ -129,6 +130,7 @@ const MapHolder = ({
     }
   };
   //------------------обробник кнопки---------------------------
+  
   const getCurrentLocation = _ => {
     setGeolocation(({ latitude, longitude }) => {
       setMapCenter({
@@ -137,7 +139,7 @@ const MapHolder = ({
       });
     });
   };
-  //------------------обробник кнопки-----------------------------
+
   useEffect(() => {
     if (Object.keys(newPoint).length !== 0) {
       const { lng, lat } = newPoint;
@@ -146,6 +148,7 @@ const MapHolder = ({
     // eslint-disable-next-line
   }, [newPoint]);
 
+
   //Sets map center to current Position of the user
   useEffect(() => {
     setGeolocation(({ longitude, latitude }) => {
@@ -153,6 +156,7 @@ const MapHolder = ({
       startWatchingPosition();
     });
   }, [setGeolocation, setMapCenter, startWatchingPosition]);
+
   const onDblClickMap = (_, event) => {
     const currentRoute = window.location.pathname;
     if (
@@ -165,45 +169,37 @@ const MapHolder = ({
     }
   };
 
-  const getRouteToNearestItem = async (endLng, endLat) => {
+  const getRouteToPosition = async (endLng, endLat) => {
     await setMapCenter({ lng: endLng, lat: endLat });
-    getRoute([endLng, endLat]);
+    getRoute(userPosition.coords, {lng: endLng, lat: endLat});
   };
 
-  const [coordinates, setCoordinates] = useState([]);
-  const [details, setDetails] = useState({distance: null,duration: null});
-  const [showDetails, setShowDetails] = useState(false);
+  const [routeCords, setRouteCords] = useState([]);
+  const [routeDetails, setRouteDetails] = useState({distance: null,duration: null});
+  const [showRouteDetails, setShowRouteDetails] = useState(false);
 
-  const getRoute = async ([endLng, endLat]) => {
-    const accessToken =
-      'pk.eyJ1Ijoib3Nrb3ZiYXNpdWsiLCJhIjoiY2s1NWVwcnhhMDhrazNmcGNvZjJ1MnA4OSJ9.56GsGp2cl6zpYh-Ns8ThxA';
-    const query = await fetch(
-      `https://api.mapbox.com/directions/v5/mapbox/driving/${userPosition.coords.lng},${userPosition.coords.lat};${endLng},${endLat}?steps=true&geometries=geojson&access_token=${accessToken}`,
-      { method: 'GET' }
-    );
+  const getRoute = async (start, endPosition) => {
+    const query = await getDirections(start, endPosition);
+    const data = query.data.routes[0];
 
-    const json = await query.json();
-    const data = json.routes[0];
-    const route = data.geometry.coordinates;
-
-    setCoordinates(route);
-    setShowDetails(true);
-    setDetails({
+    setRouteCords(data.geometry.coordinates);
+    setShowRouteDetails(true);
+    setRouteDetails({
       distance: data.distance,
       duration: data.duration
     });
   };
 
   const closeRoute = () => {
-    setCoordinates([]);
-    setShowDetails(false);
+    setRouteCords([]);
+    setShowRouteDetails(false);
     getCurrentLocation();
   };
 
   return (
     <div className={classes.mapContainer}>
       <QuickSearchButton
-        getRouteToNearestItem={getRouteToNearestItem}
+        getRouteToPosition={getRouteToPosition}
       />
       <GeoLocationButton
         currentLocation={getCurrentLocation}
@@ -221,8 +217,8 @@ const MapHolder = ({
         </Tooltip>
       </Button>
 
-      {showDetails && (
-        <RouteDetails onClose={closeRoute} details={details}/>
+      {showRouteDetails && (
+        <RouteDetails onClose={closeRoute} details={routeDetails}/>
       )}
 
       <Map
@@ -252,10 +248,10 @@ const MapHolder = ({
 
         <PopupHolder />
 
-        {coordinates && (
+        {routeCords && (
           <>
-            <RouteLayer coordinates={coordinates} />
-            <PointLayer coordinates={coordinates} />
+            <RouteLayer coordinates={routeCords} />
+            <PointLayer coordinates={routeCords} />
           </>
         )}
       </Map>

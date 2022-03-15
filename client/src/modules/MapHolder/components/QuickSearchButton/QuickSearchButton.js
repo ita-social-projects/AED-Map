@@ -21,7 +21,7 @@ const getNearestDeviceButton = {
   border: '2px solid rgba(0, 0, 0, 0.6)',
 };
 
-function QuickSearchButton({ coords, getRouteToNearestItem }) {
+function QuickSearchButton({ coords, getRouteToNearestItem: getRouteToPosition }) {
   const [, ShowAlert] = useAlert();
 
   const getNearestDefibrillators = async () => {
@@ -32,7 +32,7 @@ function QuickSearchButton({ coords, getRouteToNearestItem }) {
 
     if (nearestItem.data.listDefs) {
       const [lng, lat] = nearestItem.data.listDefs.location.coordinates;
-      await getRouteToNearestItem(lng, lat);
+      await getRouteToPosition(lng, lat);
     } else {
       ShowAlert({
         open: true,
@@ -55,7 +55,7 @@ function QuickSearchButton({ coords, getRouteToNearestItem }) {
 
 QuickSearchButton.propTypes = {
   coords: PropTypes.object.isRequired,
-  getRouteToNearestItem: PropTypes.func.isRequired
+  getRouteToPosition: PropTypes.func.isRequired
 };
 
 export default connect((state) => ({
