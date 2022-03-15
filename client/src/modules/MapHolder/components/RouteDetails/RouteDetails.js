@@ -3,30 +3,28 @@ import PropTypes from 'prop-types';
 
 const detailsStyle = {
   container: {
-    fontFamily: 'TimeNewRoman',
-    fontSize: '1.5rem',
+    fontSize: '1.25rem',
     fontWeight: 'bold',
-    color: 'darkGrey',
+    color: 'rgba(255, 255, 255, 1)',
     position: 'fixed',
     bottom: '5%',
-    right: '17%',
+    right: '160px',
     zIndex: '30',
-    backgroundColor: 'white',
-    borderRadius: '5%',
+    backgroundColor: 'rgba(40, 44, 52, 1)',
+    borderRadius: '5px',
     border: '2px solid rgba(0, 0, 0, 0.6)',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'flexStart',
     padding: '10px',
   },
   button: {
-    backgroundColor: 'darkGrey',
+    backgroundColor: 'rgba(162, 165, 173, 1)',
+    fontSize: '0.9rem',
     padding: '2px',
-    borderRadius: '25%',
-    position: 'absolute',
-    right: '5px',
-    top: '5px',
+    marginTop: '5px',
+    borderRadius: '5px',
+    cursor: 'pointer',
   },
 };
 
@@ -37,10 +35,9 @@ function RouteDetails({ onClose, details }) {
 
   return (
     <div style={detailsStyle.container}>
-      <p>{approximateTime}хв</p>
-      <p>({finalDistance}км) </p>
+      <p>{approximateTime}хв <span>({finalDistance}км)</span></p>
       <button style={detailsStyle.button} type="button" onClick={onClose}>
-        X
+        Cкасувати маршрут
       </button>
     </div>
   );
