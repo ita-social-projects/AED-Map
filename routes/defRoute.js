@@ -103,8 +103,8 @@ router.get('/nearestDevice', async (req, res) => {
               req.query.longitude,
               req.query.latitude
             ]
-          }
-          // $maxDistance: 15000,
+          },
+          $maxDistance: 15000,
         }
       },
       availableFrom: { $lt: requestHour },
