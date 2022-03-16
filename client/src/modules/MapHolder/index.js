@@ -23,7 +23,9 @@ import {
 } from './actions/userLocation';
 import GeoLocationButton from './components/GeoLocationButton';
 import QuickSearchButton from './components/QuickSearchButton';
+import RouteDetails from './components/RouteDetails';
 import UserPin from './components/UserPin';
+import { getDirections } from './api';
 
 const useStyles = makeStyles(() => ({
   mapContainer: ({ visible }) => ({
@@ -128,6 +130,7 @@ const MapHolder = ({
     }
   };
   //------------------обробник кнопки---------------------------
+
   const getCurrentLocation = _ => {
     setGeolocation(({ latitude, longitude }) => {
       setMapCenter({
@@ -135,9 +138,8 @@ const MapHolder = ({
         lat: latitude
       });
     });
-    console.log(userPosition);
   };
-  //------------------обробник кнопки-----------------------------
+
   useEffect(() => {
     if (Object.keys(newPoint).length !== 0) {
       const { lng, lat } = newPoint;
@@ -153,6 +155,7 @@ const MapHolder = ({
       startWatchingPosition();
     });
   }, [setGeolocation, setMapCenter, startWatchingPosition]);
+
   const onDblClickMap = (_, event) => {
     const currentRoute = window.location.pathname;
     if (
@@ -165,33 +168,45 @@ const MapHolder = ({
     }
   };
 
-  const getRouteToNearestItem = async args => {
-    const [, , endLng, endLat] = args;
+  const getRouteToPosition = async (endLng, endLat) => {
     await setMapCenter({ lng: endLng, lat: endLat });
-    getRoute([endLng, endLat]);
+    getRoute(userPosition.coords, {
+      lng: endLng,
+      lat: endLat
+    });
   };
 
-  const [coordinates, setCoordinates] = useState([]);
+  const [routeCords, setRouteCords] = useState([]);
+  const [routeDetails, setRouteDetails] = useState({
+    distance: null,
+    duration: null
+  });
+  const [showRouteDetails, setShowRouteDetails] = useState(
+    false
+  );
 
-  const getRoute = async ([endLng, endLat]) => {
-    const accessToken =
-      'pk.eyJ1Ijoib3Nrb3ZiYXNpdWsiLCJhIjoiY2s1NWVwcnhhMDhrazNmcGNvZjJ1MnA4OSJ9.56GsGp2cl6zpYh-Ns8ThxA';
-    const query = await fetch(
-      `https://api.mapbox.com/directions/v5/mapbox/driving/${lng},${lat};${endLng},${endLat}?overview=full&alternatives=true&steps=true&geometries=geojson&access_token=${accessToken}`,
-      { method: 'GET' }
-    );
+  const getRoute = async (start, endPosition) => {
+    const query = await getDirections(start, endPosition);
+    const data = query.data.routes[0];
 
-    const json = await query.json();
-    const data = json.routes[0];
-    const route = data.geometry.coordinates;
+    setRouteCords(data.geometry.coordinates);
+    setShowRouteDetails(true);
+    setRouteDetails({
+      distance: data.distance,
+      duration: data.duration
+    });
+  };
 
-    setCoordinates(route);
+  const closeRoute = () => {
+    setRouteCords([]);
+    setShowRouteDetails(false);
+    getCurrentLocation();
   };
 
   return (
     <div className={classes.mapContainer}>
       <QuickSearchButton
-        getRouteToNearestItem={getRouteToNearestItem}
+        getRouteToPosition={getRouteToPosition}
       />
       <GeoLocationButton
         currentLocation={getCurrentLocation}
@@ -208,6 +223,13 @@ const MapHolder = ({
           />
         </Tooltip>
       </Button>
+
+      {showRouteDetails && (
+        <RouteDetails
+          onClose={closeRoute}
+          details={routeDetails}
+        />
+      )}
 
       <Map
         // eslint-disable-next-line react/style-prop-object
@@ -236,10 +258,10 @@ const MapHolder = ({
 
         <PopupHolder />
 
-        {coordinates && (
+        {routeCords && (
           <>
-            <RouteLayer coordinates={coordinates} />
-            <PointLayer coordinates={coordinates} />
+            <RouteLayer coordinates={routeCords} />
+            <PointLayer coordinates={routeCords} />
           </>
         )}
       </Map>

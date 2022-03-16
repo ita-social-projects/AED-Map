@@ -71,6 +71,7 @@ const MapHolderMobile = ({
     }
   };
   useEffect(() => {
+    fetchDefItems();
     document.addEventListener('click', handlePopupClose);
     return () => {
       document.removeEventListener(
@@ -80,10 +81,6 @@ const MapHolderMobile = ({
     };
     // eslint-disable-next-line
   }, []);
-
-  useEffect(() => {
-    fetchDefItems();
-  }, [fetchDefItems]);
 
   const loadMap = mapRaw => {
     if (mapRaw) {

@@ -5,15 +5,15 @@ import {getAvailableDefItems} from '../../../Sidebar/api/index.js';
 import useAlert from '../../../../shared/Alert/useAlert';
 
 const getNearestDeviceButton = {
-  fontFamily: 'TimeNewRoman',
-  fontSize: '1rem',
+  fontSize: '0.8rem',
+  fontWeight: '900',
   color: 'white',
   width: '80px',
   height: '80px',
   cursor: 'pointer',
   position: 'fixed',
   bottom: '5%',
-  right: '1%',
+  right: '8px',
   zIndex: '30',
   backgroundColor: 'red',
   borderRadius: '50%',
@@ -21,7 +21,7 @@ const getNearestDeviceButton = {
   border: '2px solid rgba(0, 0, 0, 0.6)',
 };
 
-function QuickSearchButton({ coords, getRouteToNearestItem }) {
+function QuickSearchButton({ coords, getRouteToPosition }) {
   const [, ShowAlert] = useAlert();
 
   const getNearestDefibrillators = async () => {
@@ -32,8 +32,7 @@ function QuickSearchButton({ coords, getRouteToNearestItem }) {
 
     if (nearestItem.data.listDefs) {
       const [lng, lat] = nearestItem.data.listDefs.location.coordinates;
-      const args = [coords.lng, coords.lat, lng, lat];
-      await getRouteToNearestItem(args);
+      await getRouteToPosition(lng, lat);
     } else {
       ShowAlert({
         open: true,
@@ -56,9 +55,9 @@ function QuickSearchButton({ coords, getRouteToNearestItem }) {
 
 QuickSearchButton.propTypes = {
   coords: PropTypes.object.isRequired,
-  getRouteToNearestItem: PropTypes.func.isRequired
+  getRouteToPosition: PropTypes.func.isRequired
 };
 
 export default connect((state) => ({
   coords: state.userPosition.coords,
-}))(QuickSearchButton);
+}),null)(QuickSearchButton);
