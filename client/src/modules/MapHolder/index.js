@@ -26,6 +26,7 @@ import QuickSearchButton from './components/QuickSearchButton';
 import RouteDetails from './components/RouteDetails';
 import UserPin from './components/UserPin';
 import { getDirections } from './api';
+import { MAPBOX_TOKEN } from '../../consts/keys';
 
 const useStyles = makeStyles(() => ({
   mapContainer: ({ visible }) => ({
@@ -61,7 +62,7 @@ const useStyles = makeStyles(() => ({
 
 const Map = ReactMapboxGl({
   accessToken:
-    'pk.eyJ1Ijoib3Nrb3ZiYXNpdWsiLCJhIjoiY2s1NWVwcnhhMDhrazNmcGNvZjJ1MnA4OSJ9.56GsGp2cl6zpYh-Ns8ThxA'
+    MAPBOX_TOKEN
 });
 
 const MapHolder = ({
@@ -112,15 +113,18 @@ const MapHolder = ({
       zoom: event.getZoom()
     });
   };
+
   const onZoomEnded = event => {
     setMapCenter({
       ...mapState,
       zoom: event.getZoom()
     });
   };
+  
   const onZoomStarted = () => {
     hidePopup();
   };
+
   const hideSidebar = () => {
     if (map) {
       setVisible(prev => !prev);
@@ -129,8 +133,7 @@ const MapHolder = ({
       }, 100);
     }
   };
-  //------------------обробник кнопки---------------------------
-  
+
   const getCurrentLocation = _ => {
     setGeolocation(({ latitude, longitude }) => {
       setMapCenter({
@@ -147,7 +150,6 @@ const MapHolder = ({
     }
     // eslint-disable-next-line
   }, [newPoint]);
-
 
   //Sets map center to current Position of the user
   useEffect(() => {
@@ -174,7 +176,7 @@ const MapHolder = ({
     getRoute(userPosition.coords, {lng: endLng, lat: endLat});
   };
 
-  const [routeCords, setRouteCords] = useState([]);
+  const [routeCoords, setRouteCords] = useState([]);
   const [routeDetails, setRouteDetails] = useState({distance: null,duration: null});
   const [showRouteDetails, setShowRouteDetails] = useState(false);
 
@@ -248,10 +250,10 @@ const MapHolder = ({
 
         <PopupHolder />
 
-        {routeCords && (
+        {routeCoords && (
           <>
-            <RouteLayer coordinates={routeCords} />
-            <PointLayer coordinates={routeCords} />
+            <RouteLayer coordinates={routeCoords} />
+            <PointLayer coordinates={routeCoords} />
           </>
         )}
       </Map>
