@@ -21,14 +21,24 @@ const getNearestDeviceButton = {
   border: '2px solid rgba(0, 0, 0, 0.6)',
 };
 
-function QuickSearchButton({ coords, getRouteToPosition }) {
+function QuickSearchButton({ coords, geolocationProvided, getRouteToPosition }) {
   const [, ShowAlert] = useAlert();
 
   const getNearestDefibrillators = async () => {
-    const nearestItem = await getAvailableDefItems({
-      longitude: coords.lng,
-      latitude: coords.lat,
-    });
+    let nearestItem;
+    if (geolocationProvided) {
+      nearestItem = await getAvailableDefItems({
+        longitude: coords.lng,
+        latitude: coords.lat,
+      });
+    } else {
+      ShowAlert({
+        open: true,
+        severity: 'error',
+        message: 'Позиція користувача не знайдена',
+      });
+      return;
+    }
 
     if (nearestItem.data.listDefs) {
       const [lng, lat] = nearestItem.data.listDefs.location.coordinates;
@@ -60,4 +70,5 @@ QuickSearchButton.propTypes = {
 
 export default connect((state) => ({
   coords: state.userPosition.coords,
+  geolocationProvided: state.userPosition.geolocationProvided,
 }),null)(QuickSearchButton);
