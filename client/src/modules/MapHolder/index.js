@@ -260,7 +260,7 @@ const MapHolder = ({
 
         <PopupHolder />
 
-        {routeCords.length > 0 && (
+        {routeCoords.length > 0 && (
           <>
             <RouteLayer coordinates={routeCoords} />
             <PointLayer coordinates={routeCoords} />
