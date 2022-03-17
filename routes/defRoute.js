@@ -107,8 +107,8 @@ router.get('/nearestDevice', async (req, res) => {
           $maxDistance: 15000,
         }
       },
-      availableFrom: { $lt: requestHour },
-      availableUntil: { $gt: requestHour }
+      $or : [{availableFrom: null },{availableFrom: { $lt: requestHour }}],
+      $or : [{availableUntil: null},{availableUntil: { $gt: requestHour }}]
     });
 
     return res.status(200).send({ listDefs });
