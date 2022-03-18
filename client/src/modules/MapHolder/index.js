@@ -18,6 +18,7 @@ import { sidebarWidth } from '../Sidebar/styleConstants';
 import { setGeolocation, startWatchingPosition } from './actions/userLocation';
 import GeoLocationButton from './components/GeoLocationButton'
 import UserPin from './components/UserPin';
+import useAlert from '../../shared/Alert/useAlert';
 
 const useStyles = makeStyles(() => ({
   mapContainer: ({ visible }) => ({
@@ -69,6 +70,7 @@ const MapHolder = ({
   visible
 }) => {
   const classes = useStyles({ visible });
+  const [, showAlert] = useAlert();
   const [map, setLocalMap] = useState(null);
   const tooltipMessage = visible
     ? 'Приховати меню'
@@ -124,7 +126,16 @@ const MapHolder = ({
 
   //------------------обробник кнопки---------------------------
   const getCurrentLocation = _ => {
-    setGeolocation(({ latitude, longitude}) => {
+    setGeolocation((coords) => {
+      if ( coords == null ) {
+        showAlert({
+          open: true,
+          severity: 'error',
+          message: 'Позиція користувача не знайдена',
+        })
+        return
+      }
+      const { longitude, latitude } = coords;
       setMapCenter({
         lng: longitude,
         lat: latitude,
@@ -143,7 +154,11 @@ const MapHolder = ({
 
   // Sets map center to current Position of the user
   useEffect(() => {
-    setGeolocation(({longitude, latitude}) => {
+    setGeolocation((coords) => {
+      if ( coords == null ) {
+        return
+      }
+      const { longitude, latitude } = coords;
       setMapCenter({ lng: longitude, lat: latitude });
       startWatchingPosition();
     })

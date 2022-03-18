@@ -22,6 +22,7 @@ export const setGeolocation = (f) => {
   return (dispatch) => {
     const error = () => {
       dispatch({type: SET_GEOLOCATION_STATUS, payload: false});
+      f(null);
     }
     const success = ({ coords }) => {
       const { latitude, longitude} = coords;
