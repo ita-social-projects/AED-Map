@@ -30,7 +30,7 @@ export const setGeolocation = (f) => {
       dispatch({type: SET_GEOLOCATION_STATUS, payload: true});
       f({latitude, longitude})
     }
-    navigator.geolocation.getCurrentPosition(success, error, {maximumAge:60000, timeout:5000, enableHighAccuracy:true});
+    navigator.geolocation.getCurrentPosition(success, error, {maximumAge:60000, enableHighAccuracy:true});
   }
 }
 
@@ -51,7 +51,7 @@ export const startWatchingPosition = () => {
       dispatch({type: SET_USER_POSITION, payload: {lat: latitude, lng: longitude}});
       dispatch({type: SET_GEOLOCATION_STATUS, payload: true});
     }
-    const id = navigator.geolocation.watchPosition(success, error, {maximumAge:60000, timeout:5000, enableHighAccuracy:true})
+    const id = navigator.geolocation.watchPosition(success, error, {maximumAge:60000, enableHighAccuracy:true})
     dispatch({type: START_WATCHING_POSITION, payload: id});
   }
 }
