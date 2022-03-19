@@ -89,13 +89,13 @@ const useStyles = makeStyles({
   }
 });
 
-const Main = () => {
+const Main = searchInput => {
   const [visible, setVisible] = useState(true);
   const [screenWidth, setScreenWidth] = useState();
 
   useEffect(() => {
     setScreenWidth(window.innerWidth);
-  }, [screenWidth]);
+  }, [searchInput]);
 
   return (
     <>
