@@ -1,12 +1,12 @@
 import { SET_FULL_TIME,SET_FROM_TIME,SET_UNTIL_TIME } from '../consts';
 
-const initialState = {
+export const initialState = {
   fullTime: false,
   timeFrom: 0,
   timeUntil: 0
 };
 
-export default function(
+export default function (
   state = initialState,
   { type, payload }
 ) {
