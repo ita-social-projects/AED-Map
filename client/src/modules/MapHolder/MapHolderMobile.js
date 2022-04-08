@@ -47,18 +47,21 @@ const useStyles = makeStyles(() => ({
     borderRadius: '50%'
   },
   buttonContainer: () => ({
-    position: 'absolute',
+    position: 'fixed',
+    right: 0,
+    left: 0,
+    bottom: 0,
     display: 'flex',
     height: '80px',
     width: '100vw',
     backgroundColor: 'white',
-    bottom: '0',
     zIndex: 5,
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
+    alignItems: 'center'
   }),
   buttonItem: () => ({
-    marginTop: '20px',
-    maxWidth: '120px',
+    paddingTop: '10px',
+    width: '33%',
     alignSelf: 'center',
     color: '#1A73E8',
     fontSize: '12px',
