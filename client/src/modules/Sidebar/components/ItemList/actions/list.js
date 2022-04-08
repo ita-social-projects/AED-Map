@@ -21,7 +21,7 @@ import {
 } from '../../../api';
 import cancelToken from '../../../../../shared/cancel-token';
 
-import { setGeolocation } from '../../../../MapHolder/actions/userLocation'
+import { setGeolocation } from '../../../../MapHolder/actions/userPosition'
 
 const defsCancelToken = cancelToken();
 export const startLoadDef = () => {
@@ -91,7 +91,7 @@ export const fetchDefs = params => {
     const userPosition = getState().userPosition;
     if (userPosition.geolocationProvided) {
       const {lat, lng} = userPosition.coords;
-      sendGetRequest({latitude: lat, longitude: lng});
+      await sendGetRequest({latitude: lat, longitude: lng});
     } else {
       dispatch(setGeolocation(sendGetRequest));
     }

@@ -20,7 +20,7 @@ import { sidebarWidth } from '../Sidebar/styleConstants';
 import {
   setGeolocation,
   startWatchingPosition
-} from './actions/userLocation';
+} from './actions/userPosition';
 import GeoLocationButton from './components/GeoLocationButton';
 import QuickSearchButton from './components/QuickSearchButton';
 import RouteDetails from './components/RouteDetails';

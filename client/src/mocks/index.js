@@ -127,6 +127,16 @@ export const mockMap = {
   zoom: 12.5
 };
 
+export const mockUserPosition = {
+  coords: {
+    lng: 24.02,
+    lat: 24.22,
+  },
+  watchId: 1,
+  geolocationProvided: true,
+}
+
+
 export const mockCurrDef = {
   id: '',
   coordinates: []

@@ -17,7 +17,7 @@ import RouteLayer from './layers/RouteLayer';
 import {
   setGeolocation,
   startWatchingPosition
-} from './actions/userLocation';
+} from './actions/userPosition';
 import GeoLocationButtonMobile from './components/GeoLocationButton/GeoLocationButtonMobile';
 import QuickSearchButtonMobile from './components/QuickSearchButton/QuickSearchButtonMobile';
 import RouteDetailsMobile from './components/RouteDetails/RouteDetailsMobile';
