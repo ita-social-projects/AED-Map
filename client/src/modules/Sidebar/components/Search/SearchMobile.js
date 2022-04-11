@@ -37,6 +37,7 @@ const SearchMobile = ({
   search
 }) => {
   const classes = useStyles();
+  const verifyQuery = /[^A-Za-zА-Яа-я]|\d/;
   const onSearch = ({ target: { value } }) => {
     const resetPagination = (page, data) => {
       resetPage(page);
@@ -45,7 +46,7 @@ const SearchMobile = ({
 
     setSearch({ address: value });
 
-    if (value.length >= 2) {
+    if (value.length >= 2 || (value.length < 2 && verifyQuery.test(value))) {
       resetPagination(1, []);
       fetchDefItems({ address: value });
     } else if (value.length < 2) {
