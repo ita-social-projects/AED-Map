@@ -26,6 +26,7 @@ import { getDirections } from './api';
 import { MAPBOX_TOKEN } from '../../consts/keys';
 import { fetchDefs } from '../Sidebar/components/ItemList/actions/list.js';
 import ResetButton from './components/ResetButton';
+import useAlert from '../../shared/Alert/useAlert';
 
 const useStyles = makeStyles(() => ({
   mapContainer: () => ({
@@ -97,6 +98,7 @@ const MapHolderMobile = ({
   visible
 }) => {
   const classes = useStyles({ visible });
+  const [, showAlert] = useAlert();
   const [map, setLocalMap] = useState(null);
   const { lng, lat, zoom } = mapState;
 
@@ -142,14 +144,22 @@ const MapHolderMobile = ({
   };
 
   const getCurrentLocation = _ => {
-    setGeolocation(({ latitude, longitude }) => {
+    setGeolocation((coords) => {
+      if ( coords == null ) {
+        showAlert({
+          open: true,
+          severity: 'error',
+          message: 'Позиція користувача не знайдена',
+        })
+        return
+      }
+      const { longitude, latitude } = coords;
       setMapCenter({
         lng: longitude,
         lat: latitude
       });
     });
   };
-
   useEffect(() => {
     if (Object.keys(newPoint).length !== 0) {
       const { lng, lat } = newPoint;
@@ -160,7 +170,11 @@ const MapHolderMobile = ({
 
   //Sets map center to current Position of the user
   useEffect(() => {
-    setGeolocation(({ longitude, latitude }) => {
+    setGeolocation((coords) => {
+      if ( coords == null ) {
+        return
+      }
+      const { longitude, latitude } = coords;
       setMapCenter({ lng: longitude, lat: latitude });
       startWatchingPosition();
     });
