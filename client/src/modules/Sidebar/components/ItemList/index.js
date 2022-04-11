@@ -18,6 +18,7 @@ import HorizontalLoader from '../../../../shared/Loader/HorizontalLoader';
 import DefItem from './components/DefItem';
 import cancelToken from '../../../../shared/cancel-token';
 import { BASE_ZOOM_VALUE } from './consts';
+import { fetchSingleDefById } from '../../api';
 
 const defsCancelToken = cancelToken();
 
@@ -54,6 +55,7 @@ const ItemList = ({
   totalCount,
   page,
   search,
+  geolocationProvided,
   setMapCenterCoords,
   setMapZoomParam
 }) => {
@@ -103,7 +105,7 @@ const ItemList = ({
         rowIndex={index}
       >
         <DefItem
-          styleParam={style}
+          style={style}
           defItemInfo={defibrillators[index]}
         />
       </CellMeasurer>
@@ -120,15 +122,31 @@ const ItemList = ({
     // eslint-disable-next-line
   }, []);
 
+  // Update camera position when clicking on defibrilattor icon
   useEffect(() => {
-    if (activeDef) {
-      const [lng, lat] = activeDef.location.coordinates;
+    const getDef = async (callback=()=>{}) => {
+      const {data} = await fetchSingleDefById(activeDef);
+      callback(data.defibrillator);
+      return data.defibrillator;
+    }
+
+    const setCenterOnDef = (def) => {
+      const [lng, lat] = def.location.coordinates;
       setMapCenterCoords({
         lng,
         lat
       });
       setMapZoomParam(BASE_ZOOM_VALUE);
     }
+
+    if (typeof activeDef == 'object' && activeDef !== null) {
+      setCenterOnDef(activeDef);
+    }
+    else if(typeof activeDef == 'string') {
+      getDef(setCenterOnDef)
+    }
+    
+
     // eslint-disable-next-line
   }, [activeDef]);
 
@@ -195,11 +213,12 @@ export default connect(
     filter: state.filter,
     activeDef: state.defs.listData.find(
       def => def._id === state.defs.active
-    ),
+    ) || state.defs.active,
     totalCount: state.defs.totalCount,
     page: state.defs.page,
     search: state.search,
-    user: state.user.user
+    user: state.user.user,
+    geolocationProvided: state.userPosition.geolocationProvided
   }),
   dispatch => ({
     fetchDefItems: params => dispatch(fetchDefs(params)),

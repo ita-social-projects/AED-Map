@@ -11,7 +11,7 @@
       },
       actual_date: '2019-02-12',
       storage_place: 'Поверх 1, каб. Муніципальної Варти',
-      accessibility: 'Цілодобово. Без вихідних',
+      availableFrom: 'Цілодобово. Без вихідних',
       language: 'Російськомовний',
       informational_plates: 'Відсутні',
       phone: ['380322975994'],
@@ -30,7 +30,7 @@
       actual_date: '2019-02-22',
       storage_place:
         'Поверх 1, біля каб. Медпункту (на стіні)',
-      accessibility: 'Цілодобово. Без вихідних',
+      availableFrom: 'Цілодобово. Без вихідних',
       language: 'Україномовний',
       informational_plates: 'Присутні тільки біля приладу',
       phone: ['380322298303'],
@@ -50,7 +50,7 @@
       actual_date: '2019-03-07',
       storage_place:
         'Поверх 1, рецепція (схований від загального виду, треба запитатись)',
-      accessibility: 'Пн-Пт: 09:00-18:00',
+      availableFrom: 'Пн-Пт: 09:00-18:00',
       language: 'Російськомовний',
       informational_plates: 'Присутні',
       phone: ['380503713200', '380322401740'],
@@ -71,7 +71,7 @@
       actual_date: '2019-03-07',
       storage_place:
         'Поверх 1, рецепція (схований від загального виду, треба запитатись)',
-      accessibility: 'Пн-Пт: 09:00-18:00',
+      availableFrom: 'Пн-Пт: 09:00-18:00',
       language: 'Російськомовний',
       informational_plates: 'Присутні',
       phone: ['380503713200', '380322401740'],
@@ -100,7 +100,7 @@ export const mockNewDefInfo = {
   },
   actual_date: '2019-02-12',
   storage_place: 'Поверх 1, каб. Муніципальної Варти',
-  accessibility: 'Цілодобово. Без вихідних',
+  availableFrom: 'Цілодобово. Без вихідних',
   language: 'Російськомовний',
   informational_plates: 'Відсутні',
   phone: ['380322975994'],
@@ -126,6 +126,16 @@ export const mockMap = {
   lat: 49.842,
   zoom: 12.5
 };
+
+export const mockUserPosition = {
+  coords: {
+    lng: 24.02,
+    lat: 24.22,
+  },
+  watchId: 1,
+  geolocationProvided: true,
+}
+
 
 export const mockCurrDef = {
   id: '',

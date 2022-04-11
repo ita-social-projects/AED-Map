@@ -21,6 +21,8 @@ import {
 } from '../../../api';
 import cancelToken from '../../../../../shared/cancel-token';
 
+import { setGeolocation } from '../../../../MapHolder/actions/userPosition'
+
 const defsCancelToken = cancelToken();
 export const startLoadDef = () => {
   return {
@@ -69,38 +71,29 @@ export const failLoadDef = error => {
   };
 };
 
-const getCurrentPosition = (options = {}) => {
-  return new Promise((resolve, reject) => {
-    navigator.geolocation.getCurrentPosition(
-      resolve,
-      reject,
-      options
-    );
-  });
-};
-
 export const fetchDefs = params => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
+    const sendGetRequest = async (userCoordinates = null) => {
+      try {
+        const { data } = await getDefItems(
+          { ...params, ...userCoordinates },
+          defsCancelToken.instance
+        );
+        dispatch(successLoadDef(data));
+      } catch (e) {
+        dispatch(failLoadDef(e));
+      }
+    }
+
     dispatch(startLoadDef());
     dispatch(setPage());
-
-    try {
-      let userCoordinates;
-      try {
-        const { coords } = await getCurrentPosition();
-        const { latitude, longitude } = coords;
-        userCoordinates = { latitude, longitude };
-      } catch (e) {
-        userCoordinates = null;
-      }
-
-      const { data } = await getDefItems(
-        { ...params, ...userCoordinates },
-        defsCancelToken.instance
-      );
-      dispatch(successLoadDef(data));
-    } catch (e) {
-      dispatch(failLoadDef(e));
+    
+    const userPosition = getState().userPosition;
+    if (userPosition.geolocationProvided) {
+      const {lat, lng} = userPosition.coords;
+      await sendGetRequest({latitude: lat, longitude: lng});
+    } else {
+      dispatch(setGeolocation(sendGetRequest));
     }
   };
 };

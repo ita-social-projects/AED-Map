@@ -6,7 +6,8 @@ import * as types from '../../consts';
 import * as actions from '../list';
 import {
   mockNewDefInfo,
-  mockError
+  mockError,
+  mockUserPosition
 } from '../../../../../../mocks';
 
 const { id } = mockNewDefInfo;
@@ -59,7 +60,7 @@ describe('defibrillator async CRUD actions', () => {
       const request = moxios.requests.mostRecent();
       request.respondWith(mockErrorResponse(mockError));
     });
-    const store = mockStore({ error: null });
+    const store = mockStore({ error: null});
     const expectedActions = [
       {
         type: types.FAIL_LOAD_DATA,
@@ -82,7 +83,10 @@ describe('defibrillator async CRUD actions', () => {
         })
       );
     });
-    const store = mockStore({ defs: [] });
+    
+    const store = mockStore({ defs: [], 
+      userPosition: mockUserPosition
+    });
 
     const expectedActions = [
       {

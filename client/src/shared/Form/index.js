@@ -13,6 +13,7 @@ import AddMoreInfo from './AddMoreInfo';
 import FormValidation from './validator';
 import useAlert from '../Alert/useAlert';
 import { MyTextField, MyImageField } from '../Fields';
+import MyTimeField from '../Fields/timeField';
 import {
   setPage,
   setData
@@ -51,7 +52,10 @@ const MyForm = ({
   INITIAL_VALUES,
   submitAction,
   resetPage,
-  resetData
+  resetData,
+  fullTimeStatus,
+  timeFrom,
+  timeUntil
 }) => {
   const classes = useStyles();
   const [, ShowAlert] = useAlert();
@@ -70,7 +74,13 @@ const MyForm = ({
       .toISOString()
       .split('T')[0];
     try {
-      await submitAction({ ...values, actualDate });
+      await submitAction({
+        ...values,
+        fullTimeAvailable: fullTimeStatus,
+        availableFrom: fullTimeStatus ? null : timeFrom,
+        availableUntil: fullTimeStatus ? null : timeUntil,
+        actualDate
+      });
       ShowAlert({
         open: true,
         severity: 'success',
@@ -87,7 +97,7 @@ const MyForm = ({
         severity: 'error',
         message: 'Серверна помилка'
       });
-    }
+    } 
   };
 
   return (
@@ -106,11 +116,11 @@ const MyForm = ({
                 label="Введіть назву"
                 className={classes.input}
               />
-              <MyTextField
-                name="accessibility"
-                label="Коли доступний пристрій?"
-                className={classes.input}
+
+              <MyTimeField
+                label={'Коли доступний пристрій?'}
               />
+
               <MyTextField
                 name="storage_place"
                 label="Де розташований в будівлі?"
@@ -131,7 +141,7 @@ const MyForm = ({
                 name="phone"
               />
               <MyImageField
-                variant="contained" 
+                variant="contained"
                 color="primary"
                 className={classes.input}
                 id="images"
@@ -149,15 +159,17 @@ const MyForm = ({
                 color="primary"
                 size="large"
                 type="submit"
+                disabled={!isValid}
                 endIcon={<SaveIcon />}
                 onClick={() => {
-                  if (isValid === false)
+                  if (isValid === false) {
                     ShowAlert({
                       open: true,
                       severity: 'error',
                       message:
                         'Дані полів введені некоректно'
                     });
+                  } 
                 }}
               >
                 Зберегти
@@ -180,15 +192,22 @@ MyForm.propTypes = {
     phone: PropTypes.array.isRequired,
     additional_information: PropTypes.string.isRequired,
     storage_place: PropTypes.string.isRequired,
-    accessibility: PropTypes.string.isRequired,
-    coordinates: PropTypes.array.isRequired
+    coordinates: PropTypes.array.isRequired,
+    images: PropTypes.array.isRequired
   }).isRequired,
   submitAction: PropTypes.func.isRequired,
   resetPage: PropTypes.func.isRequired,
   resetData: PropTypes.func.isRequired
 };
 
-export default connect(null, {
-  resetPage: page => setPage(page),
-  resetData: data => setData(data)
-})(MyForm);
+export default connect(
+  state => ({
+    fullTimeStatus: state.setFullTime.fullTime,
+    timeFrom: state.setFullTime.timeFrom,
+    timeUntil: state.setFullTime.timeUntil
+  }),
+  {
+    resetPage: page => setPage(page),
+    resetData: data => setData(data)
+  }
+)(MyForm);

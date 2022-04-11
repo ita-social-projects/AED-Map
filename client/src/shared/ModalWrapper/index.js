@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Modal, Backdrop, Fade } from '@material-ui/core';
@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 const ModalWrapper = ({ ButtonOpen, ModalContent }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-
+  
   const handleOpen = event => {
     event.preventDefault();
     setOpen(true);

@@ -2,10 +2,9 @@ import io from 'socket.io-client';
 
 import store from '../../store';
 import { signOut } from '../../modules/Auth/actions/user';
-const BASE_URL = process.env.BASE_URL;
 
-const socket = io(BASE_URL, { 
-  autoConnect: false 
+const socket = io('http://localhost:3000', {
+  autoConnect: false
 });
 
 const socketAuthOpen = () => {

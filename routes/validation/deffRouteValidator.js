@@ -14,7 +14,8 @@ const deffValidationRules = () => {
     body('address')
       .notEmpty()
       .withMessage('Поле обов\'язкове'),
-    body('accessibility')
+    body('availableFrom')
+      .if (({req}) => req.body.availableFrom !== null)
       .notEmpty()
       .withMessage('Поле обов\'язкове'),
     body('phone')

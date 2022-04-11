@@ -26,13 +26,14 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Search = ({
-  search,
   setSearch,
   fetchDefItems,
   resetData,
-  resetPage
+  resetPage,
+  search
 }) => {
   const classes = useStyles();
+  const verifyQuery = /[^A-Za-zА-Яа-я]|\d/;
   const onSearch = ({ target: { value } }) => {
     const resetPagination = (page, data) => {
       resetPage(page);
@@ -41,9 +42,9 @@ const Search = ({
 
     setSearch({ address: value });
 
-    if (value.length >= 2) {
+    if (value.length >= 2 || (value.length < 2 && verifyQuery.test(value))) {
       resetPagination(1, []);
-      fetchDefItems(search);
+      fetchDefItems({ address: value });
     } else if (value.length < 2) {
       setSearch({ address: value });
       resetPagination(1, []);
@@ -65,6 +66,7 @@ const Search = ({
             autoFocus
             debounceTimeout={300}
             onChange={onSearch}
+            value={search.address}
           />
         </Formik>
       </Paper>

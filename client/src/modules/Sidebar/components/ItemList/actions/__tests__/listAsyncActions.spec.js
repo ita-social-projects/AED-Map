@@ -6,7 +6,8 @@ import * as types from '../../consts';
 import * as actions from '../list';
 import {
   mockData,
-  mockError
+  mockError,
+  mockUserPosition
 } from '../../../../../../mocks';
 
 const middlewares = [thunk];
@@ -33,7 +34,9 @@ describe('fetchDefs action', () => {
       const request = moxios.requests.mostRecent();
       request.respondWith(mockSuccessResponse(mockData));
     });
-    const store = mockStore({ data: [] });
+    const store = mockStore({ data: [], 
+      userPosition: mockUserPosition
+    });
     const expectedActions = [
       { type: types.START_LOAD_DATA },
       {
@@ -56,7 +59,9 @@ describe('fetchDefs action', () => {
       const request = moxios.requests.mostRecent();
       request.respondWith(mockSuccessResponse(mockData));
     });
-    const store = mockStore({ data: [] });
+    const store = mockStore({ data: [], 
+      userPosition: mockUserPosition
+    });
 
     return store.dispatch(actions.fetchDefs()).then(() => {
       expect(
@@ -73,7 +78,9 @@ describe('fetchDefs action', () => {
       const request = moxios.requests.mostRecent();
       request.respondWith(mockErrorResponse(mockError));
     });
-    const store = mockStore({ error: null });
+    const store = mockStore({ error: null, 
+      userPosition: mockUserPosition
+    });
     const expectedActions = [
       { type: types.START_LOAD_DATA },
       { type: types.SET_PAGE, payload: undefined },
@@ -92,7 +99,9 @@ describe('fetchDefs action', () => {
       const request = moxios.requests.mostRecent();
       request.respondWith(mockErrorResponse(mockError));
     });
-    const store = mockStore({ error: null });
+    const store = mockStore({ error:null, 
+      userPosition: mockUserPosition
+    });
     return store.dispatch(actions.fetchDefs()).then(() => {
       expect(store.getActions()[2].payload).toBeTruthy();
     });

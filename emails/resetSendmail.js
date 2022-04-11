@@ -1,14 +1,16 @@
+const { BASE_URL, EMAIL_FROM} = require('../config/keys');
+
 const resetSendmailEmail = (email, token) => ({
-  from: process.env.EMAIL_FROM,
+  from: EMAIL_FROM,
   to: email,
   subject: 'Відновлення пароля',
   html: `
       <h1>Вітаємо, вас!</h1>
       <p>Для успішного завершення відновлення потрібно змінити пароль.</p>
-      <p>Посилання для зміни пароля - <a href="${process.env.BASE_URL}/reset/${email}/${token}">Відновити пароль</a>.</p>
+      <p>Посилання для зміни пароля - <a href="${BASE_URL}/reset/${email}/${token}">Відновити пароль</a>.</p>
       <p>Посилання дійсне протягом години.</p>
       <hr />
-      <a href="${process.env.BASE_URL}">Головна сторінка</a>
+      <a href="${BASE_URL}">Головна сторінка</a>
     `
 });
 

@@ -5,6 +5,12 @@ import PropTypes from 'prop-types';
 import { NavLink, useHistory } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import permissionService from '../../../../../Auth/permissionService';
+import { fetchSingleDefById } from '../../../../../Sidebar/api/index';
+import {
+  setFullTime,
+  setFromTime,
+  setUntilTime
+} from '../../../EditForm/actions/setFullTime';
 import {
   setMapCenter,
   setMapZoom
@@ -72,10 +78,13 @@ const DefItem = ({
   setMapCenterCoords,
   setMapZoomParam,
   // eslint-disable-next-line react/prop-types
-  styleParam,
+  style,
   deleteDefibrPoint,
   blockDefibrPoint,
-  user
+  user,
+  setTime,
+  setFromTime,
+  setUntilTime
 }) => {
   const isActive = defItemInfo._id === activeItemId;
   const hasPermission =
@@ -109,7 +118,26 @@ const DefItem = ({
 
   const handleEditClick = event => {
     event.preventDefault();
+    setDefCheckbox(defItemInfo._id);
     history.push(`/edit-form/${defItemInfo._id}`);
+  };
+
+  const setDefCheckbox = async id => {
+    const res = await fetchSingleDefById(id);
+    const data = res.data.defibrillator;
+    setTime(data.fullTimeAvailable);
+    const timeFrom =
+      data.availableFrom === undefined ||
+      data.availableFrom === null
+        ? 0
+        : data.availableFrom;
+    setFromTime(timeFrom);
+    const timeUntil =
+      data.availableUntil === undefined ||
+      data.availableUntil === null
+        ? 23
+        : data.availableUntil;
+    setUntilTime(timeUntil);
   };
 
   const handleKeyDown = event => {
@@ -146,7 +174,7 @@ const DefItem = ({
     <NavLink
       to={`?id=${defItemInfo._id}`}
       className={classes.pointCard}
-      style={styleParam}
+      style={style}
     >
       <div
         className={classes.pointCardInfo}
@@ -236,7 +264,7 @@ DefItem.propTypes = {
     actual_date: PropTypes.string,
     floor: PropTypes.number,
     storage_place: PropTypes.string,
-    accessibility: PropTypes.string,
+    availableFrom: PropTypes.string,
     language: PropTypes.string,
     informational_plates: PropTypes.string,
     phone: PropTypes.arrayOf(PropTypes.string),
@@ -271,6 +299,9 @@ export default connect(
       dispatch(setMapZoom(mapState)),
     deleteDefibrPoint: id => dispatch(deleteDefItem(id)),
     blockDefibrPoint: (id, blocked) =>
-      dispatch(blockDefItem(id, blocked))
+      dispatch(blockDefItem(id, blocked)),
+    setTime: value => dispatch(setFullTime(value)),
+    setFromTime: time => dispatch(setFromTime(time)),
+    setUntilTime: time => dispatch(setUntilTime(time))
   })
 )(DefItem);

@@ -14,7 +14,20 @@ import {
 import { hidePopup } from './actions/popupDisplay';
 import DefibrillatorPinLayer from './layers/DefibrillatorPinLayer';
 import AddedPin from './layers/AddedPin';
+import PointLayer from './layers/PointLayer';
+import RouteLayer from './layers/RouteLayer';
 import { sidebarWidth } from '../Sidebar/styleConstants';
+import {
+  setGeolocation,
+  startWatchingPosition
+} from './actions/userPosition';
+import GeoLocationButton from './components/GeoLocationButton';
+import QuickSearchButton from './components/QuickSearchButton';
+import RouteDetails from './components/RouteDetails';
+import UserPin from './components/UserPin';
+import { getDirections } from './api';
+import { MAPBOX_TOKEN } from '../../consts/keys';
+import useAlert from '../../shared/Alert/useAlert';
 
 const useStyles = makeStyles(() => ({
   mapContainer: ({ visible }) => ({
@@ -49,29 +62,35 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Map = ReactMapboxGl({
-  accessToken:
-    'pk.eyJ1Ijoib3Nrb3ZiYXNpdWsiLCJhIjoiY2s1NWVwcnhhMDhrazNmcGNvZjJ1MnA4OSJ9.56GsGp2cl6zpYh-Ns8ThxA'
+  accessToken: MAPBOX_TOKEN
 });
 
 const MapHolder = ({
   mapState,
+  userPosition,
   newPoint,
   setMapCenter,
+  startWatchingPosition,
+  setGeolocation,
   addNewPoint,
   hidePopup,
   setVisible,
   visible
 }) => {
   const classes = useStyles({ visible });
+  const [, showAlert] = useAlert();
   const [map, setLocalMap] = useState(null);
+  const { lng, lat, zoom } = mapState;
   const tooltipMessage = visible
     ? 'Приховати меню'
     : 'Показати меню';
+
   const handlePopupClose = event => {
     if (event.target.tagName === 'CANVAS') {
       hidePopup();
     }
   };
+
   useEffect(() => {
     document.addEventListener('click', handlePopupClose);
     return () => {
@@ -83,21 +102,22 @@ const MapHolder = ({
     // eslint-disable-next-line
   }, []);
 
-  const loadMap = mapRaw => {
+  const loadMap = async mapRaw => {
     if (mapRaw) {
       setLocalMap(mapRaw);
     }
   };
 
-  const { lng, lat, zoom } = mapState;
-
   const changeMapCenterCoords = event => {
-    setMapCenter(event.getCenter());
+    setMapCenter({
+      ...event.getCenter(),
+      zoom: event.getZoom()
+    });
   };
 
   const onZoomEnded = event => {
     setMapCenter({
-      ...event.getCenter(),
+      ...mapState,
       zoom: event.getZoom()
     });
   };
@@ -109,11 +129,28 @@ const MapHolder = ({
   const hideSidebar = () => {
     if (map) {
       setVisible(prev => !prev);
-
       setTimeout(() => {
         map.resize();
       }, 100);
     }
+  };
+
+  const getCurrentLocation = _ => {
+    setGeolocation((coords) => {
+      if ( coords == null ) {
+        showAlert({
+          open: true,
+          severity: 'error',
+          message: 'Позиція користувача не знайдена',
+        })
+        return
+      }
+      const { longitude, latitude } = coords;
+      setMapCenter({
+        lng: longitude,
+        lat: latitude
+      });
+    });
   };
 
   useEffect(() => {
@@ -124,6 +161,18 @@ const MapHolder = ({
     // eslint-disable-next-line
   }, [newPoint]);
 
+  //Sets map center to current Position of the user
+  useEffect(() => {
+    setGeolocation((coords) => {
+      if ( coords == null ) {
+        return
+      }
+      const { longitude, latitude } = coords;
+      setMapCenter({ lng: longitude, lat: latitude });
+      startWatchingPosition();
+    });
+  }, [setGeolocation, setMapCenter, startWatchingPosition]);
+
   const onDblClickMap = (_, event) => {
     const currentRoute = window.location.pathname;
     if (
@@ -131,14 +180,54 @@ const MapHolder = ({
       currentRoute.includes('/edit-form')
     ) {
       const { lng, lat } = event.lngLat;
-
       addNewPoint({ lng, lat });
       event.preventDefault();
     }
   };
 
+  const getRouteToPosition = async (endLng, endLat) => {
+    await setMapCenter({ lng: endLng, lat: endLat });
+    getRoute(userPosition.coords, {
+      lng: endLng,
+      lat: endLat
+    });
+  };
+
+  const [routeCoords, setRouteCords] = useState([]);
+  const [routeDetails, setRouteDetails] = useState({
+    distance: null,
+    duration: null
+  });
+  const [showRouteDetails, setShowRouteDetails] = useState(
+    false
+  );
+
+  const getRoute = async (start, endPosition) => {
+    const query = await getDirections(start, endPosition);
+    const data = query.data.routes[0];
+
+    setRouteCords(data.geometry.coordinates);
+    setShowRouteDetails(true);
+    setRouteDetails({
+      distance: data.distance,
+      duration: data.duration
+    });
+  };
+
+  const closeRoute = () => {
+    setRouteCords([]);
+    setShowRouteDetails(false);
+    getCurrentLocation();
+  };
+
   return (
     <div className={classes.mapContainer}>
+      <QuickSearchButton
+        getRouteToPosition={getRouteToPosition}
+      />
+      <GeoLocationButton
+        currentLocation={getCurrentLocation}
+      />
       <Button
         className={classes.showIcon}
         color="primary"
@@ -151,6 +240,13 @@ const MapHolder = ({
           />
         </Tooltip>
       </Button>
+
+      {showRouteDetails && (
+        <RouteDetails
+          onClose={closeRoute}
+          details={routeDetails}
+        />
+      )}
 
       <Map
         // eslint-disable-next-line react/style-prop-object
@@ -166,10 +262,25 @@ const MapHolder = ({
         onDblClick={onDblClickMap}
       >
         {map && <DefibrillatorPinLayer map={map} />}
+        {userPosition.geolocationProvided && (
+          <UserPin
+            classes={classes}
+            coordinates={userPosition.coords}
+          />
+        )}
+
         {Object.keys(newPoint).length !== 0 && (
           <AddedPin coordinates={newPoint} />
         )}
+
         <PopupHolder />
+
+        {routeCoords.length > 0 && (
+          <>
+            <RouteLayer coordinates={routeCoords} />
+            <PointLayer coordinates={routeCoords} />
+          </>
+        )}
       </Map>
     </div>
   );
@@ -180,6 +291,8 @@ MapHolder.defaultProps = {
   setVisible: {},
   visible: null,
   setMapCenter: () => {},
+  setGeolocation: () => {},
+  startWatchingPosition: () => {},
   hidePopup: () => {}
 };
 
@@ -195,6 +308,8 @@ MapHolder.propTypes = {
   }).isRequired,
   addNewPoint: PropTypes.func.isRequired,
   setMapCenter: PropTypes.func,
+  setMapZoom: PropTypes.func,
+  startWatchingPosition: PropTypes.func,
   hidePopup: PropTypes.func,
   setVisible: PropTypes.func,
   visible: PropTypes.bool
@@ -204,9 +319,13 @@ export default connect(
   state => ({
     defsState: state.defs,
     mapState: state.mapState,
-    newPoint: state.newPoint
+    newPoint: state.newPoint,
+    userPosition: state.userPosition
   }),
   dispatch => ({
+    setGeolocation: f => dispatch(setGeolocation(f)),
+    startWatchingPosition: () =>
+      dispatch(startWatchingPosition()),
     setMapCenter: map => dispatch(setMapCenter(map)),
     setMapZoom: zoom => dispatch(setMapZoom(zoom)),
     addNewPoint: newPoint =>

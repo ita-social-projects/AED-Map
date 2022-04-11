@@ -11,7 +11,6 @@ import cancelToken from '../../../../shared/cancel-token';
 import { titles } from './consts';
 
 const currDefCancelToken = cancelToken();
-const BASE_URL = process.env.BASE_URL;
 
 const useStyle = makeStyles({
   popupContainer: {
@@ -77,6 +76,19 @@ const DefibrillatorPopupContent = ({ id, hidePopup }) => {
       return def[key].join(', ');
     }
 
+    if (key === 'availableFrom') {
+      const availableTime =
+        def.fullTimeAvailable === true
+          ? 'Цілодобово доступний'
+          : `${def.availableFrom
+              .toString()
+              .padStart(2, '0')}:00 - 
+             ${def.availableUntil
+               .toString()
+               .padStart(2, '0')}:00`;
+      return availableTime;
+    }
+
     return def[key];
   };
 
@@ -101,13 +113,14 @@ const DefibrillatorPopupContent = ({ id, hidePopup }) => {
         <img
           title={currDef.images[0].filename}
           className={classes.imagePreview}
-          src={`${BASE_URL}/api/images/${currDef.images[0].filename}`}
+          src={`http://localhost:3000/api/images/${currDef.images[0].filename}`}
           alt={currDef.images[0].filename}
         />
       )}
-      {Object.keys(titles).map(
-        key =>
-          currDef[key] && (
+
+      {Object.keys(titles).map(key => {
+        return (
+          currDef[key] !== undefined && (
             <p key={key}>
               <span className={classes.title}>
                 {titles[key]}
@@ -116,7 +129,8 @@ const DefibrillatorPopupContent = ({ id, hidePopup }) => {
               {formatData(key, currDef)}
             </p>
           )
-      )}
+        );
+      })}
       <Cancel
         className={classes.closeBtn}
         onClick={hidePopup}

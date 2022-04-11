@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  Suspense,
+  useEffect,
+  useState
+} from 'react';
 import {
   Switch,
   Route,
   Redirect,
-  withRouter
-  , useHistory
+  withRouter,
+  useHistory
 } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -19,12 +23,32 @@ import {
   successSignIn,
   failSignIn
 } from './modules/Auth/actions/user';
-import Sidebar from './modules/Sidebar';
-import MapHolder from './modules/MapHolder';
-import StartModal from './modules/MapHolder/components/StartModal';
 import SignUpPassword from './modules/Auth/submodules/SignUp/submodules/SignUpPassword';
 import ResetPassword from './modules/Auth/submodules/Reset/submodules/ResetPassword';
 import { setActive } from './modules/Sidebar/components/ItemList/actions/list';
+import SignInModal from './modules/Auth/submodules/SignIn/components/SignInModal';
+import media from './consts/media';
+
+const Sidebar = React.lazy(() =>
+  import('./modules/Sidebar')
+);
+const SidebarMobile = React.lazy(() =>
+  import('./modules/Sidebar/SidebarMobile')
+);
+const MapHolder = React.lazy(() =>
+  import('./modules/MapHolder')
+);
+const MapHolderMobile = React.lazy(() =>
+  import('./modules/MapHolder/MapHolderMobile')
+);
+const StartModal = React.lazy(() =>
+  import('./modules/MapHolder/components/StartModal')
+);
+const StartModalMobile = React.lazy(() =>
+  import(
+    './modules/MapHolder/components/StartModal/StartModalMobile'
+  )
+);
 
 const ValidateCancelToken = cancelToken();
 
@@ -65,16 +89,52 @@ const useStyles = makeStyles({
   }
 });
 
-const Main = () => {
+const Main = searchInput => {
   const [visible, setVisible] = useState(true);
+  const [screenWidth, setScreenWidth] = useState();
+
+  useEffect(() => {
+    setScreenWidth(window.innerWidth);
+  }, [searchInput]);
 
   return (
     <>
-      <Sidebar setVisible={setVisible} visible={visible} />
-      <MapHolder
-        setVisible={setVisible}
-        visible={visible}
-      />
+      {screenWidth < media.ipad &&
+      window.orientation !== 90 ? (
+        <>
+          <Suspense
+            fallback={
+              <div>Завантаження меню і мапи...</div>
+            }
+          >
+            <SidebarMobile
+              setVisible={setVisible}
+              visible={visible}
+            />
+            <MapHolderMobile
+              setVisible={setVisible}
+              visible={visible}
+            />
+          </Suspense>
+        </>
+      ) : (
+        <>
+          <Suspense
+            fallback={
+              <div>Завантаження меню і мапи...</div>
+            }
+          >
+            <Sidebar
+              setVisible={setVisible}
+              visible={visible}
+            />
+            <MapHolder
+              setVisible={setVisible}
+              visible={visible}
+            />
+          </Suspense>
+        </>
+      )}
     </>
   );
 };
@@ -85,7 +145,8 @@ const App = ({
   location,
   mapData,
   makeItemActive,
-  user
+  user,
+  searchInput
 }) => {
   const classes = useStyles();
   const transitionClasses = {
@@ -104,6 +165,7 @@ const App = ({
   );
   const history = useHistory();
   const [didMount, setDidMount] = useState(false);
+  const [screenWidth, setScreenWidth] = useState();
 
   if (pathname === '/' && search && mapData.length) {
     makeItemActive(search.split('=')[1]);
@@ -134,10 +196,19 @@ const App = ({
     // eslint-disable-next-line
   }, [user]);
 
+  useEffect(() => {
+    setScreenWidth(window.innerWidth);
+  }, [searchInput]);
+
   return (
     <div className="App">
       <div className={classes.mainStyle}>
         <Switch>
+          <Route
+            path="/admin"
+            exact
+            component={SignInModal}
+          />
           <Route
             path="/signup/:email/:token"
             component={SignUpPassword}
@@ -150,7 +221,7 @@ const App = ({
           <Redirect from="*" to="/" />
         </Switch>
       </div>
-      {(location.pathname === '/') && (
+      {location.pathname === '/' && (
         <CSSTransition
           in={isStartModalOpen}
           classNames={transitionClasses}
@@ -158,7 +229,22 @@ const App = ({
           timeout={1000}
           unmountOnExit
         >
-          <StartModal setStartModal={setStartModal} />
+          {screenWidth < media.ipad &&
+          window.orientation !== 90 ? (
+            <Suspense
+              fallback={
+                <div>Завантаження модального вікна...</div>
+              }
+            >
+              <StartModalMobile
+                setStartModal={setStartModal}
+              />
+            </Suspense>
+          ) : (
+            <Suspense fallback={<div>Завантаження...</div>}>
+              <StartModal setStartModal={setStartModal} />
+            </Suspense>
+          )}
         </CSSTransition>
       )}
     </div>
@@ -198,7 +284,8 @@ App.propTypes = {
 export default connect(
   state => ({
     mapData: state.defs.mapData,
-    user: state.user.user
+    user: state.user.user,
+    searchInput: state.search.address
   }),
   dispatch => ({
     success: (user, authorization) =>

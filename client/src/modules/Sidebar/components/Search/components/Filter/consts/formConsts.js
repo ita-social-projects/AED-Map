@@ -2,7 +2,7 @@ export const INITIAL_VALUES = {
   title: '',
   language: '',
   informational_plates: '',
-  accessibility: ''
+  availableFrom: ''
 };
 
 export const languageInterface = [
@@ -20,4 +20,4 @@ export const informationalPlates = [
   'присутні тільки біля приладу'
 ];
 
-export const accessibility = ['', 'цілодобово'];
+export const availableFrom = ['', 'цілодобово'];
